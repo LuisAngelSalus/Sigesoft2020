@@ -41,6 +41,8 @@ namespace SL.Sigesoft.WebApi
             services.AddDbContext<SigesoftCoreContext>(options => options.UseSqlServer(_configuration.GetConnectionString("SigesoftCoreDB")));
             services.AddScoped<IPersonsRepository, PersonRepository>();
             services.AddScoped<ISystemUserRepository, SystemUserRepository>();
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<ICompanyHeadquarterRepository, CompanyHeadquarterRepository>();
             services.AddScoped<IPasswordHasher<SystemUser>, PasswordHasher<SystemUser>>();
             services.AddSingleton<TokenService>();
 

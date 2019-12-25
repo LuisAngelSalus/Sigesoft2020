@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SL.Sigesoft.Common\SL.Sigesoft.Common.csproj" />
     <ProjectReference Include="..\SL.Sigesoft.Data\SL.Sigesoft.Data.csproj" />
     <ProjectReference Include="..\SL.Sigesoft.Dtos\SL.Sigesoft.Dtos.csproj" />
   </ItemGroup>

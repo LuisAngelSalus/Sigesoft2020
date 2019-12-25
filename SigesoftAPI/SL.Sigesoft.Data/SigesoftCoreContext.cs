@@ -26,6 +26,7 @@ namespace SL.Sigesoft.Data
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<SystemParameter> SystemParameter { get; set; }
         public virtual DbSet<SystemUser> SystemUser { get; set; }
+        public virtual DbSet<Company> Companies{ get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

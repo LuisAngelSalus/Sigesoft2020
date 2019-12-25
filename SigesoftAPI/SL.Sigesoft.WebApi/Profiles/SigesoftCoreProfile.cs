@@ -30,13 +30,8 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.RolName, p => p.MapFrom(m => m.Roles.v_Description))
                 .ReverseMap();
 
-            //this.CreateMap<SystemUser, AccessSysteUserDto>()
-            //    .ForMember(u => u.SystemUserId, p => p.MapFrom(m => m.i_SystemUserId))
-            //    .ForMember(u => u.UserName, p => p.MapFrom(m => m.v_UserName))
-            //    .ForMember(u => u.FullName, p => p.MapFrom(m => string.Format("{0} {1}",
-            //            m.Person.v_FirstName, m.Person.v_FirstLastName)))                
-            //    .ReverseMap();
-
+            this.CreateMap<Company, CompanyDto>().ReverseMap();
+            this.CreateMap<CompanyHeadquarter, CompanyHeadquarterDto>().ReverseMap();
         }
     }
 }

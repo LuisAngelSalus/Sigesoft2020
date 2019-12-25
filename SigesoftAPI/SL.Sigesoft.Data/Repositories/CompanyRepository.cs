@@ -1,0 +1,99 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using SL.Sigesoft.Data.Contracts;
+using SL.Sigesoft.Models;
+using SL.Sigesoft.Models.Enum;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SL.Sigesoft.Data.Repositories
+{
+    public class CompanyRepository : ICompanyRepository
+    {
+        private readonly SigesoftCoreContext _context;
+        private readonly ILogger<CompanyRepository> _logger;        
+        private DbSet<Company> _dbSet;
+
+        public CompanyRepository(SigesoftCoreContext context,
+            ILogger<CompanyRepository> logger)
+        {
+            this._context = context;
+            this._logger = logger;            
+            this._dbSet = _context.Set<Company>();
+        }
+
+
+        public async Task<Company> AddAsync(Company entity)
+        {
+            entity.i_IsDeleted = YesNo.No;            
+            _dbSet.Add(entity);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en {nameof(AddAsync)}: " + ex.Message);
+            }
+            return entity;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var entity = await _dbSet.SingleOrDefaultAsync(u => u.i_CompanyId == id);
+            entity.i_IsDeleted = YesNo.Yes;
+            try
+            {
+                return (await _context.SaveChangesAsync() > 0 ? true : false);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en {nameof(DeleteAsync)}: " + ex.Message);
+            }
+            return false;
+        }
+
+        public async Task<IEnumerable<Company>> GetAllAsync()
+        {
+            return await _dbSet.Include(su => su.CompanyHeadquarter)
+                               .Where(u => u.i_IsDeleted == YesNo.No)
+                               .ToListAsync();
+        }
+
+        public async Task<Company> GetAsync(int id)
+        {
+            return await _dbSet.Include(per => per.CompanyHeadquarter)
+                                .SingleOrDefaultAsync(c => c.i_CompanyId == id && c.i_IsDeleted == YesNo.No);
+        }
+
+        public async Task<bool> UpdateAsync(Company entity)
+        {
+            var entityDb = await _dbSet.FirstOrDefaultAsync(u => u.i_CompanyId == entity.i_CompanyId);
+
+            if (entityDb == null)
+            {
+                _logger.LogError($"Error en {nameof(UpdateAsync)}: No existe el usuario con Id: {entity.i_CompanyId}");
+                return false;
+            }
+
+            entityDb.v_Name = entity.v_Name;
+            entityDb.v_IdentificationNumber = entity.v_IdentificationNumber;
+            entityDb.v_Address = entity.v_Address;
+            entityDb.v_PhoneNumber = entity.v_PhoneNumber;
+            entityDb.v_ContacName = entity.v_ContacName;
+            entityDb.v_Mail = entity.v_Mail;
+            try
+            {
+                return await _context.SaveChangesAsync() > 0 ? true : false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en {nameof(UpdateAsync)}: " + ex.Message);
+            }
+            return false;
+        }
+    }
+}
