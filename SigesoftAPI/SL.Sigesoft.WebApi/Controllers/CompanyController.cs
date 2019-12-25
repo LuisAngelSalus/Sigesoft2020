@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SL.Sigesoft.Common;
 using SL.Sigesoft.Data.Contracts;
 using SL.Sigesoft.Dtos;
 using SL.Sigesoft.Models;
@@ -27,25 +28,34 @@ namespace SL.Sigesoft.WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<ListCompanyDto>>> Get()
+        public async Task<ActionResult<Response<IEnumerable<ListCompanyDto>>>> Get()
         {
+            var response = new Response<IEnumerable<ListCompanyDto>>();
             try
             {
                 var companies = await _companyRepository.GetAllAsync();
-                return _mapper.Map<List<ListCompanyDto>>(companies);
+                response.Data = _mapper.Map<List<ListCompanyDto>>(companies);
+                if (response.Data != null)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Consulta Exitosa";
+                }
+                
             }
             catch (Exception ex)
             {
                 return BadRequest();
             }
+            return response;
         }
 
         // GET: api/usuarios/5
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ListCompanyDto>> Get(int id)
+        public async Task<ActionResult<Response<ListCompanyDto>>> Get(int id)
         {
+            var response = new Response<ListCompanyDto>();
             try
             {
                 var company = await _companyRepository.GetAsync(id);
@@ -53,13 +63,18 @@ namespace SL.Sigesoft.WebApi.Controllers
                 {
                     return NotFound();
                 }
-                return _mapper.Map<ListCompanyDto>(company); ;
+                response.Data = _mapper.Map<ListCompanyDto>(company);
+                if (response.Data != null)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Consulta Exitosa";
+                }
             }
             catch (Exception ex)
             {
-
                 throw;
-            }
+            }   
+            return response;
 
         }
 
@@ -67,8 +82,9 @@ namespace SL.Sigesoft.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ListCompanyDto>> Post(CompanyRegisterDto companyDto)
+        public async Task<ActionResult<Response<ListCompanyDto>>> Post(CompanyRegisterDto companyDto)
         {
+            var response = new Response<ListCompanyDto>();
             try
             {
                 var company = _mapper.Map<Company>(companyDto);
@@ -80,7 +96,11 @@ namespace SL.Sigesoft.WebApi.Controllers
                 }
 
                 var newCompanyDto = _mapper.Map<ListCompanyDto>(newCompany);
-                return CreatedAtAction(nameof(Post), new { id = newCompany.i_CompanyId }, newCompanyDto);
+                response.Data = newCompanyDto;
+                response.IsSuccess = true;
+                response.Message = "Se grabó correctamente";
+                //return CreatedAtAction(nameof(Post), new { id = newCompany.i_CompanyId }, newCompanyDto);
+                return response;
 
             }
             catch (Exception ex)
@@ -94,8 +114,9 @@ namespace SL.Sigesoft.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ListCompanyDto>> Put(int id, [FromBody]CompanyUpdateDataDto companyDto)
+        public async Task<ActionResult<Response<ListCompanyDto>>> Put([FromBody]CompanyUpdateDataDto companyDto)
         {
+            var response = new Response<ListCompanyDto>();
             if (companyDto == null)
                 return NotFound();
 
@@ -104,7 +125,12 @@ namespace SL.Sigesoft.WebApi.Controllers
             if (!result)
                 return BadRequest();
 
-            return _mapper.Map<ListCompanyDto>(company);
+            response.Data = _mapper.Map<ListCompanyDto>(company);
+            response.IsSuccess = true;
+            response.Message = "Se actualizó correctamente";
+
+            //return _mapper.Map<ListCompanyDto>(company);
+            return response;
         }
 
         // DELETE: api/usuarios/5

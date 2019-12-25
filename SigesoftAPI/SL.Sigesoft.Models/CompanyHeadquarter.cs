@@ -7,11 +7,7 @@ namespace SL.Sigesoft.Models
 {
    public class CompanyHeadquarter
     {
-        public CompanyHeadquarter()
-        {
-            Company = new HashSet<Company>();
-        }
-
+        
         public int i_CompanyHeadquarterId { get; set; }
         public int i_CompanyId { get; set; }
         public string v_Name { get; set; }
@@ -23,6 +19,5 @@ namespace SL.Sigesoft.Models
         public int? i_UpdateUserId { get; set; }
         public DateTime? d_UpdateDate { get; set; }
 
-        public virtual ICollection<Company> Company { get; set; }
     }
 }

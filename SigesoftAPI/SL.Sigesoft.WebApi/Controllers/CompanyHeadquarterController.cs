@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SL.Sigesoft.Common;
 using SL.Sigesoft.Data.Contracts;
 using SL.Sigesoft.Dtos;
 using SL.Sigesoft.Models;
@@ -28,12 +29,19 @@ namespace SL.Sigesoft.WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<ListCompanyHeadquarterDto>>> Get()
+        public async Task<ActionResult<Response<IEnumerable<ListCompanyHeadquarterDto>>>> Get()
         {
+            var response = new Response<IEnumerable<ListCompanyHeadquarterDto>>();
             try
             {
                 var companyHeadquarters = await _companyHeadquarterRepository.GetAllAsync();
-                return _mapper.Map<List<ListCompanyHeadquarterDto>>(companyHeadquarters);
+                response.Data = _mapper.Map<List<ListCompanyHeadquarterDto>>(companyHeadquarters);
+                if (response.Data != null)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Consulta Exitosa";
+                }
+                return response;
             }
             catch (Exception ex)
             {
@@ -45,8 +53,9 @@ namespace SL.Sigesoft.WebApi.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ListCompanyHeadquarterDto>> Get(int id)
+        public async Task<ActionResult<Response<ListCompanyHeadquarterDto>>> Get(int id)
         {
+            var response = new Response<ListCompanyHeadquarterDto>();
             try
             {
                 var companyHeadquarter = await _companyHeadquarterRepository.GetAsync(id);
@@ -54,7 +63,13 @@ namespace SL.Sigesoft.WebApi.Controllers
                 {
                     return NotFound();
                 }
-                return _mapper.Map<ListCompanyHeadquarterDto>(companyHeadquarter) ;
+                response.Data = _mapper.Map<ListCompanyHeadquarterDto>(companyHeadquarter);
+                if (response.Data != null)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Consulta Exitosa";
+                }
+                return response;
             }
             catch (Exception ex)
             {
@@ -68,11 +83,11 @@ namespace SL.Sigesoft.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ListCompanyHeadquarterDto>> Post(CompanyHeadquarterRegisterDto companyDto)
+        public async Task<ActionResult<ListCompanyHeadquarterDto>> Post(CompanyHeadquarterRegisterDto companyHeadquarterDto)
         {
             try
             {
-                var companyHeadquarter = _mapper.Map<CompanyHeadquarter>(companyDto);
+                var companyHeadquarter = _mapper.Map<CompanyHeadquarter>(companyHeadquarterDto);
 
                 var newCompanyHeadquarter = await _companyHeadquarterRepository.AddAsync(companyHeadquarter);
                 if (newCompanyHeadquarter == null)

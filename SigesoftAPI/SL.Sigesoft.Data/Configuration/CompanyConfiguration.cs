@@ -10,12 +10,12 @@ namespace SL.Sigesoft.Data.Configuration
     public class CompanyConfiguration : IEntityTypeConfiguration<Company>
     {
         public void Configure(EntityTypeBuilder<Company> entity)
-        {
+        {                                 
             entity.HasKey(e => e.i_CompanyId)
                     .HasName("PK_company");
 
             entity.ToTable("Company", "commercial");
-
+            entity.HasIndex(e => e.i_CompanyId);
             entity.Property(e => e.i_CompanyId).HasColumnName("i_CompanyId");
             entity.Property(e => e.v_Name).HasColumnName("v_Name");
             entity.Property(e => e.v_IdentificationNumber).HasColumnName("v_IdentificationNumber");
@@ -58,10 +58,10 @@ namespace SL.Sigesoft.Data.Configuration
                .HasMaxLength(150)
                .IsUnicode(false);
 
-            entity.HasOne(d => d.CompanyHeadquarter)
-               .WithMany(p => p.Company)
-               .HasForeignKey(d => d.i_CompanyId)
-               .HasConstraintName("FK_Company_CompanyHeadquarter");
+            //entity.HasOne(d => d.CompanyHeadquarter)
+            //   .WithMany(p => p.)
+            //   .HasForeignKey(d => d.i_CompanyId)
+            //   .HasConstraintName("FK_Company_CompanyHeadquarter");
         }
     }
 }

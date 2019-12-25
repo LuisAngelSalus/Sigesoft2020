@@ -5,8 +5,13 @@ using System.Text;
 
 namespace SL.Sigesoft.Models
 {
-   public class Company
+   public partial class Company
     {   
+        public Company()
+        {
+            CompanyHeadquarter = new HashSet<CompanyHeadquarter>();
+        }
+
         public int i_CompanyId { get; set; }
         public string v_Name { get; set; }
         public string v_IdentificationNumber { get; set; }
@@ -20,6 +25,6 @@ namespace SL.Sigesoft.Models
         public int? i_UpdateUserId { get; set; }
         public DateTime? d_UpdateDate { get; set; }
 
-        public virtual CompanyHeadquarter CompanyHeadquarter { get; set; }
+        public virtual ICollection<CompanyHeadquarter> CompanyHeadquarter { get; set; }
     }
 }
