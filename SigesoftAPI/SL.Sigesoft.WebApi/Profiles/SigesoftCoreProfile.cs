@@ -75,9 +75,30 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.Address, p => p.MapFrom(m => m.v_Address))
                 .ForMember(u => u.PhoneNumber, p => p.MapFrom(m => m.v_PhoneNumber))
                 .ReverseMap();
-            
 
-            this.CreateMap<CompanyHeadquarter, CompanyHeadquarterDto>().ReverseMap();
+            this.CreateMap<CompanyHeadquarter, CompanyHeadquarterUpdateDataDto>()
+                .ForMember(u => u.CompanyHeadquarterId, p => p.MapFrom(m => m.i_CompanyHeadquarterId))
+                .ForMember(u => u.CompanyId, p => p.MapFrom(m => m.i_CompanyId))
+                .ForMember(u => u.Name, p => p.MapFrom(m => m.v_Name))
+                .ForMember(u => u.Address, p => p.MapFrom(m => m.v_Address))
+                .ForMember(u => u.PhoneNumber, p => p.MapFrom(m => m.v_PhoneNumber))
+                .ReverseMap();
+
+            this.CreateMap<Company, CompanyDto>()
+                .ForMember(u => u.Name, p => p.MapFrom(m => m.v_Name))
+                .ForMember(u => u.IdentificationNumber, p => p.MapFrom(m => m.v_IdentificationNumber))
+                .ForMember(u => u.Address, p => p.MapFrom(m => m.v_Address))
+                .ForMember(u => u.PhoneNumber, p => p.MapFrom(m => m.v_PhoneNumber))
+                .ForMember(u => u.ContacName, p => p.MapFrom(m => m.v_ContacName))
+                .ForMember(u => u.Mail, p => p.MapFrom(m => m.v_Mail))
+                .ReverseMap();
+
+            this.CreateMap<CompanyHeadquarter, CompanyHeadquarterDto>()
+                .ForMember(u => u.CompanyId, p => p.MapFrom(m => m.i_CompanyId))
+                .ForMember(u => u.Name, p => p.MapFrom(m => m.v_Name))
+                .ForMember(u => u.Address, p => p.MapFrom(m => m.v_Address))
+                .ForMember(u => u.PhoneNumber, p => p.MapFrom(m => m.v_PhoneNumber))
+                .ReverseMap();
         }
     }
 }

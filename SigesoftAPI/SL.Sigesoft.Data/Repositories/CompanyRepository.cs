@@ -68,7 +68,7 @@ namespace SL.Sigesoft.Data.Repositories
             return await _dbSet.Include(per => per.CompanyHeadquarter)
                                 .SingleOrDefaultAsync(c => c.i_CompanyId == id && c.i_IsDeleted == YesNo.No);
         }
-
+        
         public async Task<bool> UpdateAsync(Company entity)
         {
             var entityDb = await _dbSet.FirstOrDefaultAsync(u => u.i_CompanyId == entity.i_CompanyId);
@@ -94,6 +94,14 @@ namespace SL.Sigesoft.Data.Repositories
                 _logger.LogError($"Error en {nameof(UpdateAsync)}: " + ex.Message);
             }
             return false;
+        }
+        
+        public async Task<Company> GetCompanyWithHeadquarter(int companyId)
+        {
+            var xxx = await _dbSet.Where(u => u.i_IsDeleted == YesNo.No)
+                    .Include(qu => qu.CompanyHeadquarter)
+                    .SingleOrDefaultAsync(c => c.i_CompanyId == companyId);
+            return xxx;
         }
     }
 }

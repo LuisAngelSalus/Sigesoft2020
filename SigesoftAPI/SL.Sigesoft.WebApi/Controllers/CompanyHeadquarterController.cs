@@ -83,8 +83,9 @@ namespace SL.Sigesoft.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ListCompanyHeadquarterDto>> Post(CompanyHeadquarterRegisterDto companyHeadquarterDto)
+        public async Task<ActionResult<Response<ListCompanyHeadquarterDto>>> Post(CompanyHeadquarterRegisterDto companyHeadquarterDto)
         {
+            var response = new Response<ListCompanyHeadquarterDto>();
             try
             {
                 var companyHeadquarter = _mapper.Map<CompanyHeadquarter>(companyHeadquarterDto);
@@ -96,7 +97,12 @@ namespace SL.Sigesoft.WebApi.Controllers
                 }
                 
                 var newCompanyHeadquarterDto = _mapper.Map<ListCompanyHeadquarterDto>(newCompanyHeadquarter);
-                return CreatedAtAction(nameof(Post), new { id = newCompanyHeadquarter.i_CompanyHeadquarterId}, newCompanyHeadquarterDto);
+                
+                response.Data = newCompanyHeadquarterDto;
+                response.IsSuccess = true;
+                response.Message = "Se grabó correctamente";
+                //return CreatedAtAction(nameof(Post), new { id = newCompany.i_CompanyId }, newCompanyDto);
+                return response;
 
             }
             catch (Exception ex)
@@ -110,8 +116,9 @@ namespace SL.Sigesoft.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ListCompanyHeadquarterDto>> Put(int id, [FromBody]CompanyHeadquarterUpdateDataDto companyHeadquarterDto)
+        public async Task<ActionResult<Response<ListCompanyHeadquarterDto>>> Put(int id, [FromBody]CompanyHeadquarterUpdateDataDto companyHeadquarterDto)
         {
+            var response = new Response<ListCompanyHeadquarterDto>();
             if (companyHeadquarterDto == null)
                 return NotFound();
 
@@ -120,15 +127,21 @@ namespace SL.Sigesoft.WebApi.Controllers
             if (!result)
                 return BadRequest();
 
-            return _mapper.Map<ListCompanyHeadquarterDto>(companyHeadquarter);
+            response.Data = _mapper.Map<ListCompanyHeadquarterDto>(companyHeadquarter);
+            response.IsSuccess = true;
+            response.Message = "Se actualizó correctamente";
+            
+            return response;
+            //return _mapper.Map<ListCompanyHeadquarterDto>(companyHeadquarter);
         }
 
         // DELETE: api/usuarios/5
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult<Response<bool>>> Delete(int id)
         {
+            var response = new Response<bool>();
             try
             {
                 var result = await _companyHeadquarterRepository.DeleteAsync(id);
@@ -136,7 +149,13 @@ namespace SL.Sigesoft.WebApi.Controllers
                 {
                     return BadRequest();
                 }
-                return NoContent();
+                response.Data = result;
+                if (response.Data)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Eliminación Exitosa";
+                }
+                return response;
             }
             catch (Exception excepcion)
             {

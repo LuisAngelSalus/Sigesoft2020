@@ -77,6 +77,7 @@ namespace SL.Sigesoft.Data.Repositories
                 return false;
             }
 
+            entityDb.i_CompanyId = entity.i_CompanyId;
             entityDb.v_Name = entity.v_Name;
             entityDb.v_Address = entity.v_Address;
             entityDb.v_PhoneNumber = entity.v_PhoneNumber;            

@@ -137,8 +137,9 @@ namespace SL.Sigesoft.WebApi.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult<Response<bool>>> Delete(int id)
         {
+            var response = new Response<bool>();
             try
             {
                 var result = await _companyRepository.DeleteAsync(id);
@@ -146,12 +147,41 @@ namespace SL.Sigesoft.WebApi.Controllers
                 {
                     return BadRequest();
                 }
-                return NoContent();
+                response.Data = result;
+                if (response.Data)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Eliminación Exitosa";
+                }
+                return response;
             }
             catch (Exception excepcion)
             {
                 return BadRequest();
             }
+        }
+
+
+        // GET: api/ordenes/5/detalles
+        [HttpGet("{id}/sedes")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Response<CompanyDto>>> GetCompanyWithHeadquarter(int id)
+        {
+            var response = new Response<CompanyDto>();
+            var orden = await _companyRepository.GetCompanyWithHeadquarter(id);
+            if (orden == null)
+            {
+                return NotFound();
+            }
+
+            response.Data = _mapper.Map<CompanyDto>(orden);
+            if (response.Data != null)
+            {
+                response.IsSuccess = true;
+                response.Message = "Consulta Exitosa";
+            }
+            return response;
         }
 
     }
