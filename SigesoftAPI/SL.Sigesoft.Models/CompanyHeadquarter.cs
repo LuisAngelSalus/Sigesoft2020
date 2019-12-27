@@ -1,6 +1,7 @@
 ﻿using SL.Sigesoft.Models.Enum;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace SL.Sigesoft.Models
@@ -12,7 +13,12 @@ namespace SL.Sigesoft.Models
         public int i_CompanyId { get; set; }
         public string v_Name { get; set; }
         public string v_Address { get; set; }
-        public string v_PhoneNumber { get; set; }      
+        public string v_PhoneNumber { get; set; }
+        [NotMapped]
+        public RecordStatus RecordStatus { get; set; }
+        [NotMapped]
+        public RecordType RecordType { get; set; } 
+
         public YesNo i_IsDeleted { get; set; }
         public int? i_InsertUserId { get; set; }
         public DateTime? d_InsertDate { get; set; }

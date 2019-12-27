@@ -21,7 +21,7 @@ namespace SL.Sigesoft.Data.Configuration
             entity.Property(e => e.v_IdentificationNumber).HasColumnName("v_IdentificationNumber");
             entity.Property(e => e.v_Address).HasColumnName("v_Address");
             entity.Property(e => e.v_PhoneNumber).HasColumnName("v_PhoneNumber");
-            entity.Property(e => e.v_ContacName).HasColumnName("v_ContacName");
+            entity.Property(e => e.v_ContactName).HasColumnName("v_ContactName");
             entity.Property(e => e.v_Mail).HasColumnName("v_Mail");
             entity.Property(e => e.d_InsertDate).HasColumnName("d_InsertDate");
             entity.Property(e => e.d_UpdateDate).HasColumnName("d_UpdateDate");
@@ -48,8 +48,8 @@ namespace SL.Sigesoft.Data.Configuration
                .HasMaxLength(100)
                .IsUnicode(false);
 
-            entity.Property(e => e.v_ContacName)
-               .HasColumnName("v_ContacName")
+            entity.Property(e => e.v_ContactName)
+               .HasColumnName("v_ContactName")
                .HasMaxLength(150)
                .IsUnicode(false);
 

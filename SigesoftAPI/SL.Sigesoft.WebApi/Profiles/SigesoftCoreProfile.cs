@@ -36,7 +36,7 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.IdentificationNumber, p => p.MapFrom(m => m.v_IdentificationNumber))
                 .ForMember(u => u.Address, p => p.MapFrom(m => m.v_Address))
                 .ForMember(u => u.PhoneNumber, p => p.MapFrom(m => m.v_PhoneNumber))
-                .ForMember(u => u.ContacName, p => p.MapFrom(m => m.v_ContacName))
+                .ForMember(u => u.ContactName, p => p.MapFrom(m => m.v_ContactName))
                 .ForMember(u => u.Mail, p => p.MapFrom(m => m.v_Mail))
                 .ReverseMap();
 
@@ -45,10 +45,10 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.IdentificationNumber, p => p.MapFrom(m => m.v_IdentificationNumber))
                 .ForMember(u => u.Address, p => p.MapFrom(m => m.v_Address))
                 .ForMember(u => u.PhoneNumber, p => p.MapFrom(m => m.v_PhoneNumber))
-                .ForMember(u => u.ContacName, p => p.MapFrom(m => m.v_ContacName))
+                .ForMember(u => u.ContactName, p => p.MapFrom(m => m.v_ContactName))
                 .ForMember(u => u.Mail, p => p.MapFrom(m => m.v_Mail))
-                .ReverseMap()
-                .ForMember(u => u.CompanyHeadquarter, p => p.Ignore());
+                .ReverseMap();
+                //.ForMember(u => u.CompanyHeadquarter, p => p.Ignore());
 
             this.CreateMap<Company, CompanyUpdateDataDto>()
                 .ForMember(u => u.CompanyId, p => p.MapFrom(m => m.i_CompanyId))
@@ -56,10 +56,10 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.IdentificationNumber, p => p.MapFrom(m => m.v_IdentificationNumber))
                 .ForMember(u => u.Address, p => p.MapFrom(m => m.v_Address))
                 .ForMember(u => u.PhoneNumber, p => p.MapFrom(m => m.v_PhoneNumber))
-                .ForMember(u => u.ContacName, p => p.MapFrom(m => m.v_ContacName))
+                .ForMember(u => u.ContactName, p => p.MapFrom(m => m.v_ContactName))
                 .ForMember(u => u.Mail, p => p.MapFrom(m => m.v_Mail))
-                .ReverseMap()
-                .ForMember(u => u.CompanyHeadquarter, p => p.Ignore());
+                .ReverseMap();
+                //.ForMember(u => u.CompanyHeadquarter, p => p.Ignore());
 
             this.CreateMap<CompanyHeadquarter, ListCompanyHeadquarterDto>()
                 .ForMember(u => u.CompanyHeadquarterId, p => p.MapFrom(m => m.i_CompanyHeadquarterId))
@@ -85,19 +85,23 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ReverseMap();
 
             this.CreateMap<Company, CompanyDto>()
+                .ForMember(u => u.CompanyId, p => p.MapFrom(m => m.i_CompanyId))
                 .ForMember(u => u.Name, p => p.MapFrom(m => m.v_Name))
                 .ForMember(u => u.IdentificationNumber, p => p.MapFrom(m => m.v_IdentificationNumber))
                 .ForMember(u => u.Address, p => p.MapFrom(m => m.v_Address))
                 .ForMember(u => u.PhoneNumber, p => p.MapFrom(m => m.v_PhoneNumber))
-                .ForMember(u => u.ContacName, p => p.MapFrom(m => m.v_ContacName))
+                .ForMember(u => u.ContactName, p => p.MapFrom(m => m.v_ContactName))
                 .ForMember(u => u.Mail, p => p.MapFrom(m => m.v_Mail))
                 .ReverseMap();
 
-            this.CreateMap<CompanyHeadquarter, CompanyHeadquarterDto>()
+            this.CreateMap<CompanyHeadquarter, CompanyHeadquarterDto>()                
+                  .ForMember(u => u.CompanyHeadquarterId, p => p.MapFrom(m => m.i_CompanyHeadquarterId))
                 .ForMember(u => u.CompanyId, p => p.MapFrom(m => m.i_CompanyId))
                 .ForMember(u => u.Name, p => p.MapFrom(m => m.v_Name))
                 .ForMember(u => u.Address, p => p.MapFrom(m => m.v_Address))
                 .ForMember(u => u.PhoneNumber, p => p.MapFrom(m => m.v_PhoneNumber))
+                .ForMember(u => u.RecordStatus, p => p.MapFrom(m => m.RecordStatus))
+                .ForMember(u => u.RecordType, p => p.MapFrom(m => m.RecordType))
                 .ReverseMap();
         }
     }

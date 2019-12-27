@@ -100,7 +100,8 @@ namespace SL.Sigesoft.WebApi.Controllers
                 response.IsSuccess = true;
                 response.Message = "Se grabó correctamente";
                 //return CreatedAtAction(nameof(Post), new { id = newCompany.i_CompanyId }, newCompanyDto);
-                return response;
+                //return response;
+                return Ok(response);
 
             }
             catch (Exception ex)

@@ -11,8 +11,9 @@ namespace SL.Sigesoft.Dtos
         public string IdentificationNumber { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
-        public string ContacName { get; set; }
+        public string ContactName { get; set; }
         public string Mail { get; set; }
 
+        public List<CompanyHeadquarterDto> companyHeadquarter { get; set; }
     }
 }

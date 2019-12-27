@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SL.Sigesoft.Common\SL.Sigesoft.Common.csproj" />
     <ProjectReference Include="..\SL.Sigesoft.Models\SL.Sigesoft.Models.csproj" />
   </ItemGroup>
 

@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace SL.Sigesoft.Common
-{
+{   
     public class Response<T>
     {
         public T Data { get; set; }

@@ -28,8 +28,22 @@ namespace SL.Sigesoft.Data.Repositories
 
         public async Task<Company> AddAsync(Company entity)
         {
-            entity.i_IsDeleted = YesNo.No;            
-            _dbSet.Add(entity);
+            entity.i_IsDeleted = YesNo.No;
+            var list = new List<CompanyHeadquarter>();
+            foreach (var item in entity.CompanyHeadquarter) 
+            {
+                var o = new CompanyHeadquarter();
+                o.i_CompanyId = item.i_CompanyId;
+                o.v_Name = item.v_Name;
+                o.v_Address = item.v_Address;
+                o.v_PhoneNumber = item.v_PhoneNumber;
+                o.i_IsDeleted = YesNo.No;
+                list.Add(o);
+            }
+
+            entity.CompanyHeadquarter = list;
+           _dbSet.Add(entity);
+
             try
             {
                 await _context.SaveChangesAsync();
@@ -59,8 +73,8 @@ namespace SL.Sigesoft.Data.Repositories
         public async Task<IEnumerable<Company>> GetAllAsync()
         {
             return await _dbSet.Include(su => su.CompanyHeadquarter)
-                               .Where(u => u.i_IsDeleted == YesNo.No)
-                               .ToListAsync();
+                        .Where(u => u.i_IsDeleted == YesNo.No)
+                        .ToListAsync();            
         }
 
         public async Task<Company> GetAsync(int id)
@@ -71,7 +85,7 @@ namespace SL.Sigesoft.Data.Repositories
         
         public async Task<bool> UpdateAsync(Company entity)
         {
-            var entityDb = await _dbSet.FirstOrDefaultAsync(u => u.i_CompanyId == entity.i_CompanyId);
+            var entityDb = await _dbSet.Include(i => i.CompanyHeadquarter).FirstOrDefaultAsync(u => u.i_CompanyId == entity.i_CompanyId);
 
             if (entityDb == null)
             {
@@ -79,12 +93,43 @@ namespace SL.Sigesoft.Data.Repositories
                 return false;
             }
 
+            #region update Company
             entityDb.v_Name = entity.v_Name;
             entityDb.v_IdentificationNumber = entity.v_IdentificationNumber;
             entityDb.v_Address = entity.v_Address;
             entityDb.v_PhoneNumber = entity.v_PhoneNumber;
-            entityDb.v_ContacName = entity.v_ContacName;
+            entityDb.v_ContactName = entity.v_ContactName;
             entityDb.v_Mail = entity.v_Mail;
+            #endregion
+
+            foreach (var item in entity.CompanyHeadquarter)
+            {
+                if (item.RecordType == RecordType.Temporal && item.RecordStatus == RecordStatus.Agregado)
+                {
+                    var o = new CompanyHeadquarter();
+                    o.i_CompanyId = item.i_CompanyId;                    
+                    o.v_Name = item.v_Name;
+                    o.v_Address = item.v_Address;
+                    o.v_PhoneNumber = item.v_PhoneNumber;
+                    o.i_IsDeleted = YesNo.No;
+                    entityDb.CompanyHeadquarter.Add(o);
+                }
+                if (item.RecordType == RecordType.NoTemporal && (item.RecordStatus == RecordStatus.Modificado || item.RecordStatus == RecordStatus.Grabado))
+                {
+                    var o = entityDb.CompanyHeadquarter.Where(w => w.i_CompanyHeadquarterId == item.i_CompanyHeadquarterId).FirstOrDefault();                    
+                    o.v_Name = item.v_Name;                    
+                    o.v_Address = item.v_Address;
+                    o.v_PhoneNumber = item.v_PhoneNumber;                    
+                    entityDb.CompanyHeadquarter.Add(o);
+                }
+
+                if (item.RecordType == RecordType.NoTemporal && item.RecordStatus == RecordStatus.EliminadoLogico)
+                {
+                    var o = entityDb.CompanyHeadquarter.Where(w => w.i_CompanyHeadquarterId == item.i_CompanyHeadquarterId).FirstOrDefault();
+                    o.i_IsDeleted = YesNo.Yes;
+                    entityDb.CompanyHeadquarter.Add(o);
+                }
+            }
             try
             {
                 return await _context.SaveChangesAsync() > 0 ? true : false;
@@ -98,10 +143,57 @@ namespace SL.Sigesoft.Data.Repositories
         
         public async Task<Company> GetCompanyWithHeadquarter(int companyId)
         {
-            var xxx = await _dbSet.Where(u => u.i_IsDeleted == YesNo.No)
-                    .Include(qu => qu.CompanyHeadquarter)
-                    .SingleOrDefaultAsync(c => c.i_CompanyId == companyId);
-            return xxx;
+            //return await _dbSet.Where(u => u.i_IsDeleted == YesNo.No)
+            //        .Include(qu => qu.CompanyHeadquarter)
+            //        .SingleOrDefaultAsync(c => c.i_CompanyId == companyId);
+
+            var query = await (from A in _context.Company
+                               where A.i_IsDeleted == YesNo.No
+                               select new Company
+                               {
+                                   i_CompanyId = A.i_CompanyId,
+                                   v_Name = A.v_Name,
+                                   v_IdentificationNumber = A.v_IdentificationNumber,
+                                   v_Address = A.v_Address,
+                                   v_PhoneNumber = A.v_PhoneNumber,
+                                   v_ContactName = A.v_ContactName,
+                                   v_Mail = A.v_Mail,
+                                   CompanyHeadquarter = (from B in _context.CompanyHeadquarters
+                                                         where B.i_CompanyId == companyId && B.i_IsDeleted == YesNo.No
+                                                         select B)
+                                                         .ToList()
+                               }
+                               ).FirstOrDefaultAsync();
+            return query;
+            
         }
+
+        public async Task<bool> UpdateWithDetailAsync(Company entity)
+        {
+            var entityDb = await _dbSet.FirstOrDefaultAsync(u => u.i_CompanyId == entity.i_CompanyId);
+
+            if (entityDb == null)
+            {
+                _logger.LogError($"Error en {nameof(UpdateAsync)}: No existe el usuario con Id: {entity.i_CompanyId}");
+                return false;
+            }
+
+            entityDb.v_Name = entity.v_Name;
+            entityDb.v_IdentificationNumber = entity.v_IdentificationNumber;
+            entityDb.v_Address = entity.v_Address;
+            entityDb.v_PhoneNumber = entity.v_PhoneNumber;
+            entityDb.v_ContactName = entity.v_ContactName;
+            entityDb.v_Mail = entity.v_Mail;
+            try
+            {
+                return await _context.SaveChangesAsync() > 0 ? true : false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en {nameof(UpdateAsync)}: " + ex.Message);
+            }
+            return false;
+        }
+
     }
 }
