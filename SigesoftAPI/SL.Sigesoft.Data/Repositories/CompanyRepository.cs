@@ -100,6 +100,8 @@ namespace SL.Sigesoft.Data.Repositories
             entityDb.v_PhoneNumber = entity.v_PhoneNumber;
             entityDb.v_ContactName = entity.v_ContactName;
             entityDb.v_Mail = entity.v_Mail;
+            entityDb.v_District = entity.v_District;
+            entityDb.v_PhoneCompany = entity.v_PhoneCompany;
             #endregion
 
             foreach (var item in entity.CompanyHeadquarter)
@@ -158,6 +160,8 @@ namespace SL.Sigesoft.Data.Repositories
                                    v_PhoneNumber = A.v_PhoneNumber,
                                    v_ContactName = A.v_ContactName,
                                    v_Mail = A.v_Mail,
+                                   v_District = A.v_District,
+                                   v_PhoneCompany = A.v_PhoneCompany,
                                    CompanyHeadquarter = (from B in _context.CompanyHeadquarters
                                                          where B.i_CompanyId == companyId && B.i_IsDeleted == YesNo.No
                                                          select B)
@@ -184,6 +188,8 @@ namespace SL.Sigesoft.Data.Repositories
             entityDb.v_PhoneNumber = entity.v_PhoneNumber;
             entityDb.v_ContactName = entity.v_ContactName;
             entityDb.v_Mail = entity.v_Mail;
+            entityDb.v_District = entity.v_District;
+            entityDb.v_PhoneCompany = entity.v_PhoneCompany;
             try
             {
                 return await _context.SaveChangesAsync() > 0 ? true : false;

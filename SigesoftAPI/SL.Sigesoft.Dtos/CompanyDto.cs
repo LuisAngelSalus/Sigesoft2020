@@ -17,6 +17,8 @@ namespace SL.Sigesoft.Dtos
         public string PhoneNumber { get; set; }
         public string ContactName { get; set; }
         public string Mail { get; set; }
+        public string District { get; set; }
+        public string PhoneCompany { get; set; }
 
         public List<CompanyHeadquarterDto> CompanyHeadquarter { get; set; }
 

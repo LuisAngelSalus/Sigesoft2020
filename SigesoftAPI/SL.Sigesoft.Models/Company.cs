@@ -19,6 +19,8 @@ namespace SL.Sigesoft.Models
         public string v_PhoneNumber { get; set; }
         public string v_ContactName { get; set; }
         public string v_Mail { get; set; }
+        public string v_District { get; set; }
+        public string v_PhoneCompany { get; set; }
         public YesNo i_IsDeleted { get; set; }
         public int? i_InsertUserId { get; set; }
         public DateTime? d_InsertDate { get; set; }

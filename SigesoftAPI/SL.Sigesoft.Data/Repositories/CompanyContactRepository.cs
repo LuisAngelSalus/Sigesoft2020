@@ -66,6 +66,7 @@ namespace SL.Sigesoft.Data.Repositories
             var query = await (from A in _context.CompanyContact
                                join B in _context.CompanyHeadquarters on A.i_CompanyHeadquarterId equals B.i_CompanyHeadquarterId
                                join C in _context.Company on B.i_CompanyId equals C.i_CompanyId
+                               where C.i_CompanyId == companyId
                                select new CompanyContact
                                {
                                    i_CompanyHeadquarterId = A.i_CompanyHeadquarterId,
