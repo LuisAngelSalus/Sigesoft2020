@@ -6,8 +6,12 @@ using System.Text;
 
 namespace SL.Sigesoft.Models
 {
-   public class CompanyHeadquarter
+   public partial class CompanyHeadquarter
     {
+        public CompanyHeadquarter()
+        {
+            CompanyContact = new HashSet<CompanyContact>();
+        }
         
         public int i_CompanyHeadquarterId { get; set; }
         public int i_CompanyId { get; set; }
@@ -24,6 +28,8 @@ namespace SL.Sigesoft.Models
         public DateTime? d_InsertDate { get; set; }
         public int? i_UpdateUserId { get; set; }
         public DateTime? d_UpdateDate { get; set; }
+
+        public virtual ICollection<CompanyContact> CompanyContact { get; set; }
 
     }
 }
