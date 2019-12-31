@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using SL.Sigesoft.Data.Configuration;
+using SL.Sigesoft.Data.Configuration.Win;
+using SL.Sigesoft.Models.Win;
 
 namespace SL.Sigesoft.Data
 {
@@ -15,13 +15,13 @@ namespace SL.Sigesoft.Data
         {
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public virtual DbSet<ComponentWin> ComponentWin { get; set; }
+        public virtual DbSet<SystemParameterWin> SystemParameterWin { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-//            if (!optionsBuilder.IsConfigured)
-//            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-//                optionsBuilder.UseSqlServer("Data Source=DESKTOP-3OV50TL;Initial Catalog=SigesoftCore;Integrated Security=True;");
-//            }
+            modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
+            modelBuilder.ApplyConfiguration(new ComponentWinConfiguration());
         }
 
     }
