@@ -63,7 +63,7 @@ namespace SL.Sigesoft.Data.Configuration
                .IsUnicode(false);
 
             entity.Property(e => e.v_District)
-           .HasColumnName("v_District   ")
+           .HasColumnName("v_District")
            .HasMaxLength(100)
            .IsUnicode(false);
 

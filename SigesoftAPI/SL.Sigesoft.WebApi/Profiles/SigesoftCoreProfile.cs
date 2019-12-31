@@ -120,6 +120,32 @@ namespace SL.Sigesoft.WebApi.Profiles
              .ForMember(u => u.Phone, p => p.MapFrom(m => m.v_Phone))
              .ForMember(u => u.Email, p => p.MapFrom(m => m.v_Email))
              .ReverseMap();
+
+            this.CreateMap<Info, InfoDto>()
+                .ForMember(u => u.Ruc, p => p.MapFrom(m => m.Ruc))
+                .ForMember(u => u.RazonSocial, p => p.MapFrom(m => m.RazonSocial))
+                .ForMember(u => u.TipoVia, p => p.MapFrom(m => m.TipoVia))
+                .ForMember(u => u.NombreVia, p => p.MapFrom(m => m.NombreVia))
+                .ForMember(u => u.CodigoZona, p => p.MapFrom(m => m.CodigoZona))
+                .ForMember(u => u.TipoZona, p => p.MapFrom(m => m.TipoZona))
+                .ForMember(u => u.Numero, p => p.MapFrom(m => m.Numero))
+                .ForMember(u => u.Interior, p => p.MapFrom(m => m.Interior))
+                .ForMember(u => u.Lote, p => p.MapFrom(m => m.Lote))
+                .ForMember(u => u.Departamento, p => p.MapFrom(m => m.Departamento))
+                .ForMember(u => u.Manzana, p => p.MapFrom(m => m.Manzana))
+                .ReverseMap();
+
+            this.CreateMap<Detail, DetailDto>()
+                .ForMember(u => u.TipoVia, p => p.MapFrom(m => m.TipoVia))
+                .ForMember(u => u.NombreVia, p => p.MapFrom(m => m.NombreVia))
+                .ForMember(u => u.CodigoZona, p => p.MapFrom(m => m.CodigoZona))
+                .ForMember(u => u.TipoZona, p => p.MapFrom(m => m.TipoZona))
+                .ForMember(u => u.Numero, p => p.MapFrom(m => m.Numero))
+                .ForMember(u => u.Interior, p => p.MapFrom(m => m.Interior))
+                .ForMember(u => u.Lote, p => p.MapFrom(m => m.Lote))
+                .ForMember(u => u.Departamento, p => p.MapFrom(m => m.Departamento))
+                .ForMember(u => u.Manzana, p => p.MapFrom(m => m.Manzana))
+                .ReverseMap();
         }
     }
 }

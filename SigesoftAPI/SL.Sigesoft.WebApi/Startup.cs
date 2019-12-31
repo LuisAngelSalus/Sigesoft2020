@@ -44,6 +44,7 @@ namespace SL.Sigesoft.WebApi
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<ICompanyHeadquarterRepository, CompanyHeadquarterRepository>();
             services.AddScoped<ICompanyContactRepository, CompanyContactRepository>();
+            services.AddScoped<IInfoRepository, InfoRepository>();
             services.AddScoped<IPasswordHasher<SystemUser>, PasswordHasher<SystemUser>>();
             services.AddSingleton<TokenService>();
 

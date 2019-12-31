@@ -29,6 +29,8 @@ namespace SL.Sigesoft.Data
         public virtual DbSet<Company> Company{ get; set; }
         public virtual DbSet<CompanyHeadquarter> CompanyHeadquarters { get; set; }
         public virtual DbSet<CompanyContact> CompanyContact { get; set; }
+        public virtual DbSet<Info> Info { get; set; }
+        public virtual DbSet<Detail> Detail { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -47,6 +49,9 @@ namespace SL.Sigesoft.Data
             modelBuilder.ApplyConfiguration(new CompanyConfiguration());
             modelBuilder.ApplyConfiguration(new CompanyHeadquarterConfiguration());
             modelBuilder.ApplyConfiguration(new CompanyContactConfiguration());
+
+            modelBuilder.ApplyConfiguration(new InfoConfiguration());
+            modelBuilder.ApplyConfiguration(new DetailConfiguration());
 
         }
     }
