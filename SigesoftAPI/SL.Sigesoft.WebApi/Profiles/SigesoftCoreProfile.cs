@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using SL.Sigesoft.Data;
 using SL.Sigesoft.Dtos;
+using SL.Sigesoft.Dtos.Win;
 using SL.Sigesoft.Models;
+using SL.Sigesoft.Models.Win;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -145,6 +147,17 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.Lote, p => p.MapFrom(m => m.Lote))
                 .ForMember(u => u.Departamento, p => p.MapFrom(m => m.Departamento))
                 .ForMember(u => u.Manzana, p => p.MapFrom(m => m.Manzana))
+                .ReverseMap();
+
+
+            this.CreateMap<Component, ListComponentDto>()
+                .ForMember(u => u.ComponentId, p => p.MapFrom(m => m.v_ComponentId))
+                .ForMember(u => u.Name, p => p.MapFrom(m => m.v_Name))
+                .ForMember(u => u.CategoryName, p => p.MapFrom(m => m.v_CategoryName))
+                .ForMember(u => u.CategoryId, p => p.MapFrom(m => m.i_CategoryId))
+                .ForMember(u => u.CostPrice, p => p.MapFrom(m => m.r_CostPrice))
+                .ForMember(u => u.BasePrice, p => p.MapFrom(m => m.r_BasePrice))
+                .ForMember(u => u.SalePrice, p => p.MapFrom(m => m.r_SalePrice))
                 .ReverseMap();
         }
     }

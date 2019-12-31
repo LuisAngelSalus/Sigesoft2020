@@ -8,6 +8,6 @@ namespace SL.Sigesoft.Data.Contracts.Win
 {
    public interface IComponentRepository
     {
-        Task<List<ComponentWin>> GetAll();
+        Task<List<Component>> GetAllAsync();
     }
 }

@@ -18,7 +18,9 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using SL.Sigesoft.Data;
 using SL.Sigesoft.Data.Contracts;
+using SL.Sigesoft.Data.Contracts.Win;
 using SL.Sigesoft.Data.Repositories;
+using SL.Sigesoft.Data.Repositories.Win;
 using SL.Sigesoft.Models;
 using SL.Sigesoft.WebApi.Services;
 
@@ -39,12 +41,16 @@ namespace SL.Sigesoft.WebApi
             services.AddAutoMapper(typeof(Startup));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDbContext<SigesoftCoreContext>(options => options.UseSqlServer(_configuration.GetConnectionString("SigesoftCoreDB")));
+            services.AddDbContext<SigesoftWinContext>(options => options.UseSqlServer(_configuration.GetConnectionString("SigesoftWinDB")));
             services.AddScoped<IPersonsRepository, PersonRepository>();
             services.AddScoped<ISystemUserRepository, SystemUserRepository>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<ICompanyHeadquarterRepository, CompanyHeadquarterRepository>();
             services.AddScoped<ICompanyContactRepository, CompanyContactRepository>();
             services.AddScoped<IInfoRepository, InfoRepository>();
+            services.AddScoped<IComponentRepository, ComponentRepository>();
+            services.AddScoped<IProtocolProfileRepository, ProtocolProfileRepository>();
+            
             services.AddScoped<IPasswordHasher<SystemUser>, PasswordHasher<SystemUser>>();
             services.AddSingleton<TokenService>();
 

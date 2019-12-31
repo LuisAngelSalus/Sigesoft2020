@@ -15,13 +15,13 @@ namespace SL.Sigesoft.Data
         {
         }
 
-        public virtual DbSet<ComponentWin> ComponentWin { get; set; }
-        public virtual DbSet<SystemParameterWin> SystemParameterWin { get; set; }
+        public virtual DbSet<Component> Component { get; set; }
+        public virtual DbSet<SystemParameter> SystemParameter { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
-            modelBuilder.ApplyConfiguration(new ComponentWinConfiguration());
+            modelBuilder.ApplyConfiguration(new ComponentConfiguration());
         }
 
     }

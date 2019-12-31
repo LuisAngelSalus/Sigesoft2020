@@ -7,9 +7,9 @@ using System.Text;
 
 namespace SL.Sigesoft.Data.Configuration.Win
 {
-    public class ComponentWinConfiguration : IEntityTypeConfiguration<ComponentWin>
+    public class ComponentConfiguration : IEntityTypeConfiguration<Component>
     {
-        public void Configure(EntityTypeBuilder<ComponentWin> entity)
+        public void Configure(EntityTypeBuilder<Component> entity)
         {
             entity.HasKey(e => e.v_ComponentId);
 
