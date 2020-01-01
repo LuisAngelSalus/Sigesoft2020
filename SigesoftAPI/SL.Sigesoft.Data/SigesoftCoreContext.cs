@@ -33,6 +33,9 @@ namespace SL.Sigesoft.Data
         public virtual DbSet<Detail> Detail { get; set; }
         public virtual DbSet<ProtocolProfile> ProtocolProfile { get; set; }
         public virtual DbSet<ProfileDetail> ProfileDetail { get; set; }
+        public virtual DbSet<Quotation> Quatation { get; set; }
+        public virtual DbSet<QuotationProfile> QuatationProfile { get; set; }
+        public virtual DbSet<ProfileComponent> ProfileComponent { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -53,9 +56,12 @@ namespace SL.Sigesoft.Data
             modelBuilder.ApplyConfiguration(new CompanyContactConfiguration());
             modelBuilder.ApplyConfiguration(new InfoConfiguration());
             modelBuilder.ApplyConfiguration(new DetailConfiguration());
-
             modelBuilder.ApplyConfiguration(new ProtocolProfileConfiguration());
             modelBuilder.ApplyConfiguration(new ProfileDetailConfiguration());
+
+            modelBuilder.ApplyConfiguration(new QuotationConfiguration());
+            modelBuilder.ApplyConfiguration(new QuotationProfileConfiguration());
+            modelBuilder.ApplyConfiguration(new ProfileComponentConfiguration());
 
         }
     }
