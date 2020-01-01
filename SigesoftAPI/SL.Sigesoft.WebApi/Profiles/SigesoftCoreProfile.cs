@@ -159,6 +159,43 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.BasePrice, p => p.MapFrom(m => m.r_BasePrice))
                 .ForMember(u => u.SalePrice, p => p.MapFrom(m => m.r_SalePrice))
                 .ReverseMap();
+
+
+            this.CreateMap<QuotationModel, QuotationDto>()
+                .ForMember(u => u.QuotationId, p => p.MapFrom(m => m.QuotationId))
+                .ForMember(u => u.Code, p => p.MapFrom(m => m.Code))
+                .ForMember(u => u.Version, p => p.MapFrom(m => m.Version))
+                .ForMember(u => u.UserCreatedId, p => p.MapFrom(m => m.UserCreatedId))
+                .ForMember(u => u.UserName, p => p.MapFrom(m => m.UserName))
+                .ForMember(u => u.CompanyId, p => p.MapFrom(m => m.CompanyId))
+                .ForMember(u => u.CompanyName, p => p.MapFrom(m => m.CompanyName))
+                .ForMember(u => u.CompanyDistrictName, p => p.MapFrom(m => m.CompanyDistrictName))
+                .ForMember(u => u.CompanyAddress, p => p.MapFrom(m => m.CompanyAddress))
+                .ForMember(u => u.CompanyHeadquarterId, p => p.MapFrom(m => m.CompanyHeadquarterId))
+                .ForMember(u => u.FullName, p => p.MapFrom(m => m.FullName))
+                .ForMember(u => u.Email, p => p.MapFrom(m => m.Email))
+                .ForMember(u => u.TypeFormatId, p => p.MapFrom(m => m.TypeFormatId))
+                .ForMember(u => u.CommercialTerms, p => p.MapFrom(m => m.CommercialTerms))
+                //.ForMember(u => u.QuotationProfiles, p => p.Ignore())
+                .ReverseMap();
+
+            this.CreateMap<QuotationProfileModel, QuotationProfileDto>()
+                .ForMember(u => u.ProfileId, p => p.MapFrom(m => m.ProfileId))
+                .ForMember(u => u.ProfileName, p => p.MapFrom(m => m.ProfileName))
+                .ForMember(u => u.ServiceTypeId, p => p.MapFrom(m => m.ServiceTypeId))
+                .ForMember(u => u.ServiceTypeName, p => p.MapFrom(m => m.ServiceTypeName))
+                //.ForMember(u => u.ProfileComponents, p => p.Ignore())
+                .ReverseMap();
+
+            this.CreateMap<ProfileComponentModel, ProfileComponentDto>()
+                .ForMember(u => u.CategoryId, p => p.MapFrom(m => m.CategoryId))
+                .ForMember(u => u.CategoryName, p => p.MapFrom(m => m.CategoryName))
+                .ForMember(u => u.ComponentId, p => p.MapFrom(m => m.ComponentId))
+                .ForMember(u => u.ComponentName, p => p.MapFrom(m => m.ComponentName))
+                .ForMember(u => u.MinPrice, p => p.MapFrom(m => m.MinPrice))
+                .ForMember(u => u.PriceList, p => p.MapFrom(m => m.PriceList))
+                .ForMember(u => u.SalePrice, p => p.MapFrom(m => m.SalePrice))
+                .ReverseMap();
         }
     }
 }

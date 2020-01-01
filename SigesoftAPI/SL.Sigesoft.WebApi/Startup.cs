@@ -50,8 +50,9 @@ namespace SL.Sigesoft.WebApi
             services.AddScoped<IInfoRepository, InfoRepository>();
             services.AddScoped<IComponentRepository, ComponentRepository>();
             services.AddScoped<IProtocolProfileRepository, ProtocolProfileRepository>();
-            
+            services.AddScoped<IQuotationRepository, QuotationRepository>();
             services.AddScoped<IPasswordHasher<SystemUser>, PasswordHasher<SystemUser>>();
+            
             services.AddSingleton<TokenService>();
 
             //Accedemos a la sección JwtSettings del archivo appsettings.json

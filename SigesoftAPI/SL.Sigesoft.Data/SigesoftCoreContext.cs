@@ -33,8 +33,8 @@ namespace SL.Sigesoft.Data
         public virtual DbSet<Detail> Detail { get; set; }
         public virtual DbSet<ProtocolProfile> ProtocolProfile { get; set; }
         public virtual DbSet<ProfileDetail> ProfileDetail { get; set; }
-        public virtual DbSet<Quotation> Quatation { get; set; }
-        public virtual DbSet<QuotationProfile> QuatationProfile { get; set; }
+        public virtual DbSet<Quotation> Quotation { get; set; }
+        public virtual DbSet<QuotationProfile> QuotationProfile { get; set; }
         public virtual DbSet<ProfileComponent> ProfileComponent { get; set; }
 
 

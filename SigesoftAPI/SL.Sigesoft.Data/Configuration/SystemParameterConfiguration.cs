@@ -11,14 +11,14 @@ namespace SL.Sigesoft.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<SystemParameter> entity)
         {
-            entity.HasKey(e => new { e.IGroupId, e.IParameterId })
+            entity.HasKey(e => new { e.i_GroupId, e.i_ParameterId })
                     .HasName("PK_systemparameter");
 
             entity.ToTable("SystemParameter", "common");
 
-            entity.Property(e => e.IGroupId).HasColumnName("i_GroupId");
+            entity.Property(e => e.i_GroupId).HasColumnName("i_GroupId");
 
-            entity.Property(e => e.IParameterId).HasColumnName("i_ParameterId");
+            entity.Property(e => e.i_ParameterId).HasColumnName("i_ParameterId");
 
             entity.Property(e => e.d_InsertDate).HasColumnName("d_InsertDate");
 
@@ -30,12 +30,12 @@ namespace SL.Sigesoft.Data.Configuration
 
             entity.Property(e => e.i_UpdateUserId).HasColumnName("i_UpdateUserId");
 
-            entity.Property(e => e.VValue1)
+            entity.Property(e => e.v_Value1)
                 .HasColumnName("v_Value1")
                 .HasMaxLength(8000)
                 .IsUnicode(false);
 
-            entity.Property(e => e.VValue2)
+            entity.Property(e => e.v_Value2)
                 .HasColumnName("v_Value2")
                 .HasMaxLength(8000)
                 .IsUnicode(false);

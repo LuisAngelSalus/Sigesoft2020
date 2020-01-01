@@ -11,12 +11,12 @@ namespace SL.Sigesoft.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<QuotationProfile> entity)
         {
-            entity.HasKey(e => e.i_QuatationProfileId)
+            entity.HasKey(e => e.i_QuotationProfileId)
               .HasName("PK_quotationProfile");
 
             entity.ToTable("QuotationProfile", "commercial");
-            entity.HasIndex(e => e.i_QuatationProfileId);
-            entity.Property(e => e.i_QuatationProfileId).HasColumnName("i_QuatationProfileId");
+            entity.HasIndex(e => e.i_QuotationProfileId);
+            entity.Property(e => e.i_QuotationProfileId).HasColumnName("i_QuotationProfileId");
 
             entity.Property(e => e.i_QuotationId).HasColumnName("i_QuotationId");
             entity.Property(e => e.i_ProfileId).HasColumnName("i_ProfileId");
