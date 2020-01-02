@@ -26,6 +26,8 @@ namespace SL.Sigesoft.Models
 
     public class QuotationProfileModel
     {
+        public int QuotationProfileId { get; set; }
+        public int QuotationId { get; set; }
         public int? ProfileId { get; set; }
         public string ProfileName { get; set; }
         public int? ServiceTypeId { get; set; }
@@ -35,7 +37,9 @@ namespace SL.Sigesoft.Models
     }
 
     public class ProfileComponentModel
-    {       
+    {
+        public int ProfileComponentId { get; set; }
+        public int QuotationProfileId { get; set; }
         public int? CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string ComponentId { get; set; }

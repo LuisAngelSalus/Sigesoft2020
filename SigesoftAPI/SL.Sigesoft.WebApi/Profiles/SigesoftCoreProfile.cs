@@ -179,7 +179,8 @@ namespace SL.Sigesoft.WebApi.Profiles
                 //.ForMember(u => u.QuotationProfiles, p => p.Ignore())
                 .ReverseMap();
 
-            this.CreateMap<QuotationProfileModel, QuotationProfileDto>()
+            this.CreateMap<QuotationProfileModel, QuotationProfileDto>()                
+                .ForMember(u => u.QuotationProfileId, p => p.MapFrom(m => m.QuotationProfileId))
                 .ForMember(u => u.ProfileId, p => p.MapFrom(m => m.ProfileId))
                 .ForMember(u => u.ProfileName, p => p.MapFrom(m => m.ProfileName))
                 .ForMember(u => u.ServiceTypeId, p => p.MapFrom(m => m.ServiceTypeId))
@@ -188,6 +189,7 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ReverseMap();
 
             this.CreateMap<ProfileComponentModel, ProfileComponentDto>()
+                .ForMember(u => u.ProfileComponentId, p => p.MapFrom(m => m.ProfileComponentId))
                 .ForMember(u => u.CategoryId, p => p.MapFrom(m => m.CategoryId))
                 .ForMember(u => u.CategoryName, p => p.MapFrom(m => m.CategoryName))
                 .ForMember(u => u.ComponentId, p => p.MapFrom(m => m.ComponentId))
@@ -195,6 +197,112 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.MinPrice, p => p.MapFrom(m => m.MinPrice))
                 .ForMember(u => u.PriceList, p => p.MapFrom(m => m.PriceList))
                 .ForMember(u => u.SalePrice, p => p.MapFrom(m => m.SalePrice))
+                .ReverseMap();
+
+            this.CreateMap<Quotation, QuotationDto>()
+               .ForMember(u => u.QuotationId, p => p.MapFrom(m => m.i_QuotationId))
+               .ForMember(u => u.Code, p => p.MapFrom(m => m.v_Code))
+               .ForMember(u => u.Version, p => p.MapFrom(m => m.i_Version))
+               .ForMember(u => u.UserCreatedId, p => p.MapFrom(m => m.i_UserCreatedId))               
+               .ForMember(u => u.CompanyId, p => p.MapFrom(m => m.i_CompanyId))          
+               .ForMember(u => u.CompanyHeadquarterId, p => p.MapFrom(m => m.i_CompanyHeadquarterId))
+               .ForMember(u => u.FullName, p => p.MapFrom(m => m.v_FullName))
+               .ForMember(u => u.Email, p => p.MapFrom(m => m.v_Email))
+               .ForMember(u => u.TypeFormatId, p => p.MapFrom(m => m.i_TypeFormatId))
+               .ForMember(u => u.CommercialTerms, p => p.MapFrom(m => m.v_CommercialTerms))
+               .ForMember(u => u.InsertUserId, p => p.MapFrom(m => m.i_InsertUserId))               
+               .ReverseMap();
+
+            this.CreateMap<QuotationProfile, QuotationProfileDto>()                
+                .ForMember(u => u.QuotationProfileId, p => p.MapFrom(m => m.i_QuotationProfileId))
+                .ForMember(u => u.QuotationId, p => p.MapFrom(m => m.i_QuotationId))
+                .ForMember(u => u.ProfileId, p => p.MapFrom(m => m.i_ProfileId))
+                .ForMember(u => u.ServiceTypeId, p => p.MapFrom(m => m.i_ServiceTypeId))
+               .ForMember(u => u.InsertUserId, p => p.MapFrom(m => m.i_InsertUserId))
+                .ReverseMap();
+
+            this.CreateMap<ProfileComponent, ProfileComponentDto>()
+                .ForMember(u => u.ProfileComponentId, p => p.MapFrom(m => m.i_ProfileComponentId))
+                .ForMember(u => u.QuotationProfileId, p => p.MapFrom(m => m.i_QuotationProfileId))
+                .ForMember(u => u.CategoryName, p => p.MapFrom(m => m.v_CategoryName))
+                .ForMember(u => u.CategoryId, p => p.MapFrom(m => m.i_CategoryId))
+                .ForMember(u => u.ComponentName, p => p.MapFrom(m => m.v_ComponentName))
+                .ForMember(u => u.ComponentId, p => p.MapFrom(m => m.v_ComponentId))
+                .ForMember(u => u.MinPrice, p => p.MapFrom(m => m.r_MinPrice))
+                .ForMember(u => u.PriceList, p => p.MapFrom(m => m.r_PriceList))
+                .ForMember(u => u.SalePrice, p => p.MapFrom(m => m.r_SalePrice))
+                .ForMember(u => u.InsertUserId, p => p.MapFrom(m => m.i_InsertUserId))
+                .ReverseMap();
+
+
+
+
+            this.CreateMap<Quotation, QuotationRegisterDto>()
+              .ForMember(u => u.Code, p => p.MapFrom(m => m.v_Code))
+              .ForMember(u => u.Version, p => p.MapFrom(m => m.i_Version))
+              .ForMember(u => u.UserCreatedId, p => p.MapFrom(m => m.i_UserCreatedId))
+              .ForMember(u => u.CompanyId, p => p.MapFrom(m => m.i_CompanyId))
+              .ForMember(u => u.CompanyHeadquarterId, p => p.MapFrom(m => m.i_CompanyHeadquarterId))
+              .ForMember(u => u.FullName, p => p.MapFrom(m => m.v_FullName))
+              .ForMember(u => u.Email, p => p.MapFrom(m => m.v_Email))
+              .ForMember(u => u.TypeFormatId, p => p.MapFrom(m => m.i_TypeFormatId))
+              .ForMember(u => u.CommercialTerms, p => p.MapFrom(m => m.v_CommercialTerms))
+              .ForMember(u => u.InsertUserId, p => p.MapFrom(m => m.i_InsertUserId))
+              .ReverseMap();
+
+            this.CreateMap<QuotationProfile, QuotationProfileRegisterDto>()
+                .ForMember(u => u.QuotationId, p => p.MapFrom(m => m.i_QuotationId))
+                .ForMember(u => u.ProfileId, p => p.MapFrom(m => m.i_ProfileId))
+                .ForMember(u => u.ServiceTypeId, p => p.MapFrom(m => m.i_ServiceTypeId))
+               .ForMember(u => u.InsertUserId, p => p.MapFrom(m => m.i_InsertUserId))
+                .ReverseMap();
+
+            this.CreateMap<ProfileComponent, ProfileComponentRegisterDto>()
+                .ForMember(u => u.QuotationProfileId, p => p.MapFrom(m => m.i_QuotationProfileId))
+                .ForMember(u => u.CategoryName, p => p.MapFrom(m => m.v_CategoryName))
+                .ForMember(u => u.CategoryId, p => p.MapFrom(m => m.i_CategoryId))
+                .ForMember(u => u.ComponentName, p => p.MapFrom(m => m.v_ComponentName))
+                .ForMember(u => u.ComponentId, p => p.MapFrom(m => m.v_ComponentId))
+                .ForMember(u => u.MinPrice, p => p.MapFrom(m => m.r_MinPrice))
+                .ForMember(u => u.PriceList, p => p.MapFrom(m => m.r_PriceList))
+                .ForMember(u => u.SalePrice, p => p.MapFrom(m => m.r_SalePrice))
+                .ForMember(u => u.InsertUserId, p => p.MapFrom(m => m.i_InsertUserId))
+                .ReverseMap();
+
+
+            this.CreateMap<Quotation, QuotationUpdateDto>()
+              .ForMember(u => u.QuotationId, p => p.MapFrom(m => m.i_QuotationId))
+              .ForMember(u => u.Code, p => p.MapFrom(m => m.v_Code))
+              .ForMember(u => u.Version, p => p.MapFrom(m => m.i_Version))
+              .ForMember(u => u.CompanyId, p => p.MapFrom(m => m.i_CompanyId))
+              .ForMember(u => u.CompanyHeadquarterId, p => p.MapFrom(m => m.i_CompanyHeadquarterId))
+              .ForMember(u => u.FullName, p => p.MapFrom(m => m.v_FullName))
+              .ForMember(u => u.Email, p => p.MapFrom(m => m.v_Email))
+              .ForMember(u => u.TypeFormatId, p => p.MapFrom(m => m.i_TypeFormatId))
+              .ForMember(u => u.CommercialTerms, p => p.MapFrom(m => m.v_CommercialTerms))
+              .ForMember(u => u.UpdateUserId, p => p.MapFrom(m => m.i_UpdateUserId))
+              .ReverseMap();
+
+            this.CreateMap<QuotationProfile, QuotationProfileUpdateDto>()
+                .ForMember(u => u.QuotationProfileId, p => p.MapFrom(m => m.i_QuotationProfileId))
+                .ForMember(u => u.QuotationId, p => p.MapFrom(m => m.i_QuotationId))
+                .ForMember(u => u.ServiceTypeId, p => p.MapFrom(m => m.i_ServiceTypeId))
+               .ForMember(u => u.UpdateUserId, p => p.MapFrom(m => m.i_UpdateUserId))
+               .ForMember(u => u.RecordStatus, p => p.MapFrom(m => m.RecordStatus))
+                .ForMember(u => u.RecordType, p => p.MapFrom(m => m.RecordType))
+                .ReverseMap();
+
+            this.CreateMap<ProfileComponent, ProfileComponentUpdateDto>()
+                .ForMember(u => u.ProfileComponentId, p => p.MapFrom(m => m.i_ProfileComponentId))
+                .ForMember(u => u.QuotationProfileId, p => p.MapFrom(m => m.i_QuotationProfileId))
+                .ForMember(u => u.CategoryName, p => p.MapFrom(m => m.v_CategoryName))
+                .ForMember(u => u.CategoryId, p => p.MapFrom(m => m.i_CategoryId))
+                .ForMember(u => u.ComponentName, p => p.MapFrom(m => m.v_ComponentName))
+                .ForMember(u => u.ComponentId, p => p.MapFrom(m => m.v_ComponentId))                
+                .ForMember(u => u.SalePrice, p => p.MapFrom(m => m.r_SalePrice))
+                .ForMember(u => u.UpdateUserId, p => p.MapFrom(m => m.i_UpdateUserId))
+                .ForMember(u => u.RecordStatus, p => p.MapFrom(m => m.RecordStatus))
+                .ForMember(u => u.RecordType, p => p.MapFrom(m => m.RecordType))
                 .ReverseMap();
         }
     }

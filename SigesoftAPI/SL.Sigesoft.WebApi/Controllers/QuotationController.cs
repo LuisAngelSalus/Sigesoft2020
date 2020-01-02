@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using SL.Sigesoft.Common;
 using SL.Sigesoft.Data.Contracts;
 using SL.Sigesoft.Dtos;
+using SL.Sigesoft.Models;
 
 namespace SL.Sigesoft.WebApi.Controllers
 {
@@ -50,6 +51,61 @@ namespace SL.Sigesoft.WebApi.Controllers
             }
             return response;
 
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Response<QuotationRegisterDto>>> Post(QuotationRegisterDto quotationDto)
+        {
+            var response = new Response<QuotationRegisterDto>();
+            try
+            {
+                var quotation = _mapper.Map<Quotation>(quotationDto);
+
+                var newQuotation = await _quotationRepository.AddAsync(quotation);
+                if (newQuotation == null)
+                {
+                    return BadRequest();
+                }
+
+                var newQuotationDto = _mapper.Map<QuotationRegisterDto>(newQuotation);
+                response.Data = newQuotationDto;
+                response.IsSuccess = true;
+                response.Message = "Se grabó correctamente";
+                
+                return Ok(response);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
+
+        // PUT: api/usuarios/5
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Response<QuotationRegisterDto>>> Put([FromBody]QuotationUpdateDto quotationDto)
+        {
+            var response = new Response<QuotationRegisterDto>();
+            if (quotationDto == null)
+                return NotFound();
+
+            var quotation = _mapper.Map<Quotation>(quotationDto);
+            var result = await _quotationRepository.UpdateAsync(quotation);
+            if (!result)
+                return BadRequest();
+
+            response.Data = _mapper.Map<QuotationRegisterDto>(quotation);
+            response.IsSuccess = true;
+            response.Message = "Se actualizó correctamente";
+
+            //return _mapper.Map<ListCompanyDto>(company);
+            return response;
         }
 
     }

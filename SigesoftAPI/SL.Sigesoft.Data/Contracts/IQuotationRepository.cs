@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace SL.Sigesoft.Data.Contracts
 {
-   public interface IQuotationRepository : IGenericRepository<Quotation>
-    {
+   public interface IQuotationRepository :IGenericRepository<Quotation>
+    {        
         Task<QuotationModel> GetQuotationAsync(int id);
     }
 }
