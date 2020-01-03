@@ -16,6 +16,7 @@ namespace SL.Sigesoft.Dtos
         public int UserCreatedId { get; set; }
         public string UserName { get; set; }
         public int CompanyId { get; set; }
+        public string CompanyRuc { get; set; }
         public string CompanyName { get; set; }
         public string CompanyDistrictName { get; set; }
         public string CompanyAddress { get; set; }

@@ -92,6 +92,7 @@ namespace SL.Sigesoft.Data.Repositories
                                        Version = A.i_Version,
                                        UserCreatedId = A.i_UserCreatedId,
                                        UserName = C.v_UserName,
+                                       CompanyRuc = B.v_IdentificationNumber,
                                        CompanyId = A.i_CompanyId,
                                        CompanyName = B.v_Name,
                                        CompanyDistrictName = B.v_District,
@@ -119,6 +120,7 @@ namespace SL.Sigesoft.Data.Repositories
                                                                 ServiceTypeName = C1.v_Value1,
                                                                 ProfileComponents = (from A2 in _context.ProfileComponent
                                                                                      where A2.i_QuotationProfileId == A1.i_QuotationProfileId
+                                                                                     orderby A2.v_CategoryName
                                                                                      select new ProfileComponentModel
                                                                                      {
                                                                                          ProfileComponentId = A2.i_ProfileComponentId,

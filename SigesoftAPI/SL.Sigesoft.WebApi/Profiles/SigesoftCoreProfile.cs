@@ -168,6 +168,7 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.UserCreatedId, p => p.MapFrom(m => m.UserCreatedId))
                 .ForMember(u => u.UserName, p => p.MapFrom(m => m.UserName))
                 .ForMember(u => u.CompanyId, p => p.MapFrom(m => m.CompanyId))
+                .ForMember(u => u.CompanyRuc, p => p.MapFrom(m => m.CompanyRuc))
                 .ForMember(u => u.CompanyName, p => p.MapFrom(m => m.CompanyName))
                 .ForMember(u => u.CompanyDistrictName, p => p.MapFrom(m => m.CompanyDistrictName))
                 .ForMember(u => u.CompanyAddress, p => p.MapFrom(m => m.CompanyAddress))
@@ -303,6 +304,12 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.UpdateUserId, p => p.MapFrom(m => m.i_UpdateUserId))
                 .ForMember(u => u.RecordStatus, p => p.MapFrom(m => m.RecordStatus))
                 .ForMember(u => u.RecordType, p => p.MapFrom(m => m.RecordType))
+                .ReverseMap();
+
+            this.CreateMap<Secuential, SecuentialDto>()
+                .ForMember(u => u.OwnerCompanyId, p => p.MapFrom(m => m.i_OwnerCompanyId))
+                .ForMember(u => u.Process, p => p.MapFrom(m => m.v_Process))
+                .ForMember(u => u.SystemUserId, p => p.MapFrom(m => m.i_SystemUserId))
                 .ReverseMap();
         }
     }

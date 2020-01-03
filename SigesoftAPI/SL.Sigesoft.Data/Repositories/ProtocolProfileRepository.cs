@@ -95,7 +95,7 @@ namespace SL.Sigesoft.Data.Repositories
                     var y = x.ToList().Find(p => p.v_ComponentId == item.v_ComponentId);
                     o.Active = y == null ? false : true;
                     o.ComponentId = item.v_ComponentId;
-                    o.ComponentName = item.v_CategoryName;
+                    o.ComponentName = item.v_Name;
                     o.CostPrice = item.r_CostPrice;
                     o.BasePrice = item.r_BasePrice;
                     o.SalePrice = item.r_SalePrice;
@@ -103,7 +103,7 @@ namespace SL.Sigesoft.Data.Repositories
                     list.Add(o);
                 }
 
-                oCategoryModel.Detail = list;
+                oCategoryModel.Detail = list.OrderByDescending(o => o.Active).ToList();
                 oCategories.Add(oCategoryModel);
             }
 
