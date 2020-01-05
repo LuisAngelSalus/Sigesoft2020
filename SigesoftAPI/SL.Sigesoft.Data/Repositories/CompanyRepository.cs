@@ -150,7 +150,7 @@ namespace SL.Sigesoft.Data.Repositories
             //        .SingleOrDefaultAsync(c => c.i_CompanyId == companyId);
 
             var query = await (from A in _context.Company
-                               where A.i_IsDeleted == YesNo.No
+                               where A.i_IsDeleted == YesNo.No && A.i_CompanyId == companyId
                                select new Company
                                {
                                    i_CompanyId = A.i_CompanyId,
@@ -201,5 +201,37 @@ namespace SL.Sigesoft.Data.Repositories
             return false;
         }
 
+        public async Task<Company> GetCompanyByRuc(string ruc)
+        {
+            try
+            {
+                var query = await (from A in _context.Company
+                                   where A.i_IsDeleted == YesNo.No && A.v_IdentificationNumber == ruc
+                                   select new Company
+                                   {
+                                       i_CompanyId = A.i_CompanyId,
+                                       v_Name = A.v_Name,
+                                       v_IdentificationNumber = A.v_IdentificationNumber,
+                                       v_Address = A.v_Address,
+                                       v_PhoneNumber = A.v_PhoneNumber,
+                                       v_ContactName = A.v_ContactName,
+                                       v_Mail = A.v_Mail,
+                                       v_District = A.v_District,
+                                       v_PhoneCompany = A.v_PhoneCompany,
+                                       CompanyHeadquarter = (from B in _context.CompanyHeadquarters
+                                                             where B.i_CompanyId == A.i_CompanyId && B.i_IsDeleted == YesNo.No
+                                                             select B)
+                                                             .ToList()
+                                   }
+                              ).FirstOrDefaultAsync();
+                return query;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            
+        }
     }
 }

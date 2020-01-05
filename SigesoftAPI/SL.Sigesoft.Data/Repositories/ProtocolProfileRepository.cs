@@ -51,8 +51,17 @@ namespace SL.Sigesoft.Data.Repositories
         public async Task<ProtocolProfileModel> GetProfile(int protocolProfileId)
         {
             var profile = new ProtocolProfileModel();
-            var protocolProfile = await _dbSet.Include(i => i.ProfileDetail).SingleOrDefaultAsync(c => c.i_ProtocolProfileId == protocolProfileId && c.i_IsDeleted == YesNo.No);
+            try
+            {
+                var protocolProfile = await _dbSet.Include(i => i.ProfileDetail).SingleOrDefaultAsync(c => c.i_ProtocolProfileId == protocolProfileId && c.i_IsDeleted == YesNo.No);
+
             
+            
+            var selectedCategories = protocolProfile.ProfileDetail.AsEnumerable()
+                       .Where(s => s.i_CategoryId != -1)
+                       .GroupBy(x => x.i_CategoryId)
+                       .Select(group => group.First());
+
             var query = await (from A in _contextWin.Component
                                join B in _contextWin.SystemParameter on new { a = A.i_CategoryId.Value, b = 116 }
                                             equals new { a = B.i_ParameterId, b = B.i_GroupId } into B_join
@@ -70,7 +79,7 @@ namespace SL.Sigesoft.Data.Repositories
                                }).ToListAsync();
 
 
-            var categories = query.AsEnumerable()
+            var unselectedCategories = query.AsEnumerable()
                        .Where(s => s.i_CategoryId != -1)
                        .GroupBy(x => x.i_CategoryId)
                        .Select(group => group.First());
@@ -79,37 +88,81 @@ namespace SL.Sigesoft.Data.Repositories
             profile.ProtocolProfileName = protocolProfile.v_Name;
 
             var oCategories = new List<CategoryModel>();
-            foreach (var category in categories)
+            var oUnselectedCategories = new List<CategoryModel>();
+            foreach (var category in selectedCategories)
             {
+                #region Selecteds
                 var oCategoryModel = new CategoryModel();
-                oCategoryModel.CategoryId = category.i_CategoryId.Value;
+                oCategoryModel.CategoryId = category.i_CategoryId;
                 oCategoryModel.CategoryName = category.v_CategoryName;
 
-                var detail = query.FindAll(p => p.i_CategoryId == category.i_CategoryId).ToList();
+                var detail = protocolProfile.ProfileDetail.ToList().FindAll(p => p.i_CategoryId == category.i_CategoryId).ToList();
 
                 var list = new List<ProfileDetailModel>();
                 foreach (var item in detail)
                 {
                     var o = new ProfileDetailModel();
-                    var x = protocolProfile.ProfileDetail;
-                    var y = x.ToList().Find(p => p.v_ComponentId == item.v_ComponentId);
-                    o.Active = y == null ? false : true;
+                    o.CategoryId = category.i_CategoryId;
+                    o.Active = true;
                     o.ComponentId = item.v_ComponentId;
-                    o.ComponentName = item.v_Name;
-                    o.CostPrice = item.r_CostPrice;
-                    o.BasePrice = item.r_BasePrice;
-                    o.SalePrice = item.r_SalePrice;
+                    o.ComponentName = query.Find(p => p.v_ComponentId == item.v_ComponentId).v_Name;
+                    o.MinPrice = item.r_MinPrice == null? 0: float.Parse( item.r_MinPrice.ToString());
+                    o.ListPrice = item.r_ListPrice == null ? 0 : float.Parse(item.r_ListPrice.ToString());
+                    o.SalePrice = item.r_SalePrice == null ? 0 : float.Parse(item.r_SalePrice.ToString());
 
                     list.Add(o);
                 }
-
-                oCategoryModel.Detail = list.OrderByDescending(o => o.Active).ToList();
+                oCategoryModel.Detail = list;
                 oCategories.Add(oCategoryModel);
+                #endregion
             }
 
-            profile.categories = oCategories;
+            foreach (var unCategory in unselectedCategories)
+            {
+                #region Unselecteds
+                var oUnselectedCategoryModel = new CategoryModel();
+                oUnselectedCategoryModel.CategoryId = unCategory.i_CategoryId.Value;
+                oUnselectedCategoryModel.CategoryName = unCategory.v_CategoryName;
+                var unSeldetail = query.FindAll(p => p.i_CategoryId == unCategory.i_CategoryId).ToList();
 
-            return profile;
+                var unSellist = new List<ProfileDetailModel>();
+                foreach (var item in unSeldetail)
+                {
+                    var res = protocolProfile.ProfileDetail.ToList().Find(p => p.v_ComponentId == item.v_ComponentId);
+                    if (res == null)
+                    {
+                        var o = new ProfileDetailModel();
+                        o.CategoryId = unCategory.i_CategoryId.Value;
+                        o.Active = false;
+                        o.ComponentId = item.v_ComponentId;
+                        o.ComponentName = item.v_Name;
+                        o.MinPrice = item.r_CostPrice == null ? 0 : item.r_CostPrice;
+                        o.ListPrice = item.r_BasePrice == null ? 0 : item.r_BasePrice;
+                        o.SalePrice = item.r_SalePrice == null ? 0 : item.r_SalePrice;
+
+                        unSellist.Add(o);
+                    }
+                    
+
+                }
+                    oUnselectedCategoryModel.Detail = unSellist;
+                    oUnselectedCategories.Add(oUnselectedCategoryModel);
+
+                #endregion
+            }
+
+
+
+            profile.categories = oCategories;
+            profile.UnselectedCategories = oUnselectedCategories;
+
+                return profile;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         public Task<bool> UpdateAsync(ProtocolProfile entity)

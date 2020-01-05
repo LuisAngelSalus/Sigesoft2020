@@ -9,5 +9,7 @@ namespace SL.Sigesoft.Data.Contracts
     public interface ICompanyRepository:IGenericRepository<Company>
     {
         Task<Company> GetCompanyWithHeadquarter(int companyId);
+
+        Task<Company> GetCompanyByRuc(string ruc);
     }
 }

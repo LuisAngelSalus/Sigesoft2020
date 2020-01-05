@@ -16,5 +16,7 @@ namespace SL.Sigesoft.Dtos
         public string District { get; set; }
         public string PhoneCompany { get; set; }
 
+        public List<ListCompanyHeadquarterDto> CompanyHeadquarters { get; set; }
+
     }
 }

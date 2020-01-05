@@ -49,34 +49,34 @@ namespace SL.Sigesoft.WebApi.Controllers
             return response;
         }
 
-        // GET: api/usuarios/5
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Response<ListCompanyDto>>> Get(int id)
-        {
-            var response = new Response<ListCompanyDto>();
-            try
-            {
-                var company = await _companyRepository.GetAsync(id);
-                if (company == null)
-                {
-                    return NotFound();
-                }
-                response.Data = _mapper.Map<ListCompanyDto>(company);
-                if (response.Data != null)
-                {
-                    response.IsSuccess = true;
-                    response.Message = "Consulta Exitosa";
-                }
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }   
-            return response;
+        //// GET: api/usuarios/5
+        //[HttpGet("{id}")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //public async Task<ActionResult<Response<ListCompanyDto>>> Get(int id)
+        //{
+        //    var response = new Response<ListCompanyDto>();
+        //    try
+        //    {
+        //        var company = await _companyRepository.GetAsync(id);
+        //        if (company == null)
+        //        {
+        //            return NotFound();
+        //        }
+        //        response.Data = _mapper.Map<ListCompanyDto>(company);
+        //        if (response.Data != null)
+        //        {
+        //            response.IsSuccess = true;
+        //            response.Message = "Consulta Exitosa";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }   
+        //    return response;
 
-        }
+        //}
 
         // POST: api/usuarios
         [HttpPost]
@@ -184,6 +184,38 @@ namespace SL.Sigesoft.WebApi.Controllers
             }
             return response;
         }
+
+
+        // GET: api/usuarios/5
+        [HttpGet("{ruc}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Response<CompanyDto>>> Get(string ruc)
+        {
+            var response = new Response<CompanyDto>();
+            try
+            {
+                var company = await _companyRepository.GetCompanyByRuc(ruc);
+                if (company == null)
+                {
+                    return NotFound();
+                }
+                response.Data = _mapper.Map<CompanyDto>(company);
+                if (response.Data != null)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Consulta Exitosa";
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return response;
+
+        }
+
+
 
     }
 }
