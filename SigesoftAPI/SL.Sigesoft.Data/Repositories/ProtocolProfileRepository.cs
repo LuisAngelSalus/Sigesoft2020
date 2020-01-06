@@ -28,9 +28,33 @@ namespace SL.Sigesoft.Data.Repositories
         }
 
 
-        public Task<ProtocolProfile> AddAsync(ProtocolProfile entity)
+        public async Task<ProtocolProfile> AddAsync(ProtocolProfile entity)
         {
-            throw new NotImplementedException();
+            #region AUDIT
+            entity.i_IsDeleted = YesNo.No;
+            entity.d_InsertDate = DateTime.UtcNow;
+            entity.i_InsertUserId = 11;
+            #endregion
+
+            foreach (var item in entity.ProfileDetail)
+            {
+                #region AUDIT
+                item.i_IsDeleted = YesNo.No;
+                item.d_InsertDate = DateTime.UtcNow;
+                item.i_InsertUserId = entity.i_InsertUserId;
+                #endregion
+            }
+
+            _dbSet.Add(entity);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en {nameof(AddAsync)}: {ex.Message}");
+            }
+            return entity;
         }
 
         public Task<bool> DeleteAsync(int id)
@@ -169,5 +193,12 @@ namespace SL.Sigesoft.Data.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public async Task<List<ProtocolProfile>> DrowpDownList()
+        {
+            return await _dbSet.Where(c => c.i_IsDeleted == YesNo.No).ToListAsync();
+        }
+
+
     }
 }

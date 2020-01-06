@@ -9,5 +9,6 @@ namespace SL.Sigesoft.Data.Contracts
    public interface IProtocolProfileRepository : IGenericRepository<ProtocolProfile>
     {
         Task<ProtocolProfileModel> GetProfile(int protocolProfileId);
+        Task<List<ProtocolProfile>> DrowpDownList();
     }
 }

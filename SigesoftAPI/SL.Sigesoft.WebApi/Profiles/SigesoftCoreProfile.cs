@@ -311,6 +311,24 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.Process, p => p.MapFrom(m => m.v_Process))
                 .ForMember(u => u.SystemUserId, p => p.MapFrom(m => m.i_SystemUserId))
                 .ReverseMap();
+
+            this.CreateMap< ProtocolProfile, ProtocolProfileRegisterDto>()
+                .ForMember(u => u.Name, p => p.MapFrom(m => m.v_Name))
+                .ReverseMap();
+
+            this.CreateMap<ProfileDetail, ProfileDetailRegisterDto>()
+              .ForMember(u => u.ComponentId, p => p.MapFrom(m => m.v_ComponentId))
+              .ForMember(u => u.CategoryId, p => p.MapFrom(m => m.i_CategoryId))
+              .ForMember(u => u.CategoryName, p => p.MapFrom(m => m.v_CategoryName))
+              .ForMember(u => u.MinPrice, p => p.MapFrom(m => m.r_MinPrice))
+              .ForMember(u => u.ListPrice, p => p.MapFrom(m => m.r_ListPrice))
+              .ForMember(u => u.SalePrice, p => p.MapFrom(m => m.r_SalePrice))
+              .ReverseMap();
+
+            this.CreateMap<ProtocolProfile, DropdownListDto>()
+                .ForMember(u => u.Id, p => p.MapFrom(m => m.i_ProtocolProfileId))
+                .ForMember(u => u.Value, p => p.MapFrom(m => m.v_Name))
+                .ReverseMap();
         }
     }
 }

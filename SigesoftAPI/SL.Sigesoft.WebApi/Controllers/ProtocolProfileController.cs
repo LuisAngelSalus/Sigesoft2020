@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SL.Sigesoft.Common;
 using SL.Sigesoft.Data.Contracts;
+using SL.Sigesoft.Dtos;
 using SL.Sigesoft.Models;
 
 namespace SL.Sigesoft.WebApi.Controllers
@@ -53,6 +54,64 @@ namespace SL.Sigesoft.WebApi.Controllers
 
         }
 
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Response<ProtocolProfileRegisterDto>>> Post(ProtocolProfileRegisterDto protocolProfileDto)
+        {
+            var response = new Response<ProtocolProfileRegisterDto>();
+            try
+            {
+                var protocolProfile = _mapper.Map<ProtocolProfile>(protocolProfileDto);
+
+                var newProtocolProfile = await _protocolProfileRepository.AddAsync(protocolProfile);
+                if (newProtocolProfile == null)
+                {
+                    return BadRequest();
+                }
+
+                var newProtocolProfileDto = _mapper.Map<ProtocolProfileRegisterDto>(newProtocolProfile);
+                response.Data = newProtocolProfileDto;
+                response.IsSuccess = true;
+                response.Message = "Se grabó correctamente";
+                return Ok(response);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
+
+        [HttpGet()]
+        [Route("DropdownList")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Response<List<DropdownListDto>>>> DropdownList()
+        {
+            var response = new Response<List<DropdownListDto>>();
+            try
+            {
+                var profile = await _protocolProfileRepository.DrowpDownList();
+                if (profile == null)
+                {
+                    return NotFound();
+                }
+                response.Data = _mapper.Map<List<DropdownListDto>>(profile);
+                if (response.Data != null)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Consulta Exitosa";
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return response;
+
+        }
 
     }
 }
