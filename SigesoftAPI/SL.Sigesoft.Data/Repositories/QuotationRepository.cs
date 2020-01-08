@@ -114,7 +114,7 @@ namespace SL.Sigesoft.Data.Repositories
                                                             join C1 in _context.SystemParameter on new { a = A1.i_ServiceTypeId.Value, b = 101 }
                                                                                                equals new { a = C1.i_ParameterId, b = C1.i_GroupId } into C1_join
                                                             from C1 in C1_join.DefaultIfEmpty()
-                                                            where A1.i_QuotationId == A.i_QuotationId
+                                                            where A1.i_QuotationId == A.i_QuotationId && A1.i_IsDeleted == YesNo.No
                                                             select new QuotationProfileModel
                                                             {
                                                                 QuotationId = A.i_QuotationId,
@@ -122,10 +122,10 @@ namespace SL.Sigesoft.Data.Repositories
                                                                 ProfileName = A1.v_ProfileName,
                                                                 ServiceTypeId = A1.i_ServiceTypeId,
                                                                 ServiceTypeName = C1.v_Value1,
-                                                                RecordStatus = RecordStatus.Agregado,
+                                                                RecordStatus = RecordStatus.Grabado,
                                                                 RecordType = RecordType.NoTemporal,
                                                                 ProfileComponents = (from A2 in _context.ProfileComponent
-                                                                                     where A2.i_QuotationProfileId == A1.i_QuotationProfileId
+                                                                                     where A2.i_QuotationProfileId == A1.i_QuotationProfileId && A2.i_IsDeleted == YesNo.No
                                                                                      orderby A2.v_CategoryName
                                                                                      select new ProfileComponentModel
                                                                                      {
@@ -138,7 +138,7 @@ namespace SL.Sigesoft.Data.Repositories
                                                                                          MinPrice = A2.r_MinPrice,
                                                                                          PriceList = A2.r_PriceList,
                                                                                          SalePrice = A2.r_SalePrice,
-                                                                                         RecordStatus = RecordStatus.Agregado,
+                                                                                         RecordStatus = RecordStatus.Grabado,
                                                                                          RecordType = RecordType.NoTemporal,
                                                                                      }).ToList()
                                                             }).ToList()
@@ -195,40 +195,50 @@ namespace SL.Sigesoft.Data.Repositories
 
         private void UpdateQuotationProfiles(List<QuotationProfile> quotationProfiles, Quotation entityDb)
         {
-            foreach (var item in quotationProfiles)
+            try
             {
-                if (item.RecordType == RecordType.Temporal && item.RecordStatus == RecordStatus.Agregado)
+                foreach (var item in quotationProfiles)
                 {
-                    var o = new QuotationProfile();
-                    o.i_QuotationId = item.i_QuotationId;
-                    o.v_ProfileName = item.v_ProfileName;
-                    o.i_ServiceTypeId = item.i_ServiceTypeId;
-                    o.i_InsertUserId = item.i_UpdateUserId;
-                    o.i_IsDeleted = YesNo.No;
-                    entityDb.QuotationProfiles.Add(o);
-                }
-                if (item.RecordType == RecordType.NoTemporal && (item.RecordStatus == RecordStatus.Modificado || item.RecordStatus == RecordStatus.Grabado))
-                {
-                    var o = entityDb.QuotationProfiles.Where(w => w.i_QuotationProfileId== item.i_QuotationProfileId).FirstOrDefault();
-                    o.i_ServiceTypeId = item.i_ServiceTypeId;                                        
-                    o.d_UpdateDate = DateTime.UtcNow;
-                    o.i_UpdateUserId = item.i_UpdateUserId;
-                    entityDb.QuotationProfiles.Add(o);
-                }
-                if (item.RecordType == RecordType.NoTemporal && item.RecordStatus == RecordStatus.EliminadoLogico)
-                {
-                    var o = entityDb.QuotationProfiles.Where(w => w.i_QuotationProfileId== item.i_QuotationProfileId).FirstOrDefault();
-                    o.i_IsDeleted = YesNo.Yes;                    
-                    o.d_UpdateDate = DateTime.UtcNow;
-                    o.i_UpdateUserId = item.i_UpdateUserId;
-                    entityDb.QuotationProfiles.Add(o);
-                }
+                    if (item.RecordType == RecordType.Temporal && item.RecordStatus == RecordStatus.Agregado)
+                    {
+                        var o = new QuotationProfile();
+                        o.i_QuotationId = item.i_QuotationId;
+                        o.v_ProfileName = item.v_ProfileName;
+                        o.i_ServiceTypeId = item.i_ServiceTypeId;
+                        o.i_InsertUserId = item.i_UpdateUserId;
+                        o.i_IsDeleted = YesNo.No;
+                        entityDb.QuotationProfiles.Add(o);
+                    }
+                    if (item.RecordType == RecordType.NoTemporal && (item.RecordStatus == RecordStatus.Modificado || item.RecordStatus == RecordStatus.Grabado))
+                    {
+                        var o = entityDb.QuotationProfiles.Where(w => w.i_QuotationProfileId == item.i_QuotationProfileId).FirstOrDefault();
+                        o.i_ServiceTypeId = item.i_ServiceTypeId;
+                        o.v_ProfileName = item.v_ProfileName;
+                        o.d_UpdateDate = DateTime.UtcNow;
+                        o.i_UpdateUserId = item.i_UpdateUserId;
+                        entityDb.QuotationProfiles.Add(o);
+                    }
+                    if (item.RecordType == RecordType.NoTemporal && item.RecordStatus == RecordStatus.EliminadoLogico)
+                    {
+                        var o = entityDb.QuotationProfiles.Where(w => w.i_QuotationProfileId == item.i_QuotationProfileId).FirstOrDefault();
+                        o.i_IsDeleted = YesNo.Yes;
+                        o.d_UpdateDate = DateTime.UtcNow;
+                        o.i_UpdateUserId = item.i_UpdateUserId;
+                        entityDb.QuotationProfiles.Add(o);
+                    }
 
-                #region ProfileComponents
-                var x = entityDb.QuotationProfiles.Find(p => p.i_QuotationProfileId == item.i_QuotationProfileId);
-                UpdateProfileComponent(item.ProfileComponents, x);
-                #endregion
+                    #region ProfileComponents
+                    var x = entityDb.QuotationProfiles.Find(p => p.i_QuotationProfileId == item.i_QuotationProfileId);
+                    UpdateProfileComponent(item.ProfileComponents, x);
+                    #endregion
+                }
             }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+         
         }
 
         private void UpdateProfileComponent(List<ProfileComponent> profileComponents, QuotationProfile quotationProfile)

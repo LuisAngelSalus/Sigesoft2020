@@ -122,7 +122,8 @@ namespace SL.Sigesoft.Dtos
     {
         public int QuotationProfileId { get; set; }
         public int QuotationId { get; set; }       
-        public int? ServiceTypeId { get; set; }        
+        public int? ServiceTypeId { get; set; }
+        public string ProfileName { get; set; }
         public int? UpdateUserId { get; set; }
         public RecordStatus RecordStatus { get; set; }
         public RecordType RecordType { get; set; }

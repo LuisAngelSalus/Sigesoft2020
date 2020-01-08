@@ -284,6 +284,7 @@ namespace SL.Sigesoft.WebApi.Profiles
             this.CreateMap<QuotationProfile, QuotationProfileUpdateDto>()
                 .ForMember(u => u.QuotationProfileId, p => p.MapFrom(m => m.i_QuotationProfileId))
                 .ForMember(u => u.QuotationId, p => p.MapFrom(m => m.i_QuotationId))
+                .ForMember(u => u.ProfileName, p => p.MapFrom(m => m.v_ProfileName))
                 .ForMember(u => u.ServiceTypeId, p => p.MapFrom(m => m.i_ServiceTypeId))
                .ForMember(u => u.UpdateUserId, p => p.MapFrom(m => m.i_UpdateUserId))
                .ForMember(u => u.RecordStatus, p => p.MapFrom(m => m.RecordStatus))
