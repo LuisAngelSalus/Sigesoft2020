@@ -217,7 +217,9 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.QuotationId, p => p.MapFrom(m => m.i_QuotationId))
                 .ForMember(u => u.ProfileName, p => p.MapFrom(m => m.v_ProfileName))
                 .ForMember(u => u.ServiceTypeId, p => p.MapFrom(m => m.i_ServiceTypeId))
-               .ForMember(u => u.InsertUserId, p => p.MapFrom(m => m.i_InsertUserId))
+                .ForMember(u => u.InsertUserId, p => p.MapFrom(m => m.i_InsertUserId))
+                .ForMember(u => u.RecordStatus, p => p.MapFrom(m => m.RecordStatus))
+                .ForMember(u => u.RecordType, p => p.MapFrom(m => m.RecordType))
                 .ReverseMap();
 
             this.CreateMap<ProfileComponent, ProfileComponentDto>()
@@ -231,10 +233,9 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.PriceList, p => p.MapFrom(m => m.r_PriceList))
                 .ForMember(u => u.SalePrice, p => p.MapFrom(m => m.r_SalePrice))
                 .ForMember(u => u.InsertUserId, p => p.MapFrom(m => m.i_InsertUserId))
+                .ForMember(u => u.RecordStatus, p => p.MapFrom(m => m.RecordStatus))
+                .ForMember(u => u.RecordType, p => p.MapFrom(m => m.RecordType))
                 .ReverseMap();
-
-
-
 
             this.CreateMap<Quotation, QuotationRegisterDto>()
               .ForMember(u => u.Code, p => p.MapFrom(m => m.v_Code))

@@ -85,7 +85,7 @@ namespace SL.Sigesoft.WebApi.Controllers
 
 
         // PUT: api/usuarios/5
-        [HttpPut("{id}")]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

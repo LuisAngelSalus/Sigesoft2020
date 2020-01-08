@@ -8,30 +8,37 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using SL.Sigesoft.Models.Enum;
+using SL.Sigesoft.Common;
 
 namespace SL.Sigesoft.Data.Repositories
 {
     public class QuotationRepository : IQuotationRepository
     {
+        private ISecuentialRespository _secuentialRespository;
         private readonly SigesoftCoreContext _context;
         private readonly ILogger<QuotationRepository> _logger;
         private DbSet<Quotation> _dbSet;
 
         public QuotationRepository(SigesoftCoreContext context,
-          ILogger<QuotationRepository> logger)
+          ILogger<QuotationRepository> logger, ISecuentialRespository secuentialRespository)
         {
             this._context = context;
             this._logger = logger;
             this._dbSet = _context.Set<Quotation>();
+            this._secuentialRespository = secuentialRespository;
         }
 
         public async Task<Quotation> AddAsync(Quotation entity)
-        {            
+        {
+            #region Code
+            entity.v_Code = Utils.Code("COT", entity.i_UserCreatedId.ToString(),await _secuentialRespository.GetCode("COT", entity.i_UserCreatedId, 1));           
+            #endregion
+
             #region AUDIT
             entity.i_IsDeleted = YesNo.No;
             entity.d_InsertDate = DateTime.UtcNow;
             entity.i_InsertUserId = entity.i_InsertUserId;
-            #endregion
+         
             foreach (var item in entity.QuotationProfiles)
             {
                 #region AUDIT
@@ -48,6 +55,9 @@ namespace SL.Sigesoft.Data.Repositories
                     #endregion
                 }
             }
+
+
+            #endregion
             _dbSet.Add(entity);
             try
             {
@@ -112,6 +122,8 @@ namespace SL.Sigesoft.Data.Repositories
                                                                 ProfileName = A1.v_ProfileName,
                                                                 ServiceTypeId = A1.i_ServiceTypeId,
                                                                 ServiceTypeName = C1.v_Value1,
+                                                                RecordStatus = RecordStatus.Agregado,
+                                                                RecordType = RecordType.NoTemporal,
                                                                 ProfileComponents = (from A2 in _context.ProfileComponent
                                                                                      where A2.i_QuotationProfileId == A1.i_QuotationProfileId
                                                                                      orderby A2.v_CategoryName
@@ -125,7 +137,9 @@ namespace SL.Sigesoft.Data.Repositories
                                                                                          ComponentName = A2.v_ComponentName,
                                                                                          MinPrice = A2.r_MinPrice,
                                                                                          PriceList = A2.r_PriceList,
-                                                                                         SalePrice = A2.r_SalePrice
+                                                                                         SalePrice = A2.r_SalePrice,
+                                                                                         RecordStatus = RecordStatus.Agregado,
+                                                                                         RecordType = RecordType.NoTemporal,
                                                                                      }).ToList()
                                                             }).ToList()
 

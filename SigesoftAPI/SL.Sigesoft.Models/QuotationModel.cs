@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SL.Sigesoft.Models.Enum;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -33,7 +34,10 @@ namespace SL.Sigesoft.Models
         public string ProfileName { get; set; }
         public int? ServiceTypeId { get; set; }
         public string ServiceTypeName { get; set; }
-
+        
+        public RecordStatus RecordStatus { get; set; }
+        
+        public RecordType RecordType { get; set; }
         public List<ProfileComponentModel> ProfileComponents { get; set; }
     }
 
@@ -48,5 +52,10 @@ namespace SL.Sigesoft.Models
         public decimal? MinPrice { get; set; }
         public decimal? PriceList { get; set; }
         public decimal? SalePrice { get; set; }
+
+        [notMaped]
+        public RecordStatus RecordStatus { get; set; }
+        [notMaped]
+        public RecordType RecordType { get; set; }
     }
 }

@@ -36,6 +36,8 @@ namespace SL.Sigesoft.Dtos
         public int? ServiceTypeId { get; set; }
         public string ServiceTypeName { get; set; }
         public int? InsertUserId { get; set; }
+        public RecordStatus RecordStatus { get; set; }
+        public RecordType RecordType { get; set; }
         public List<ProfileComponentDto> ProfileComponents { get; set; }
     }
 
@@ -51,6 +53,8 @@ namespace SL.Sigesoft.Dtos
         public decimal? PriceList { get; set; }
         public decimal? SalePrice { get; set; }
         public int? InsertUserId { get; set; }
+        public RecordStatus RecordStatus { get; set; }
+        public RecordType RecordType { get; set; }
     }
     #endregion
 
