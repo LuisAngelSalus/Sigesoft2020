@@ -30,6 +30,7 @@ namespace SL.Sigesoft.Data
         public virtual DbSet<CompanyHeadquarter> CompanyHeadquarters { get; set; }
         public virtual DbSet<CompanyContact> CompanyContact { get; set; }
         public virtual DbSet<Info> Info { get; set; }
+        public virtual DbSet<Ubigeo> Ubigeo { get; set; }
         public virtual DbSet<Detail> Detail { get; set; }
         public virtual DbSet<ProtocolProfile> ProtocolProfile { get; set; }
         public virtual DbSet<ProfileDetail> ProfileDetail { get; set; }
@@ -57,6 +58,7 @@ namespace SL.Sigesoft.Data
             modelBuilder.ApplyConfiguration(new CompanyHeadquarterConfiguration());
             modelBuilder.ApplyConfiguration(new CompanyContactConfiguration());
             modelBuilder.ApplyConfiguration(new InfoConfiguration());
+            modelBuilder.ApplyConfiguration(new UbigeoConfiguration());
             modelBuilder.ApplyConfiguration(new DetailConfiguration());
             modelBuilder.ApplyConfiguration(new ProtocolProfileConfiguration());
             modelBuilder.ApplyConfiguration(new ProfileDetailConfiguration());

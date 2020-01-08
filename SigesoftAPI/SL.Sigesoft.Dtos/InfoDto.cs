@@ -17,6 +17,7 @@ namespace SL.Sigesoft.Dtos
         public string Lote { get; set; }
         public string Departamento { get; set; }
         public string Manzana { get; set; }
+        public string Distrito { get; set; }
         public List<DetailDto> details { get; set; }
     }
 

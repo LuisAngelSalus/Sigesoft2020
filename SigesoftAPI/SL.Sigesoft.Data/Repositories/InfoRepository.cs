@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace SL.Sigesoft.Data.Repositories
 {
@@ -26,8 +27,19 @@ namespace SL.Sigesoft.Data.Repositories
 
         public async Task<Info> GetInfo(string ruc)
         {
-            return await _dbSet.Include(p => p.Details)
+            var result = await _dbSet.Include(p => p.Details)
                               .SingleOrDefaultAsync(c => c.Ruc == ruc);
+            var ubigeo = result.Ubigeo;
+            var obj = await (from A in _context.Ubigeo
+                             where A.v_Ubigeo == ubigeo
+                             select A
+                                    ).FirstOrDefaultAsync();
+            if (obj != null)
+            {
+                result.Distrito = obj.v_Distrito;
+            }
+            
+            return result;
             
         }
     }

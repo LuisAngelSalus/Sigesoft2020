@@ -80,7 +80,6 @@ namespace SL.Sigesoft.Data.Repositories
             try
             {
 
-
                 var query = await (from A in _context.Quotation
                                    join B in _context.Company on A.i_CompanyId equals B.i_CompanyId
                                    join C in _context.SystemUser on A.i_UserCreatedId equals C.i_SystemUserId
@@ -100,12 +99,8 @@ namespace SL.Sigesoft.Data.Repositories
                                        CompanyHeadquarterId = A.i_CompanyHeadquarterId,
                                        FullName = A.v_FullName,
                                        Email = A.v_Email,
-                                       TypeFormatId = A.i_TypeFormatId,
                                        CommercialTerms = A.v_CommercialTerms,
                                        QuotationProfiles = (from A1 in _context.QuotationProfile
-                                                            join B1 in _context.SystemParameter on new { a = A1.i_ProfileId.Value, b = 100 }
-                                                                                               equals new { a = B1.i_ParameterId, b = B1.i_GroupId } into B1_join
-                                                            from B1 in B1_join.DefaultIfEmpty()
                                                             join C1 in _context.SystemParameter on new { a = A1.i_ServiceTypeId.Value, b = 101 }
                                                                                                equals new { a = C1.i_ParameterId, b = C1.i_GroupId } into C1_join
                                                             from C1 in C1_join.DefaultIfEmpty()
@@ -114,8 +109,7 @@ namespace SL.Sigesoft.Data.Repositories
                                                             {
                                                                 QuotationId = A.i_QuotationId,
                                                                 QuotationProfileId = A1.i_QuotationProfileId, 
-                                                                ProfileId = A1.i_ProfileId.Value,
-                                                                ProfileName = B1.v_Value1,
+                                                                ProfileName = A1.v_ProfileName,
                                                                 ServiceTypeId = A1.i_ServiceTypeId,
                                                                 ServiceTypeName = C1.v_Value1,
                                                                 ProfileComponents = (from A2 in _context.ProfileComponent
@@ -163,7 +157,6 @@ namespace SL.Sigesoft.Data.Repositories
             entityDb.i_CompanyHeadquarterId = entity.i_CompanyHeadquarterId;
             entityDb.v_FullName = entity.v_FullName;
             entityDb.v_Email = entity.v_Email;
-            entityDb.i_TypeFormatId = entity.i_TypeFormatId;
             entityDb.v_CommercialTerms = entity.v_CommercialTerms;
             entityDb.i_UpdateUserId = entity.i_UpdateUserId;
             
@@ -194,7 +187,7 @@ namespace SL.Sigesoft.Data.Repositories
                 {
                     var o = new QuotationProfile();
                     o.i_QuotationId = item.i_QuotationId;
-                    o.i_ProfileId = item.i_ProfileId;
+                    o.v_ProfileName = item.v_ProfileName;
                     o.i_ServiceTypeId = item.i_ServiceTypeId;
                     o.i_InsertUserId = item.i_UpdateUserId;
                     o.i_IsDeleted = YesNo.No;

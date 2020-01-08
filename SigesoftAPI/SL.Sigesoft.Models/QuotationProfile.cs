@@ -15,7 +15,7 @@ namespace SL.Sigesoft.Models
 
         public int i_QuotationProfileId { get; set; }
         public int? i_QuotationId { get; set; }
-        public int? i_ProfileId { get; set; }
+        public string v_ProfileName { get; set; }
         public int? i_ServiceTypeId { get; set; }
         public YesNo i_IsDeleted { get; set; }
         public int? i_InsertUserId { get; set; }

@@ -23,7 +23,6 @@ namespace SL.Sigesoft.Dtos
         public int CompanyHeadquarterId { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
-        public int TypeFormatId { get; set; }
         public string CommercialTerms { get; set; }
         public int? InsertUserId { get; set; }
         public List<QuotationProfileDto> QuotationProfiles { get; set; }
@@ -33,7 +32,6 @@ namespace SL.Sigesoft.Dtos
     {
         public int QuotationProfileId { get; set; }
         public int QuotationId { get; set; }
-        public int? ProfileId { get; set; }
         public string ProfileName { get; set; }
         public int? ServiceTypeId { get; set; }
         public string ServiceTypeName { get; set; }
@@ -71,7 +69,6 @@ namespace SL.Sigesoft.Dtos
         public int CompanyHeadquarterId { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
-        public int TypeFormatId { get; set; }
         public string CommercialTerms { get; set; }
         public int? InsertUserId { get; set; }
         public List<QuotationProfileRegisterDto> QuotationProfiles { get; set; }
@@ -80,7 +77,6 @@ namespace SL.Sigesoft.Dtos
     public class QuotationProfileRegisterDto
     {
         public int QuotationId { get; set; }
-        public int? ProfileId { get; set; }
         public string ProfileName { get; set; }
         public int? ServiceTypeId { get; set; }
         public string ServiceTypeName { get; set; }
@@ -113,7 +109,6 @@ namespace SL.Sigesoft.Dtos
         public int CompanyHeadquarterId { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
-        public int TypeFormatId { get; set; }
         public string CommercialTerms { get; set; }
         public int? UpdateUserId { get; set; }
         public List<QuotationProfileUpdateDto> QuotationProfiles { get; set; }

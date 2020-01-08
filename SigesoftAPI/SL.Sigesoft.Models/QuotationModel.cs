@@ -29,7 +29,7 @@ namespace SL.Sigesoft.Models
     {
         public int QuotationProfileId { get; set; }
         public int QuotationId { get; set; }
-        public int? ProfileId { get; set; }
+        //public int? ProfileId { get; set; }
         public string ProfileName { get; set; }
         public int? ServiceTypeId { get; set; }
         public string ServiceTypeName { get; set; }

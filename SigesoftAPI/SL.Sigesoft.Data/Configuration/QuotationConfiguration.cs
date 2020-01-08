@@ -26,7 +26,6 @@ namespace SL.Sigesoft.Data.Configuration
             entity.Property(e => e.v_FullName).HasColumnName("v_FullName");
             entity.Property(e => e.v_Email).HasColumnName("v_Email");
 
-            entity.Property(e => e.i_TypeFormatId).HasColumnName("i_TypeFormatId");
             entity.Property(e => e.v_CommercialTerms).HasColumnName("v_CommercialTerms");
 
             entity.Property(e => e.i_IsDeleted).HasColumnName("i_IsDeleted");

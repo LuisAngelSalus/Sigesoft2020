@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace SL.Sigesoft.Models
@@ -16,6 +17,8 @@ namespace SL.Sigesoft.Models
         public string EstadoContribuyente { get; set;}
         public string CondicionDomicilio { get; set;}
         public string Ubigeo { get; set;}
+        [NotMapped]
+        public string Distrito { get; set; }
         public string TipoVia { get; set;}
         public string NombreVia { get; set;}
         public string CodigoZona { get; set;}

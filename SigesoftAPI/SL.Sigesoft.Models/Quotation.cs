@@ -19,8 +19,7 @@ namespace SL.Sigesoft.Models
         public int i_CompanyId { get; set; }
         public int i_CompanyHeadquarterId { get; set; }
         public string v_FullName { get; set; }
-        public string v_Email { get; set; }
-        public int i_TypeFormatId { get; set; }
+        public string v_Email { get; set; }        
         public string v_CommercialTerms { get; set; }
         public YesNo i_IsDeleted { get; set; }
         public int? i_InsertUserId { get; set; }
