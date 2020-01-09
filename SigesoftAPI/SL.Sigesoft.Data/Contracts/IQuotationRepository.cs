@@ -9,5 +9,6 @@ namespace SL.Sigesoft.Data.Contracts
    public interface IQuotationRepository :IGenericRepository<Quotation>
     {        
         Task<QuotationModel> GetQuotationAsync(int id);
+        Task<IEnumerable<QuotationFilterModel>> GetFilterAsync(ParamsQuotationFilterDto parameters);
     }
 }

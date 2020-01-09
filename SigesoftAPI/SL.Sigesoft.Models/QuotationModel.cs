@@ -58,4 +58,12 @@ namespace SL.Sigesoft.Models
         [notMaped]
         public RecordType RecordType { get; set; }
     }
+
+    public class ParamsQuotationFilterDto
+    {
+        public string NroQuotation { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
+        public string CompanyName { get; set; }
+    }
 }

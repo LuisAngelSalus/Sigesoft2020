@@ -327,6 +327,20 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.Id, p => p.MapFrom(m => m.i_ProtocolProfileId))
                 .ForMember(u => u.Value, p => p.MapFrom(m => m.v_Name))
                 .ReverseMap();
+
+            this.CreateMap<QuotationFilterModel, QuotationFilterDto>()
+            .ForMember(u => u.QuotationId, p => p.MapFrom(m => m.QuotationId))
+            .ForMember(u => u.NroQuotation, p => p.MapFrom(m => m.NroQuotation))
+            .ForMember(u => u.ShippingDate, p => p.MapFrom(m => m.ShippingDate))
+            .ForMember(u => u.AcceptanceDate, p => p.MapFrom(m => m.AcceptanceDate))
+            .ForMember(u => u.CompanyName, p => p.MapFrom(m => m.CompanyName))
+            .ForMember(u => u.Total, p => p.MapFrom(m => m.Total))
+            .ForMember(u => u.StatusName, p => p.MapFrom(m => m.StatusName))
+            .ForMember(u => u.USDate, p => p.MapFrom(m => m.USDate))
+            .ForMember(u => u.TrackingDescription, p => p.MapFrom(m => m.TrackingDescription))
+            .ReverseMap();
+
+
         }
     }
 }

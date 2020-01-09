@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using SL.Sigesoft.Models.Enum;
 using SL.Sigesoft.Common;
+using System.Globalization;
 
 namespace SL.Sigesoft.Data.Repositories
 {
@@ -73,12 +74,7 @@ namespace SL.Sigesoft.Data.Repositories
         public Task<bool> DeleteAsync(int id)
         {
             throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Quotation>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
+        }      
 
         public Task<Quotation> GetAsync(int id)
         {
@@ -274,6 +270,43 @@ namespace SL.Sigesoft.Data.Repositories
                     quotationProfile.ProfileComponents.Add(o);
                 }
             }           
+        }
+
+        public Task<IEnumerable<Quotation>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<QuotationFilterModel>> GetFilterAsync(ParamsQuotationFilterDto parameters)
+        {
+            string nroQuotation = string.IsNullOrWhiteSpace(parameters.NroQuotation) ? null : parameters.NroQuotation;
+            string companyName = string.IsNullOrWhiteSpace(parameters.CompanyName) ? null : parameters.CompanyName;
+
+            bool validfi = DateTime.TryParseExact(parameters.StartDate, "yyyy/MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime fi);
+            bool validff = DateTime.TryParseExact(parameters.EndDate, "yyyy/MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime ff);
+
+            var query = await(from A in _context.Quotation
+                              join B in _context.Company on A.i_CompanyId equals B.i_CompanyId
+                              where A.i_IsDeleted == 0
+                              && (companyName ==null || B.v_Name.Contains(companyName))
+                              && (companyName == null || B.v_IdentificationNumber.Contains(companyName))
+                              && (nroQuotation == null || A.v_Code.Contains(nroQuotation))
+                               //&& (!validfi || n.FechaInicio >= fi)
+                               // && (!validff || n.FechaInicio <= ff) 
+                              select new QuotationFilterModel
+                              {
+                                  QuotationId = A.i_QuotationId,
+                                  NroQuotation = A.v_Code,
+                                  ShippingDate = null,
+                                  AcceptanceDate = null,
+                                  CompanyName = B.v_Name,
+                                  Total = 0,
+                                  StatusName = "",
+                                  USDate = null,
+                                  TrackingDescription = ""
+                              }).ToListAsync();
+
+            return query;
         }
     }
 }

@@ -25,6 +25,32 @@ namespace SL.Sigesoft.WebApi.Controllers
             this._mapper = mapper;
         }
 
+        [HttpPost]
+        [Route("Filter")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Response<IEnumerable<QuotationFilterDto>>>> Get(ParamsQuotationFilterDto parameters)
+        {
+            var response = new Response<IEnumerable<QuotationFilterDto>>();
+            try
+            {
+                var quotations = await _quotationRepository.GetFilterAsync(parameters);
+                response.Data = _mapper.Map<List<QuotationFilterDto>>(quotations);
+                if (response.Data != null)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Consulta Exitosa";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+            return response;
+        }
+
+
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

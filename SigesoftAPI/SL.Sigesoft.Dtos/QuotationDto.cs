@@ -144,4 +144,20 @@ namespace SL.Sigesoft.Dtos
         public RecordType RecordType { get; set; }
     }
     #endregion
+
+    #region Filter
+    
+    public class QuotationFilterDto
+    {
+        public int QuotationId { get; set; }
+        public string NroQuotation { get; set; }
+        public DateTime? ShippingDate { get; set; }
+        public DateTime? AcceptanceDate { get; set; }
+        public string CompanyName { get; set; }
+        public decimal Total { get; set; }
+        public string StatusName { get; set; }
+        public DateTime? USDate { get; set; }
+        public string TrackingDescription { get; set; }
+    }
+        #endregion
 }
