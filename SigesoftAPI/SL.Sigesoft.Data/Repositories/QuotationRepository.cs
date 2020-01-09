@@ -279,31 +279,41 @@ namespace SL.Sigesoft.Data.Repositories
 
         public async Task<IEnumerable<QuotationFilterModel>> GetFilterAsync(ParamsQuotationFilterDto parameters)
         {
+            string[] formats = { "dd/MM/yyyy", "dd-MM-yyyy", "yyyy-MM-dd"};
+
             string nroQuotation = string.IsNullOrWhiteSpace(parameters.NroQuotation) ? null : parameters.NroQuotation;
             string companyName = string.IsNullOrWhiteSpace(parameters.CompanyName) ? null : parameters.CompanyName;
 
-            bool validfi = DateTime.TryParseExact(parameters.StartDate, "yyyy/MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime fi);
-            bool validff = DateTime.TryParseExact(parameters.EndDate, "yyyy/MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime ff);
+            bool validfi = DateTime.TryParseExact(parameters.StartDate, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime fi);
+            bool validff = DateTime.TryParseExact(parameters.EndDate, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime ff);
 
             var query = await(from A in _context.Quotation
                               join B in _context.Company on A.i_CompanyId equals B.i_CompanyId
+                              //join C in _context.QuoteTracking on A.i_QuotationId equals C.i_QuotationId
                               where A.i_IsDeleted == 0
-                              && (companyName ==null || B.v_Name.Contains(companyName))
-                              && (companyName == null || B.v_IdentificationNumber.Contains(companyName))
+                              && (companyName ==null || B.v_Name.Contains(companyName) || B.v_IdentificationNumber.Contains(companyName))                              
                               && (nroQuotation == null || A.v_Code.Contains(nroQuotation))
-                               //&& (!validfi || n.FechaInicio >= fi)
-                               // && (!validff || n.FechaInicio <= ff) 
+                            && (!validfi || A.d_InsertDate >= fi)
+                            && (!validff || A.d_InsertDate <= ff)
                               select new QuotationFilterModel
                               {
                                   QuotationId = A.i_QuotationId,
                                   NroQuotation = A.v_Code,
-                                  ShippingDate = null,
-                                  AcceptanceDate = null,
+                                  ShippingDate = A.d_ShippingDate,
+                                  AcceptanceDate = A.d_AcceptanceDate,
                                   CompanyName = B.v_Name,
                                   Total = 0,
                                   StatusName = "",
                                   USDate = null,
-                                  TrackingDescription = ""
+                                  TrackingDescription = "",
+                                  QuoteTrackings = (from A1 in _context.QuoteTracking 
+                                                    where A1.i_QuotationId == A.i_QuotationId && A1.i_IsDeleted == YesNo.No
+                                                    select new QuoteTrackingFilterModel { 
+                                                        Commentary =  A1.v_Commentary,
+                                                        Date =  A1.d_Date,
+                                                        QuotationId =  A1.i_QuotationId,
+                                                        QuoteTrackingId =  A1.i_QuoteTrackingId
+                                                    }).ToList()
                               }).ToListAsync();
 
             return query;

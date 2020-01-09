@@ -340,6 +340,34 @@ namespace SL.Sigesoft.WebApi.Profiles
             .ForMember(u => u.TrackingDescription, p => p.MapFrom(m => m.TrackingDescription))
             .ReverseMap();
 
+            this.CreateMap<QuoteTrackingFilterModel, QuoteTrackingFilterDto>()
+                .ForMember(u => u.QuoteTrackingId, p => p.MapFrom(m => m.QuoteTrackingId))
+                .ForMember(u => u.QuotationId, p => p.MapFrom(m => m.QuotationId))
+                .ForMember(u => u.Date, p => p.MapFrom(m => m.Date))
+                .ForMember(u => u.Commentary, p => p.MapFrom(m => m.Commentary))
+            .ReverseMap();
+
+
+            this.CreateMap<QuoteTracking, ListQuoteTrackingDto>()
+                .ForMember(u => u.QuoteTrackingId, p => p.MapFrom(m => m.i_QuotationId))
+                .ForMember(u => u.QuotationId, p => p.MapFrom(m => m.i_QuotationId))
+                .ForMember(u => u.Date, p => p.MapFrom(m => m.d_Date))
+                .ForMember(u => u.Commentary, p => p.MapFrom(m => m.v_Commentary))
+                .ReverseMap();
+
+            
+
+            this.CreateMap<QuoteTracking, QuoteTrackingRegisterDto>()               
+               .ForMember(u => u.QuotationId, p => p.MapFrom(m => m.i_QuotationId))               
+               .ForMember(u => u.Commentary, p => p.MapFrom(m => m.v_Commentary))
+               .ForMember(u => u.InsertUserId, p => p.MapFrom(m => m.i_InsertUserId))
+               .ReverseMap();
+
+            this.CreateMap<QuoteTracking, QuoteTrackingUpdateDto>()
+               .ForMember(u => u.QuoteTrackingId, p => p.MapFrom(m => m.i_QuoteTrackingId))
+               .ForMember(u => u.Commentary, p => p.MapFrom(m => m.v_Commentary))
+               .ForMember(u => u.UpdateUserId, p => p.MapFrom(m => m.i_UpdateUserId))
+               .ReverseMap();
 
         }
     }

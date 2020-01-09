@@ -39,6 +39,7 @@ namespace SL.Sigesoft.Data
         public virtual DbSet<ProfileComponent> ProfileComponent { get; set; }
 
         public virtual DbSet<Secuential> Secuential { get; set; }
+        public virtual DbSet<QuoteTracking> QuoteTracking { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -67,6 +68,7 @@ namespace SL.Sigesoft.Data
             modelBuilder.ApplyConfiguration(new QuotationProfileConfiguration());
             modelBuilder.ApplyConfiguration(new ProfileComponentConfiguration());
             modelBuilder.ApplyConfiguration(new SecuentialConfiguration());
+            modelBuilder.ApplyConfiguration(new QuoteTrackingConfiguration());
 
         }
     }

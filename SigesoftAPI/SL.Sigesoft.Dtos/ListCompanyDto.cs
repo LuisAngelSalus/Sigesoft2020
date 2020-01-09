@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SL.Sigesoft.Dtos
 {
-   public class ListCompanyDto
+    public class ListCompanyDto
     {
         public int CompanyId { get; set; }
         public string Name { get; set; }

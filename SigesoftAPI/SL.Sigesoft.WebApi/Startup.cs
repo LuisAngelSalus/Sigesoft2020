@@ -52,6 +52,7 @@ namespace SL.Sigesoft.WebApi
             services.AddScoped<IProtocolProfileRepository, ProtocolProfileRepository>();
             services.AddScoped<IQuotationRepository, QuotationRepository>();
             services.AddScoped<ISecuentialRespository, SecuentialRespository>();
+            services.AddScoped<IQuoteTrackingRepository, QuoteTrackingRepository>();
             services.AddScoped<IPasswordHasher<SystemUser>, PasswordHasher<SystemUser>>();
             
             services.AddSingleton<TokenService>();

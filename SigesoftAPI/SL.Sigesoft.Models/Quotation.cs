@@ -21,6 +21,8 @@ namespace SL.Sigesoft.Models
         public string v_FullName { get; set; }
         public string v_Email { get; set; }        
         public string v_CommercialTerms { get; set; }
+        public DateTime? d_ShippingDate { get; set; }
+        public DateTime? d_AcceptanceDate { get; set; }
         public YesNo i_IsDeleted { get; set; }
         public int? i_InsertUserId { get; set; }
         public DateTime? d_InsertDate { get; set; }
