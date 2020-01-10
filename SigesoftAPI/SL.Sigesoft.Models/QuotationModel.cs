@@ -22,7 +22,8 @@ namespace SL.Sigesoft.Models
         public string Email { get; set; }
         public int TypeFormatId { get; set; }
         public string CommercialTerms { get; set; }
-
+        public int StatusQuotationId { get; set; }
+        public decimal? TotalQuotation { get; set; }
         public List<QuotationProfileModel> QuotationProfiles { get; set; }
     }
 

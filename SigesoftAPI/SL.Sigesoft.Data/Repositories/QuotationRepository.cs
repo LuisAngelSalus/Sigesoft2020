@@ -106,6 +106,7 @@ namespace SL.Sigesoft.Data.Repositories
                                        FullName = A.v_FullName,
                                        Email = A.v_Email,
                                        CommercialTerms = A.v_CommercialTerms,
+                                       StatusQuotationId = A.i_StatusQuotationId.Value,
                                        QuotationProfiles = (from A1 in _context.QuotationProfile
                                                             join C1 in _context.SystemParameter on new { a = A1.i_ServiceTypeId.Value, b = 101 }
                                                                                                equals new { a = C1.i_ParameterId, b = C1.i_GroupId } into C1_join
@@ -168,6 +169,8 @@ namespace SL.Sigesoft.Data.Repositories
             entityDb.v_FullName = entity.v_FullName;
             entityDb.v_Email = entity.v_Email;
             entityDb.v_CommercialTerms = entity.v_CommercialTerms;
+            entityDb.r_TotalQuotation = entity.r_TotalQuotation;
+            entityDb.i_StatusQuotationId = entity.i_StatusQuotationId;
             entityDb.i_UpdateUserId = entity.i_UpdateUserId;
             
             entityDb.d_UpdateDate = DateTime.UtcNow;
@@ -289,7 +292,9 @@ namespace SL.Sigesoft.Data.Repositories
 
             var query = await(from A in _context.Quotation
                               join B in _context.Company on A.i_CompanyId equals B.i_CompanyId
-                              //join C in _context.QuoteTracking on A.i_QuotationId equals C.i_QuotationId
+                              join C in _context.SystemParameter on new { a = A.i_StatusQuotationId.Value, b = 103 }
+                                                                                               equals new { a = C.i_ParameterId, b = C.i_GroupId } into C_join
+                              from C in C_join.DefaultIfEmpty()
                               where A.i_IsDeleted == 0
                               && (companyName ==null || B.v_Name.Contains(companyName) || B.v_IdentificationNumber.Contains(companyName))                              
                               && (nroQuotation == null || A.v_Code.Contains(nroQuotation))
@@ -302,10 +307,11 @@ namespace SL.Sigesoft.Data.Repositories
                                   ShippingDate = A.d_ShippingDate,
                                   AcceptanceDate = A.d_AcceptanceDate,
                                   CompanyName = B.v_Name,
-                                  Total = 0,
-                                  StatusName = "",
+                                  Total = A.r_TotalQuotation,
                                   USDate = null,
                                   TrackingDescription = "",
+                                  StatusQuotationId = A.i_StatusQuotationId.Value,
+                                  StatusQuotationName = C.v_Value1,
                                   QuoteTrackings = (from A1 in _context.QuoteTracking 
                                                     where A1.i_QuotationId == A.i_QuotationId && A1.i_IsDeleted == YesNo.No
                                                     select new QuoteTrackingFilterModel { 

@@ -15,6 +15,8 @@ namespace SL.Sigesoft.Models
         public string StatusName { get; set; }
         public DateTime? USDate { get; set; }
         public string TrackingDescription { get; set; }
+        public string StatusQuotationName { get; set; }
+        public int StatusQuotationId { get; set; }
         public List<QuoteTrackingFilterModel> QuoteTrackings { get; set; }
     }
 
