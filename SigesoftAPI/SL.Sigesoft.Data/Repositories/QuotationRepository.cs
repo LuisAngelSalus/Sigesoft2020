@@ -161,26 +161,34 @@ namespace SL.Sigesoft.Data.Repositories
                 _logger.LogError($"Error en {nameof(UpdateAsync)}: No existe el usuario con Id: {entity.i_CompanyId}");
                 return false;
             }
+            //Solo para actulizar Estado de cotización dentro de la matriz
+            if (string.IsNullOrEmpty(entity.v_Code))
+            {
+                entityDb.i_StatusQuotationId = entity.i_StatusQuotationId;
+            }
+            else
+            {
+                #region Update Quotation
+                entityDb.v_Code = entity.v_Code;
+                entityDb.i_CompanyId = entity.i_CompanyId;
+                entityDb.i_CompanyHeadquarterId = entity.i_CompanyHeadquarterId;
+                entityDb.v_FullName = entity.v_FullName;
+                entityDb.v_Email = entity.v_Email;
+                entityDb.v_CommercialTerms = entity.v_CommercialTerms;
+                entityDb.r_TotalQuotation = entity.r_TotalQuotation;
+                entityDb.i_StatusQuotationId = entity.i_StatusQuotationId;
+                entityDb.i_UpdateUserId = entity.i_UpdateUserId;
+                entityDb.d_UpdateDate = DateTime.UtcNow;
+                entityDb.i_UpdateUserId = entity.i_UpdateUserId;
 
-            #region Update Quotation
-            entityDb.v_Code = entity.v_Code;
-            entityDb.i_CompanyId = entity.i_CompanyId;
-            entityDb.i_CompanyHeadquarterId = entity.i_CompanyHeadquarterId;
-            entityDb.v_FullName = entity.v_FullName;
-            entityDb.v_Email = entity.v_Email;
-            entityDb.v_CommercialTerms = entity.v_CommercialTerms;
-            entityDb.r_TotalQuotation = entity.r_TotalQuotation;
-            entityDb.i_StatusQuotationId = entity.i_StatusQuotationId;
-            entityDb.i_UpdateUserId = entity.i_UpdateUserId;
-            
-            entityDb.d_UpdateDate = DateTime.UtcNow;
-            entityDb.i_UpdateUserId = entity.i_UpdateUserId;
+                #endregion
 
-            #endregion
+                #region QuotationProfiles
+                UpdateQuotationProfiles(entity.QuotationProfiles, entityDb);
+                #endregion
+            }
 
-            #region QuotationProfiles
-            UpdateQuotationProfiles(entity.QuotationProfiles, entityDb);
-            #endregion
+
             try
             {
                 return await _context.SaveChangesAsync() > 0 ? true : false;
@@ -286,7 +294,7 @@ namespace SL.Sigesoft.Data.Repositories
 
             string nroQuotation = string.IsNullOrWhiteSpace(parameters.NroQuotation) ? null : parameters.NroQuotation;
             string companyName = string.IsNullOrWhiteSpace(parameters.CompanyName) ? null : parameters.CompanyName;
-
+            int statusQuotationId = parameters.StatusQuotationId;
             bool validfi = DateTime.TryParseExact(parameters.StartDate, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime fi);
             bool validff = DateTime.TryParseExact(parameters.EndDate, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime ff);
 
@@ -298,8 +306,9 @@ namespace SL.Sigesoft.Data.Repositories
                               where A.i_IsDeleted == 0
                               && (companyName ==null || B.v_Name.Contains(companyName) || B.v_IdentificationNumber.Contains(companyName))                              
                               && (nroQuotation == null || A.v_Code.Contains(nroQuotation))
-                            && (!validfi || A.d_InsertDate >= fi)
-                            && (!validff || A.d_InsertDate <= ff)
+                              &&(statusQuotationId == -1 || A.i_StatusQuotationId == statusQuotationId)
+                              && (!validfi || A.d_InsertDate >= fi)
+                              && (!validff || A.d_InsertDate <= ff)
                               select new QuotationFilterModel
                               {
                                   QuotationId = A.i_QuotationId,

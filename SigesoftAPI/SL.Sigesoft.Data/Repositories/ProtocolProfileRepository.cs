@@ -136,7 +136,8 @@ namespace SL.Sigesoft.Data.Repositories
 
                     list.Add(o);
                 }
-                oCategoryModel.Detail = list;
+                    list.Sort((x, y) => x.ComponentName.CompareTo(y.ComponentName));
+                    oCategoryModel.Detail = list;
                 oCategories.Add(oCategoryModel);
                 #endregion
             }
@@ -169,6 +170,7 @@ namespace SL.Sigesoft.Data.Repositories
                     
 
                 }
+                    unSellist.Sort((x, y) => x.ComponentName.CompareTo(y.ComponentName));
                     oUnselectedCategoryModel.Detail = unSellist;
                     oUnselectedCategories.Add(oUnselectedCategoryModel);
 
