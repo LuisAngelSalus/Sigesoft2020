@@ -64,6 +64,7 @@ namespace SL.Sigesoft.Dtos
 
     public class QuotationRegisterDto
     {
+        public int QuotationId { get; set; }
         public string Code { get; set; }
         public int Version { get; set; }
         public int UserCreatedId { get; set; }

@@ -32,10 +32,11 @@ namespace SL.Sigesoft.Data.Repositories
         public async Task<Quotation> AddAsync(Quotation entity)
         {
             #region Code
-            entity.v_Code = Utils.Code("COT", entity.i_UserCreatedId.ToString(),await _secuentialRespository.GetCode("COT", entity.i_UserCreatedId, 1));           
+            entity.v_Code = Utils.Code("COT", entity.i_UserCreatedId.ToString(),await _secuentialRespository.GetCode("COT", entity.i_UserCreatedId, 1));
             #endregion
 
             #region AUDIT
+            entity.d_ShippingDate = DateTime.UtcNow;
             entity.i_IsDeleted = YesNo.No;
             entity.d_InsertDate = DateTime.UtcNow;
             entity.i_InsertUserId = entity.i_InsertUserId;
@@ -309,6 +310,7 @@ namespace SL.Sigesoft.Data.Repositories
                               &&(statusQuotationId == -1 || A.i_StatusQuotationId == statusQuotationId)
                               && (!validfi || A.d_InsertDate >= fi)
                               && (!validff || A.d_InsertDate <= ff)
+                              orderby A.d_ShippingDate
                               select new QuotationFilterModel
                               {
                                   QuotationId = A.i_QuotationId,
@@ -317,12 +319,18 @@ namespace SL.Sigesoft.Data.Repositories
                                   AcceptanceDate = A.d_AcceptanceDate,
                                   CompanyName = B.v_Name,
                                   Total = A.r_TotalQuotation,
-                                  USDate = null,
-                                  TrackingDescription = "",
+                                  USDate = (from A2 in _context.QuoteTracking
+                                            where A2.i_QuotationId == A.i_QuotationId && A2.i_IsDeleted == YesNo.No
+                                            orderby A2.d_Date descending select A2).FirstOrDefault().d_Date,
+                                  TrackingDescription = (from A2 in _context.QuoteTracking
+                                                         where A2.i_QuotationId == A.i_QuotationId && A2.i_IsDeleted == YesNo.No
+                                                         orderby A2.d_Date descending
+                                                         select A2).FirstOrDefault().v_Commentary,
                                   StatusQuotationId = A.i_StatusQuotationId.Value,
                                   StatusQuotationName = C.v_Value1,
                                   QuoteTrackings = (from A1 in _context.QuoteTracking 
                                                     where A1.i_QuotationId == A.i_QuotationId && A1.i_IsDeleted == YesNo.No
+                                                    orderby A1.d_Date descending
                                                     select new QuoteTrackingFilterModel { 
                                                         Commentary =  A1.v_Commentary,
                                                         Date =  A1.d_Date,

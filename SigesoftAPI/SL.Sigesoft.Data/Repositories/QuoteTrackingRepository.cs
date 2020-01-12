@@ -40,7 +40,6 @@ namespace SL.Sigesoft.Data.Repositories
             {
                 _logger.LogError($"Error en {nameof(AddAsync)}: " + ex.Message);
             }
-
             return entity;
         }
 

@@ -242,6 +242,7 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ReverseMap();
 
             this.CreateMap<Quotation, QuotationRegisterDto>()
+                .ForMember(u => u.QuotationId, p => p.MapFrom(m => m.i_QuotationId))
               .ForMember(u => u.Code, p => p.MapFrom(m => m.v_Code))
               .ForMember(u => u.Version, p => p.MapFrom(m => m.i_Version))
               .ForMember(u => u.UserCreatedId, p => p.MapFrom(m => m.i_UserCreatedId))
