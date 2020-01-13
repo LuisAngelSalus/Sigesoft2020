@@ -37,7 +37,7 @@ namespace SL.Sigesoft.Data
         public virtual DbSet<Quotation> Quotation { get; set; }
         public virtual DbSet<QuotationProfile> QuotationProfile { get; set; }
         public virtual DbSet<ProfileComponent> ProfileComponent { get; set; }
-
+        public virtual DbSet<AdditionalComponentsQuote> AdditionalComponentsQuote { get; set; }
         public virtual DbSet<Secuential> Secuential { get; set; }
         public virtual DbSet<QuoteTracking> QuoteTracking { get; set; }
 
@@ -69,6 +69,7 @@ namespace SL.Sigesoft.Data
             modelBuilder.ApplyConfiguration(new ProfileComponentConfiguration());
             modelBuilder.ApplyConfiguration(new SecuentialConfiguration());
             modelBuilder.ApplyConfiguration(new QuoteTrackingConfiguration());
+            modelBuilder.ApplyConfiguration(new AdditionalComponentsQuoteConfiguration());
 
         }
     }

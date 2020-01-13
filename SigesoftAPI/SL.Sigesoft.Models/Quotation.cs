@@ -10,6 +10,7 @@ namespace SL.Sigesoft.Models
         public Quotation()
         {
             QuotationProfiles = new List<QuotationProfile>();
+            AdditionalComponentsQuotes = new List<AdditionalComponentsQuote>();
         }
 
         public int i_QuotationId { get; set; }
@@ -31,6 +32,7 @@ namespace SL.Sigesoft.Models
         public int? i_UpdateUserId { get; set; }
         public DateTime? d_UpdateDate { get; set; }
 
-        public List<QuotationProfile> QuotationProfiles { get; set; }        
+        public List<QuotationProfile> QuotationProfiles { get; set; }
+        public List<AdditionalComponentsQuote> AdditionalComponentsQuotes { get; set; }
     }
 }

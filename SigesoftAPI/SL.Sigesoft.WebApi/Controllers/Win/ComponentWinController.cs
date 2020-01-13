@@ -48,5 +48,31 @@ namespace SL.Sigesoft.WebApi.Controllers.Win
             return response;
         }
 
+
+        [HttpGet("{value}")]
+        //[Route("ComponentByName")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Response<IEnumerable<ListComponentDto>>>> GetByName(string value)
+        {
+            var response = new Response<IEnumerable<ListComponentDto>>();
+            try
+            {
+                var components = await _componentRepository.GetByNameAsync(value);
+                response.Data = _mapper.Map<List<ListComponentDto>>(components);
+                if (response.Data != null)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Consulta Exitosa";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+            return response;
+        }
+
     }
 }

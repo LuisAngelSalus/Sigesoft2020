@@ -28,6 +28,7 @@ namespace SL.Sigesoft.Dtos
         public decimal? TotalQuotation { get; set; }
         public int? InsertUserId { get; set; }
         public List<QuotationProfileDto> QuotationProfiles { get; set; }
+        public List<AdditionalComponentsQuoteDto> AdditionalComponentsQuotes { get; set; }
     }
 
     public class QuotationProfileDto
@@ -47,6 +48,21 @@ namespace SL.Sigesoft.Dtos
     {
         public int ProfileComponentId { get; set; }
         public int QuotationProfileId { get; set; }
+        public int? CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public string ComponentId { get; set; }
+        public string ComponentName { get; set; }
+        public decimal? MinPrice { get; set; }
+        public decimal? PriceList { get; set; }
+        public decimal? SalePrice { get; set; }
+        public int? InsertUserId { get; set; }
+        public RecordStatus RecordStatus { get; set; }
+        public RecordType RecordType { get; set; }
+    }
+
+    public class AdditionalComponentsQuoteDto
+    {
+        public int AdditionalComponentsQuoteId { get; set; }
         public int? CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string ComponentId { get; set; }
@@ -81,6 +97,7 @@ namespace SL.Sigesoft.Dtos
         public decimal? TotalQuotation { get; set; }
         public int? InsertUserId { get; set; }
         public List<QuotationProfileRegisterDto> QuotationProfiles { get; set; }
+        public List<AdditionalComponentsQuoteRegisterDto> AdditionalComponentsQuotes { get; set; }
     }
 
     public class QuotationProfileRegisterDto
@@ -96,6 +113,19 @@ namespace SL.Sigesoft.Dtos
     public class ProfileComponentRegisterDto
     {
         public int QuotationProfileId { get; set; }
+        public int? CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public string ComponentId { get; set; }
+        public string ComponentName { get; set; }
+        public decimal? MinPrice { get; set; }
+        public decimal? PriceList { get; set; }
+        public decimal? SalePrice { get; set; }
+        public int? InsertUserId { get; set; }
+    }
+
+    public class AdditionalComponentsQuoteRegisterDto
+    {
+        public int QuotationId { get; set; }
         public int? CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string ComponentId { get; set; }
@@ -123,8 +153,23 @@ namespace SL.Sigesoft.Dtos
         public decimal? TotalQuotation { get; set; }
         public int? UpdateUserId { get; set; }
         public List<QuotationProfileUpdateDto> QuotationProfiles { get; set; }
+        public List<AdditionalComponentsQuoteUpdateDto> AdditionalComponentsQuotes { get; set; }
     }
 
+    public class AdditionalComponentsQuoteUpdateDto
+    {
+        public int QuotationId { get; set; }
+        public int? CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public string ComponentId { get; set; }
+        public string ComponentName { get; set; }
+        public decimal? MinPrice { get; set; }
+        public decimal? PriceList { get; set; }
+        public decimal? SalePrice { get; set; }
+        public int? InsertUserId { get; set; }
+        public RecordStatus RecordStatus { get; set; }
+        public RecordType RecordType { get; set; }
+    }
     public class QuotationProfileUpdateDto
     {
         public int QuotationProfileId { get; set; }

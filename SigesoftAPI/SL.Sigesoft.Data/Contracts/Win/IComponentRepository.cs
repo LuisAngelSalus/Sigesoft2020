@@ -9,5 +9,6 @@ namespace SL.Sigesoft.Data.Contracts.Win
    public interface IComponentRepository
     {
         Task<List<Component>> GetAllAsync();
+        Task<List<Component>> GetByNameAsync(string value);
     }
 }
