@@ -73,7 +73,7 @@ namespace SL.Sigesoft.Data.Repositories
 
         public async Task<bool> UpdateAsync(QuoteTracking entity)
         {
-            var entityDb = await _dbSet.FirstOrDefaultAsync(u => u.i_QuoteTrackingId == entity.i_QuoteTrackingId);
+            var entityDb = await _dbSet.FirstOrDefaultAsync(u => u.i_QuoteTrackingId == entity.i_QuoteTrackingId);           
 
             if (entityDb == null)
             {
@@ -84,6 +84,10 @@ namespace SL.Sigesoft.Data.Repositories
             entityDb.v_Commentary = entity.v_Commentary;
             entityDb.d_UpdateDate = DateTime.UtcNow;
             entityDb.i_UpdateUserId = entity.i_UpdateUserId;
+            //if (entity.s)
+            //{
+
+            //}
             try
             {
                 return await _context.SaveChangesAsync() > 0 ? true : false;

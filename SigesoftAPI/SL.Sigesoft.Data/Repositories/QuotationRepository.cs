@@ -36,6 +36,7 @@ namespace SL.Sigesoft.Data.Repositories
             #endregion
 
             #region AUDIT
+            entity.d_AcceptanceDate = DateTime.UtcNow;
             entity.d_ShippingDate = DateTime.UtcNow;
             entity.i_IsDeleted = YesNo.No;
             entity.d_InsertDate = DateTime.UtcNow;
@@ -188,6 +189,9 @@ namespace SL.Sigesoft.Data.Repositories
             if (string.IsNullOrEmpty(entity.v_Code))
             {
                 entityDb.i_StatusQuotationId = entity.i_StatusQuotationId;
+                if (entity.i_StatusQuotationId == 2)
+                    entityDb.d_AcceptanceDate = DateTime.UtcNow;
+                
             }
             else
             {
