@@ -201,6 +201,11 @@ namespace SL.Sigesoft.Data.Repositories
             return await _dbSet.Where(c => c.i_IsDeleted == YesNo.No).ToListAsync();
         }
 
+        public async Task<List<ProtocolProfile>> AutocompleteByName(string value)
+        {
+            return await _dbSet.Where(c => c.i_IsDeleted == YesNo.No && c.v_Name.Contains(value)).ToListAsync();
+        }
+
 
     }
 }

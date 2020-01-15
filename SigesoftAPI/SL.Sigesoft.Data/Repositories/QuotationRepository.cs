@@ -36,7 +36,6 @@ namespace SL.Sigesoft.Data.Repositories
             #endregion
 
             #region AUDIT
-            entity.d_AcceptanceDate = DateTime.UtcNow;
             entity.d_ShippingDate = DateTime.UtcNow;
             entity.i_IsDeleted = YesNo.No;
             entity.d_InsertDate = DateTime.UtcNow;

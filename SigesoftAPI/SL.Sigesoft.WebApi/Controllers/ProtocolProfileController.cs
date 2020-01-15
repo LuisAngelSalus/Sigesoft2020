@@ -25,7 +25,7 @@ namespace SL.Sigesoft.WebApi.Controllers
             this._mapper = mapper;
         }
 
-        
+
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -94,6 +94,34 @@ namespace SL.Sigesoft.WebApi.Controllers
             try
             {
                 var profile = await _protocolProfileRepository.DrowpDownList();
+                if (profile == null)
+                {
+                    return NotFound();
+                }
+                response.Data = _mapper.Map<List<DropdownListDto>>(profile);
+                if (response.Data != null)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Consulta Exitosa";
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return response;
+
+        }
+
+        [HttpGet("{value}/AutocompleteByName")]        
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Response<List<DropdownListDto>>>> AutocompleteByName(string value)
+        {
+            var response = new Response<List<DropdownListDto>>();
+            try
+            {
+                var profile = await _protocolProfileRepository.AutocompleteByName(value);
                 if (profile == null)
                 {
                     return NotFound();

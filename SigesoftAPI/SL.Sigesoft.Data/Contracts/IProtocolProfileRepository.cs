@@ -10,5 +10,7 @@ namespace SL.Sigesoft.Data.Contracts
     {
         Task<ProtocolProfileModel> GetProfile(int protocolProfileId);
         Task<List<ProtocolProfile>> DrowpDownList();
+
+        Task<List<ProtocolProfile>> AutocompleteByName(string value);
     }
 }
