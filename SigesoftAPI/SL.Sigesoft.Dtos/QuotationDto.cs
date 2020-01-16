@@ -12,7 +12,7 @@ namespace SL.Sigesoft.Dtos
     {
         public int QuotationId { get; set; }
         public string Code { get; set; }
-        public int Version { get; set; }
+        public string Version { get; set; }
         public int UserCreatedId { get; set; }
         public string UserName { get; set; }
         public int CompanyId { get; set; }
@@ -211,6 +211,7 @@ namespace SL.Sigesoft.Dtos
         public string TrackingDescription { get; set; }
         public int StatusQuotationId { get; set; }
         public string StatusQuotationName { get; set; }
+        public string Indicator { get; set; }
         public List<QuoteTrackingFilterDto> QuoteTrackings { get; set; }
     }
     public class QuoteTrackingFilterDto
@@ -221,4 +222,82 @@ namespace SL.Sigesoft.Dtos
         public string Commentary { get; set; }
     }
     #endregion
+
+
+
+    #region NEW VERSION
+
+    public class QuotationNewVersionDto
+    {
+        
+        public string Code { get; set; }
+        public int Version { get; set; }
+        public int UserCreatedId { get; set; }
+        public string UserName { get; set; }
+        public int CompanyId { get; set; }
+        public string CompanyName { get; set; }
+        public string CompanyDistrictName { get; set; }
+        public string CompanyAddress { get; set; }
+        public int CompanyHeadquarterId { get; set; }
+        public string FullName { get; set; }
+        public string Email { get; set; }
+        public string CommercialTerms { get; set; }
+        public int StatusQuotationId { get; set; }
+        public decimal? TotalQuotation { get; set; }
+        public int? InsertUserId { get; set; }
+        public List<QuotationProfileNewVersionDto> QuotationProfiles { get; set; }
+        public List<AdditionalComponentsQuoteNewVersionDto> AdditionalComponentsQuotes { get; set; }
+    }
+
+    public class QuotationProfileNewVersionDto
+    {        
+        public string ProfileName { get; set; }
+        public int? ServiceTypeId { get; set; }
+        public string ServiceTypeName { get; set; }
+        public int? InsertUserId { get; set; }
+        public List<ProfileComponentNewVersionDto> ProfileComponents { get; set; }
+    }
+
+    public class ProfileComponentNewVersionDto
+    {        
+        public int? CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public string ComponentId { get; set; }
+        public string ComponentName { get; set; }
+        public decimal? MinPrice { get; set; }
+        public decimal? PriceList { get; set; }
+        public decimal? SalePrice { get; set; }
+        public int? InsertUserId { get; set; }
+    }
+
+    public class AdditionalComponentsQuoteNewVersionDto
+    {
+        public int? CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public string ComponentId { get; set; }
+        public string ComponentName { get; set; }
+        public decimal? MinPrice { get; set; }
+        public decimal? PriceList { get; set; }
+        public decimal? SalePrice { get; set; }
+        public int? InsertUserId { get; set; }
+    }
+
+
+    #endregion
+
+    public class QuotationVersionDto
+    {
+        public int QuotationId { get; set; }
+        public string NroQuotation { get; set; }
+        public int Version { get; set; }
+        public YesNo IsProccess { get; set; }
+        public DateTime? ShippingDate { get; set; }
+        public string CompanyName { get; set; }
+        public decimal Total { get; set; }
+        public DateTime? USDate { get; set; }
+        public string TrackingDescription { get; set; }
+        public int StatusQuotationId { get; set; }
+        public string StatusQuotationName { get; set; }        
+        
+    }
 }

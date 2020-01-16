@@ -16,6 +16,7 @@ namespace SL.Sigesoft.Models
         public int i_QuotationId { get; set; }
         public string v_Code { get; set; }
         public int i_Version { get; set; }
+        public YesNo i_IsProccess { get; set; }
         public int i_UserCreatedId { get; set; }
         public int i_CompanyId { get; set; }
         public int i_CompanyHeadquarterId { get; set; }

@@ -134,5 +134,62 @@ namespace SL.Sigesoft.WebApi.Controllers
             return response;
         }
 
+
+        [HttpPost]
+        [Route("NewVersion")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Response<QuotationRegisterDto>>> NewVersion(QuotationNewVersionDto quotationDto)
+        {
+            var response = new Response<QuotationRegisterDto>();
+            try
+            {
+                var quotation = _mapper.Map<Quotation>(quotationDto);
+
+                var newQuotation = await _quotationRepository.NewVersion(quotation);
+                if (newQuotation == null)
+                {
+                    return BadRequest();
+                }
+
+                var newQuotationDto = _mapper.Map<QuotationRegisterDto>(newQuotation);
+                response.Data = newQuotationDto;
+                response.IsSuccess = true;
+                response.Message = "Se grabó correctamente";
+
+                return Ok(response);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet]
+        [Route("Versions/{code}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Response<IEnumerable<QuotationVersionDto>>>> GetVersions(string code)
+        {
+            var response = new Response<IEnumerable<QuotationVersionDto>>();
+            try
+            {
+                var quotations = await _quotationRepository.GetVersions(code);
+                response.Data = _mapper.Map<List<QuotationVersionDto>>(quotations);
+                if (response.Data != null)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Consulta Exitosa";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+            return response;
+        }
+
     }
 }

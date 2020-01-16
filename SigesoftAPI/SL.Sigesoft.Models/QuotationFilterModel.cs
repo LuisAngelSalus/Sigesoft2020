@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SL.Sigesoft.Models.Enum;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -18,6 +19,7 @@ namespace SL.Sigesoft.Models
         public string StatusQuotationName { get; set; }
         public int StatusQuotationId { get; set; }
         public DateTime? InsertDate { get; set; }
+        public string Indicator { get; set; }
         public List<QuoteTrackingFilterModel> QuoteTrackings { get; set; }
     }
 
@@ -27,5 +29,21 @@ namespace SL.Sigesoft.Models
         public int QuotationId { get; set; }
         public DateTime? Date { get; set; }
         public string Commentary { get; set; }
+    }
+
+    public class QuotationVersionModel
+    {
+        public int QuotationId { get; set; }
+        public string NroQuotation { get; set; }
+        public int Version { get; set; }
+        public YesNo IsProccess { get; set; }
+        public DateTime? ShippingDate { get; set; }
+        public string CompanyName { get; set; }
+        public decimal Total { get; set; }
+        public DateTime? USDate { get; set; }
+        public string TrackingDescription { get; set; }
+        public int StatusQuotationId { get; set; }
+        public string StatusQuotationName { get; set; }
+
     }
 }

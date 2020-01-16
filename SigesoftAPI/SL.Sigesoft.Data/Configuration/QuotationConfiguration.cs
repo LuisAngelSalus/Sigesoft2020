@@ -20,6 +20,7 @@ namespace SL.Sigesoft.Data.Configuration
 
             entity.Property(e => e.v_Code).HasColumnName("v_Code");
             entity.Property(e => e.i_Version).HasColumnName("i_Version");
+            entity.Property(e => e.i_IsProccess).HasColumnName("i_IsProccess");
             entity.Property(e => e.i_UserCreatedId).HasColumnName("i_UserCreatedId");
             entity.Property(e => e.i_CompanyId).HasColumnName("i_CompanyId");
             entity.Property(e => e.i_CompanyHeadquarterId).HasColumnName("i_CompanyHeadquarterId");

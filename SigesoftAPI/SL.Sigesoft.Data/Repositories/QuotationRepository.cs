@@ -33,6 +33,7 @@ namespace SL.Sigesoft.Data.Repositories
         {
             #region Code
             entity.v_Code = Utils.Code("COT", entity.i_UserCreatedId.ToString(),await _secuentialRespository.GetCode("COT", entity.i_UserCreatedId, 1));
+            entity.i_IsProccess = YesNo.Yes;
             #endregion
 
             #region AUDIT
@@ -76,6 +77,54 @@ namespace SL.Sigesoft.Data.Repositories
             catch (Exception ex)
             {
                 _logger.LogError($"Error en {nameof(AddAsync)}: " + ex.Message);
+            }
+            return entity;
+        }
+
+        public async Task<Quotation> NewVersion(Quotation entity)
+        {
+            #region AUDIT
+            entity.d_ShippingDate = DateTime.UtcNow;
+            entity.i_IsDeleted = YesNo.No;
+            entity.d_InsertDate = DateTime.UtcNow;
+            entity.i_InsertUserId = entity.i_InsertUserId;
+
+            foreach (var item in entity.QuotationProfiles)
+            {
+                #region AUDIT
+                item.i_IsDeleted = YesNo.No;
+                item.d_InsertDate = DateTime.UtcNow;
+                item.i_InsertUserId = entity.i_InsertUserId;
+                #endregion
+                foreach (var item2 in item.ProfileComponents)
+                {
+                    #region AUDIT
+                    item2.i_IsDeleted = YesNo.No;
+                    item2.d_InsertDate = DateTime.UtcNow;
+                    item2.i_InsertUserId = entity.i_InsertUserId;
+                    #endregion
+                }
+            }
+
+            foreach (var item in entity.AdditionalComponentsQuotes)
+            {
+                #region AUDIT
+                item.i_IsDeleted = YesNo.No;
+                item.d_InsertDate = DateTime.UtcNow;
+                item.i_InsertUserId = entity.i_InsertUserId;
+                #endregion
+            }
+
+            #endregion
+            _dbSet.Add(entity);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en {nameof(NewVersion)}: " + ex.Message);
+                return null;
             }
             return entity;
         }
@@ -190,12 +239,13 @@ namespace SL.Sigesoft.Data.Repositories
                 entityDb.i_StatusQuotationId = entity.i_StatusQuotationId;
                 if (entity.i_StatusQuotationId == 2)
                     entityDb.d_AcceptanceDate = DateTime.UtcNow;
-                
+
             }
             else
             {
                 #region Update Quotation
                 entityDb.v_Code = entity.v_Code;
+                //entityDb.i_Version = entity.i_Version + 1;
                 entityDb.i_CompanyId = entity.i_CompanyId;
                 entityDb.i_CompanyHeadquarterId = entity.i_CompanyHeadquarterId;
                 entityDb.v_FullName = entity.v_FullName;
@@ -364,9 +414,29 @@ namespace SL.Sigesoft.Data.Repositories
             }           
         }
 
-        public Task<IEnumerable<Quotation>> GetAllAsync()
+        public async Task<IEnumerable<QuotationVersionModel>> GetVersions(string code)
         {
-            throw new NotImplementedException();
+            var query = await (from A in _context.Quotation
+                               join B in _context.Company on A.i_CompanyId equals B.i_CompanyId
+                               join C in _context.SystemParameter on new { a = A.i_StatusQuotationId.Value, b = 103 }
+                                                               equals new { a = C.i_ParameterId, b = C.i_GroupId } into C_join
+                               from C in C_join.DefaultIfEmpty()
+                               where A.i_IsDeleted == 0 && A.v_Code == code
+                               orderby A.d_ShippingDate
+                               select new QuotationVersionModel
+                               {
+                                   QuotationId = A.i_QuotationId,
+                                   NroQuotation = A.v_Code ,
+                                   IsProccess = A.i_IsProccess,
+                                   Version = A.i_Version,
+                                   ShippingDate = A.d_ShippingDate,                                   
+                                   CompanyName = B.v_Name,
+                                   Total = A.r_TotalQuotation,
+                                   StatusQuotationId = A.i_StatusQuotationId.Value,
+                                   StatusQuotationName = C.v_Value1,
+                               }).ToListAsync();
+
+            return query;
         }
 
         public async Task<IEnumerable<QuotationFilterModel>> GetFilterAsync(ParamsQuotationFilterDto parameters)
@@ -390,15 +460,17 @@ namespace SL.Sigesoft.Data.Repositories
                               &&(statusQuotationId == -1 || A.i_StatusQuotationId == statusQuotationId)
                               && (!validfi || A.d_InsertDate >= fi)
                               && (!validff || A.d_InsertDate <= ff)
+                              && (A.i_IsProccess == YesNo.Yes)
                               orderby A.d_ShippingDate
                               select new QuotationFilterModel
                               {
                                   QuotationId = A.i_QuotationId,
-                                  NroQuotation = A.v_Code,
+                                  NroQuotation = A.v_Code + " v.  " + A.i_Version,
                                   ShippingDate = A.d_ShippingDate,
                                   AcceptanceDate = A.d_AcceptanceDate,
                                   CompanyName = B.v_Name,
                                   Total = A.r_TotalQuotation,
+                                  Indicator = GetIndicator(A.d_ShippingDate),
                                   USDate = (from A2 in _context.QuoteTracking
                                             where A2.i_QuotationId == A.i_QuotationId && A2.i_IsDeleted == YesNo.No
                                             orderby A2.d_Date descending select A2).FirstOrDefault().d_Date,
@@ -420,6 +492,32 @@ namespace SL.Sigesoft.Data.Repositories
                               }).ToListAsync();
 
             return query;
+        }
+
+        private string GetIndicator(DateTime? shippingDate)
+        {
+            var dateNow = DateTime.Now;
+            var diff = (DateTime.Now - shippingDate.Value).TotalDays;
+
+            if (diff >=0 && diff <= 10)
+            {
+                return "GREEN";
+            }
+            else if (diff > 10 && diff <= 20)
+            {
+                return "AMBER";
+            }
+            else if (diff > 21 )
+            {
+                return "RED";
+            }
+
+            return "";
+        }
+
+        public Task<IEnumerable<Quotation>> GetAllAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }
