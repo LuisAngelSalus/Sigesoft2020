@@ -476,6 +476,13 @@ namespace SL.Sigesoft.WebApi.Profiles
             .ForMember(u => u.StatusQuotationName, p => p.MapFrom(m => m.StatusQuotationName))
             .ForMember(u => u.StatusQuotationId, p => p.MapFrom(m => m.StatusQuotationId))            
             .ReverseMap();
+
+            this.CreateMap<Quotation, QuotationUpdateProcess>()
+            .ForMember(u => u.QuotationId, p => p.MapFrom(m => m.i_QuotationId))
+            .ForMember(u => u.Code, p => p.MapFrom(m => m.v_Code))
+            .ReverseMap();
+
+            
         }
     }
 }

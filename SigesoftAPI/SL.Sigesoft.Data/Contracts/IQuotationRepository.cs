@@ -12,5 +12,6 @@ namespace SL.Sigesoft.Data.Contracts
         Task<IEnumerable<QuotationFilterModel>> GetFilterAsync(ParamsQuotationFilterDto parameters);
         Task<Quotation> NewVersion(Quotation entity);
         Task<IEnumerable<QuotationVersionModel>> GetVersions(string code);
+        Task<bool> UpdateIsProccess(string code, int quotationId);
     }
 }

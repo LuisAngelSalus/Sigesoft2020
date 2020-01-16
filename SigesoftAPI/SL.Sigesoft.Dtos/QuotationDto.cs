@@ -137,6 +137,11 @@ namespace SL.Sigesoft.Dtos
     }
 
     #endregion
+    public class QuotationUpdateProcess
+    {
+        public int QuotationId { get; set; }
+        public string Code { get; set; }
+    }
 
     #region Update
     public class QuotationUpdateDto

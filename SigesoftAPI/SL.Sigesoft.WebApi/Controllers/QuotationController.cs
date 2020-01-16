@@ -110,7 +110,6 @@ namespace SL.Sigesoft.WebApi.Controllers
         }
 
 
-        // PUT: api/usuarios/5
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -188,6 +187,30 @@ namespace SL.Sigesoft.WebApi.Controllers
             {
                 return BadRequest();
             }
+            return response;
+        }
+
+
+        [HttpPut]
+        [Route("Process")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Response<bool>>> UpdateProccess([FromBody]QuotationUpdateProcess quotationDto)
+        {
+            var response = new Response<bool>();
+            if (quotationDto == null)
+                return NotFound();
+
+            var quotation = _mapper.Map<Quotation>(quotationDto);
+            var result = await _quotationRepository.UpdateIsProccess(quotation.v_Code,quotation.i_QuotationId);
+            if (!result)
+                return BadRequest();
+
+            response.Data = result;
+            response.IsSuccess = true;
+            response.Message = "Se actualizó correctamente";
+
             return response;
         }
 

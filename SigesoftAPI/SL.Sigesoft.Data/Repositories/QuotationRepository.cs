@@ -499,7 +499,7 @@ namespace SL.Sigesoft.Data.Repositories
             var dateNow = DateTime.Now;
             var diff = (DateTime.Now - shippingDate.Value).TotalDays;
 
-            if (diff >=0 && diff <= 10)
+            if ( diff <= 10)
             {
                 return "GREEN";
             }
@@ -518,6 +518,36 @@ namespace SL.Sigesoft.Data.Repositories
         public Task<IEnumerable<Quotation>> GetAllAsync()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<bool> UpdateIsProccess(string code, int quotationId)
+        {
+            try
+            {
+                var entitiesDb = await _dbSet.Where(u => u.v_Code == code).ToListAsync();
+
+                foreach (var item in entitiesDb)
+                {
+                    if (item.i_QuotationId != quotationId)
+                    {
+                        item.i_IsProccess = YesNo.No;
+                    }
+                    else
+                    {
+                        item.i_IsProccess = YesNo.Yes;
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+                                
         }
     }
 }
