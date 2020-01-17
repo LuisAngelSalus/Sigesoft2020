@@ -83,7 +83,9 @@ namespace SL.Sigesoft.Data.Repositories
 
         public async Task<Quotation> NewVersion(Quotation entity)
         {
+
             #region AUDIT
+            entity.i_Version = GetLastVersion(entity.v_Code) + 1;
             entity.d_ShippingDate = DateTime.UtcNow;
             entity.i_IsDeleted = YesNo.No;
             entity.d_InsertDate = DateTime.UtcNow;
@@ -548,6 +550,19 @@ namespace SL.Sigesoft.Data.Repositories
                 return false;
             }
                                 
+        }
+
+        private int GetLastVersion(string code)
+        {
+            var sql = (from A in _context.Quotation
+                       where A.v_Code == code
+                       orderby A.i_Version descending
+                       select A).FirstOrDefault();
+            if (sql != null)
+            {
+                return sql.i_Version;
+            }
+            return 0;
         }
     }
 }
