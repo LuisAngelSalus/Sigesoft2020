@@ -8,6 +8,7 @@ namespace SL.Sigesoft.Dtos
     {
         public int QuotationId { get; set; }
         public string Commentary { get; set; }
+        public string StatusName { get; set; }        
         public int InsertUserId { get; set; }
     }
 }

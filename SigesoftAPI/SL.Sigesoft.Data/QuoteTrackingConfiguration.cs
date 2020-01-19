@@ -21,6 +21,7 @@ namespace SL.Sigesoft.Data
             entity.Property(e => e.i_QuotationId).HasColumnName("i_QuotationId");
             entity.Property(e => e.d_Date).HasColumnName("d_Date");
             entity.Property(e => e.v_Commentary).HasColumnName("v_Commentary");
+            entity.Property(e => e.v_StatusName).HasColumnName("v_StatusName");
             entity.Property(e => e.i_IsDeleted).HasColumnName("i_IsDeleted");
             entity.Property(e => e.i_InsertUserId).HasColumnName("i_InsertUserId");
             entity.Property(e => e.d_InsertDate).HasColumnName("d_InsertDate");

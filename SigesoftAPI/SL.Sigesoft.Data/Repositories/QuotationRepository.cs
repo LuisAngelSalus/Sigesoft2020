@@ -489,7 +489,8 @@ namespace SL.Sigesoft.Data.Repositories
                                                         Commentary =  A1.v_Commentary,
                                                         Date =  A1.d_Date,
                                                         QuotationId =  A1.i_QuotationId,
-                                                        QuoteTrackingId =  A1.i_QuoteTrackingId
+                                                        QuoteTrackingId =  A1.i_QuoteTrackingId,
+                                                        StatusName = A1.v_StatusName
                                                     }).ToList()
                               }).ToListAsync();
 

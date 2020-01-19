@@ -394,6 +394,7 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.QuotationId, p => p.MapFrom(m => m.QuotationId))
                 .ForMember(u => u.Date, p => p.MapFrom(m => m.Date))
                 .ForMember(u => u.Commentary, p => p.MapFrom(m => m.Commentary))
+                .ForMember(u => u.StatusName, p => p.MapFrom(m => m.StatusName))
             .ReverseMap();
 
 
@@ -402,13 +403,13 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.QuotationId, p => p.MapFrom(m => m.i_QuotationId))
                 .ForMember(u => u.Date, p => p.MapFrom(m => m.d_Date))
                 .ForMember(u => u.Commentary, p => p.MapFrom(m => m.v_Commentary))
+                .ForMember(u => u.StatusName, p => p.MapFrom(m => m.v_StatusName))
                 .ReverseMap();
-
-            
 
             this.CreateMap<QuoteTracking, QuoteTrackingRegisterDto>()               
                .ForMember(u => u.QuotationId, p => p.MapFrom(m => m.i_QuotationId))               
                .ForMember(u => u.Commentary, p => p.MapFrom(m => m.v_Commentary))
+               .ForMember(u => u.StatusName, p => p.MapFrom(m => m.v_StatusName))
                .ForMember(u => u.InsertUserId, p => p.MapFrom(m => m.i_InsertUserId))
                .ReverseMap();
 
