@@ -424,7 +424,7 @@ namespace SL.Sigesoft.Data.Repositories
                                                                equals new { a = C.i_ParameterId, b = C.i_GroupId } into C_join
                                from C in C_join.DefaultIfEmpty()
                                where A.i_IsDeleted == 0 && A.v_Code == code
-                               orderby A.d_ShippingDate
+                               orderby A.d_ShippingDate descending
                                select new QuotationVersionModel
                                {
                                    QuotationId = A.i_QuotationId,
@@ -463,7 +463,7 @@ namespace SL.Sigesoft.Data.Repositories
                               && (!validfi || A.d_InsertDate >= fi)
                               && (!validff || A.d_InsertDate <= ff)
                               && (A.i_IsProccess == YesNo.Yes)
-                              orderby A.d_ShippingDate
+                              orderby A.d_ShippingDate descending
                               select new QuotationFilterModel
                               {
                                   QuotationId = A.i_QuotationId,
