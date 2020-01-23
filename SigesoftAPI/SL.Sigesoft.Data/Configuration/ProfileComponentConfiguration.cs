@@ -24,7 +24,11 @@ namespace SL.Sigesoft.Data.Configuration
             entity.Property(e => e.v_ComponentName).HasColumnName("v_ComponentName");            
             entity.Property(e => e.r_MinPrice).HasColumnName("r_MinPrice");
             entity.Property(e => e.r_PriceList).HasColumnName("r_PriceList");
-            entity.Property(e => e.r_SalePrice).HasColumnName("r_SalePrice");            
+            entity.Property(e => e.r_SalePrice).HasColumnName("r_SalePrice");
+
+            entity.Property(e => e.i_AgeConditionalId).HasColumnName("i_AgeConditionalId");
+            entity.Property(e => e.i_Age).HasColumnName("i_Age");
+            entity.Property(e => e.i_GenderConditionalId).HasColumnName("i_GenderConditionalId");
 
             entity.Property(e => e.i_IsDeleted).HasColumnName("i_IsDeleted");
             entity.Property(e => e.i_InsertUserId).HasColumnName("i_InsertUserId");

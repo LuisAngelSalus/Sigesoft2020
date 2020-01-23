@@ -17,6 +17,9 @@ namespace SL.Sigesoft.Models
         public decimal? r_MinPrice { get; set; }
         public decimal? r_PriceList { get; set; }
         public decimal? r_SalePrice { get; set; }
+        public int? i_AgeConditionalId { get; set; }
+        public int? i_Age { get; set; }
+        public int? i_GenderConditionalId { get; set; }
         public YesNo i_IsDeleted { get; set; }
         public int? i_InsertUserId { get; set; }
         public DateTime? d_InsertDate { get; set; }

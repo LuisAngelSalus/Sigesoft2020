@@ -17,6 +17,7 @@ namespace SL.Sigesoft.Models
         public int? i_QuotationId { get; set; }
         public string v_ProfileName { get; set; }
         public int? i_ServiceTypeId { get; set; }
+        public int i_TypeFormatId { get; set; }
         public YesNo i_IsDeleted { get; set; }
         public int? i_InsertUserId { get; set; }
         public DateTime? d_InsertDate { get; set; }

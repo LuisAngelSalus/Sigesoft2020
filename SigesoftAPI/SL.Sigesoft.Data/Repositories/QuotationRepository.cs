@@ -101,7 +101,16 @@ namespace SL.Sigesoft.Data.Repositories
                 foreach (var item2 in item.ProfileComponents)
                 {
                     #region AUDIT
-                    item2.i_IsDeleted = YesNo.No;
+                    //PARCHE
+                    if (item2.RecordStatus == RecordStatus.EliminadoLogico)
+                    {
+                        item2.i_IsDeleted = YesNo.Yes;
+                    }
+                    else
+                    {
+                        item2.i_IsDeleted = YesNo.No;
+                    }
+                    
                     item2.d_InsertDate = DateTime.UtcNow;
                     item2.i_InsertUserId = entity.i_InsertUserId;
                     #endregion
@@ -179,6 +188,7 @@ namespace SL.Sigesoft.Data.Repositories
                                                                 ProfileName = A1.v_ProfileName,
                                                                 ServiceTypeId = A1.i_ServiceTypeId,
                                                                 ServiceTypeName = C1.v_Value1,
+                                                                TypeFormatId = A1.i_TypeFormatId,
                                                                 RecordStatus = RecordStatus.Grabado,
                                                                 RecordType = RecordType.NoTemporal,
                                                                 ProfileComponents = (from A2 in _context.ProfileComponent
@@ -195,6 +205,9 @@ namespace SL.Sigesoft.Data.Repositories
                                                                                          MinPrice = A2.r_MinPrice,
                                                                                          PriceList = A2.r_PriceList,
                                                                                          SalePrice = A2.r_SalePrice,
+                                                                                         AgeConditionalId = A2.i_AgeConditionalId.Value,
+                                                                                         Age = A2.i_Age.Value,
+                                                                                         GenderConditionalId = A2.i_GenderConditionalId.Value,
                                                                                          RecordStatus = RecordStatus.Grabado,
                                                                                          RecordType = RecordType.NoTemporal,
                                                                                      }).ToList()
@@ -394,6 +407,9 @@ namespace SL.Sigesoft.Data.Repositories
                     o.v_ComponentName = component.v_ComponentName;
                     o.r_SalePrice = component.r_SalePrice;
                     o.i_UpdateUserId = component.i_UpdateUserId;
+                    o.i_AgeConditionalId = component.i_AgeConditionalId;
+                    o.i_Age = component.i_Age;
+                    o.i_GenderConditionalId = component.i_GenderConditionalId;
                     o.i_IsDeleted = YesNo.No;
                     quotationProfile.ProfileComponents.Add(o);
                 }
@@ -402,6 +418,9 @@ namespace SL.Sigesoft.Data.Repositories
                     var o = quotationProfile.ProfileComponents.Where(w => w.i_ProfileComponentId == component.i_ProfileComponentId).FirstOrDefault();
                     o.r_SalePrice = component.r_SalePrice;
                     o.d_UpdateDate = DateTime.UtcNow;
+                    o.i_AgeConditionalId = component.i_AgeConditionalId;
+                    o.i_Age = component.i_Age;
+                    o.i_GenderConditionalId = component.i_GenderConditionalId;
                     o.i_UpdateUserId = component.i_UpdateUserId;
                     quotationProfile.ProfileComponents.Add(o);
                 }
@@ -504,11 +523,11 @@ namespace SL.Sigesoft.Data.Repositories
 
             if ( diff <= 10)
             {
-                return "GREEN";
+                return "AMBER";
             }
             else if (diff > 10 && diff <= 20)
             {
-                return "AMBER";
+                return "GREEN";
             }
             else if (diff > 21 )
             {

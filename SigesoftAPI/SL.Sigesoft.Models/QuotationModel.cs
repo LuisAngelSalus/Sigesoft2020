@@ -35,10 +35,9 @@ namespace SL.Sigesoft.Models
         //public int? ProfileId { get; set; }
         public string ProfileName { get; set; }
         public int? ServiceTypeId { get; set; }
-        public string ServiceTypeName { get; set; }
-        
-        public RecordStatus RecordStatus { get; set; }
-        
+        public int TypeFormatId { get; set; }
+        public string ServiceTypeName { get; set; }        
+        public RecordStatus RecordStatus { get; set; }        
         public RecordType RecordType { get; set; }
         public List<ProfileComponentModel> ProfileComponents { get; set; }
     }
@@ -54,6 +53,10 @@ namespace SL.Sigesoft.Models
         public decimal? MinPrice { get; set; }
         public decimal? PriceList { get; set; }
         public decimal? SalePrice { get; set; }
+
+        public int? AgeConditionalId { get; set; }
+        public int? Age { get; set; }
+        public int? GenderConditionalId { get; set; }
 
         [notMaped]
         public RecordStatus RecordStatus { get; set; }
