@@ -523,11 +523,11 @@ namespace SL.Sigesoft.Data.Repositories
 
             if ( diff <= 10)
             {
-                return "AMBER";
+                return "GREEN";
             }
             else if (diff > 10 && diff <= 20)
             {
-                return "GREEN";
+                return "AMBER";                
             }
             else if (diff > 21 )
             {
