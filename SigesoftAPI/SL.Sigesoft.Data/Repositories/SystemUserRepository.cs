@@ -183,7 +183,7 @@ namespace SL.Sigesoft.Data.Repositories
                     var modules = new List<Module>();
                     foreach (var itemModule in ModulesDb)
                     {
-                        var oModule = new Module { ModuleName = itemModule.ApplicationHierarchyName};
+                        var oModule = new Module { ModuleId = itemModule.ApplicationHierarchyId , ModuleName = itemModule.ApplicationHierarchyName};
                         modules.Add(oModule);
 
                         var OptionsDb = query.Where(w => w.RolId == oRole.RolId && w.ParentId != -1).GroupBy(g => g.ApplicationHierarchyId).Select(s => s.First()).ToList();

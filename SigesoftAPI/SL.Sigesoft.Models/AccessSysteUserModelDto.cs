@@ -29,6 +29,7 @@ namespace SL.Sigesoft.Models
 
     public class Module
     {
+        public int ModuleId { get; set; }
         public string ModuleName { get; set; }
         public List<Option> Options { get; set; }
     }
