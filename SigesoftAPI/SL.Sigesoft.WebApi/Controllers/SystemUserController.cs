@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SL.Sigesoft.Data.Contracts;
@@ -11,6 +12,7 @@ using SL.Sigesoft.Models;
 
 namespace SL.Sigesoft.WebApi.Controllers
 {
+    [Authorize(Roles = "Administrador,Sistemas,Médico,Recepción,Gerencia,Comercial")]
     [Route("api/[controller]")]
     [ApiController]
     public class SystemUserController : ControllerBase

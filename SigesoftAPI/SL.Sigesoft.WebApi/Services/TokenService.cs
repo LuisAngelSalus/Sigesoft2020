@@ -19,7 +19,7 @@ namespace SL.Sigesoft.WebApi.Services
             _configuration = configuration;
         }
 
-        public string GenerarToken(SystemUser usuario)
+        public string GenerarToken(SystemUserLoginModel usuario)
         {
             //Accedemos a la sección JwtSettings del archivo appsettings.json
             var jwtSettings = _configuration.GetSection("JwtSettings");
@@ -34,13 +34,13 @@ namespace SL.Sigesoft.WebApi.Services
 
             var key = Encoding.ASCII.GetBytes(secretKey);
 
-            //Creamos nuestra lista de Claims, en este caso para el Username,
-            //el Email y el Perfil del Usuario.
+            //Creamos nuestra lista de Claims            
             List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Name,usuario.v_UserName));
-            claims.Add(new Claim(ClaimTypes.Email, usuario.v_Email));
-            //claims.Add(new Claim(ClaimTypes.Role, usuario.Perfil.Nombre));
-            
+            claims.Add(new Claim(ClaimTypes.Name,usuario.UserName));
+            foreach (var rol in usuario.Roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, rol.RolName));
+            }           
 
             // Creamos el objeto JwtSecurityToken
             var token = new JwtSecurityToken(

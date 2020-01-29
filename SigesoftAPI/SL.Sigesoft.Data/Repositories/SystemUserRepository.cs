@@ -117,7 +117,7 @@ namespace SL.Sigesoft.Data.Repositories
         {
             throw new NotImplementedException();
         }
-        public async Task<(bool result, SystemUser systemUser)> ValidateLogin(SystemUser systemUser)
+        public async Task<(bool result, SystemUser systemUser)> ValidateLogin_(SystemUser systemUser)
         {
             var systemUserDb = await _dbSet.Include(u => u.Permissions).FirstOrDefaultAsync(u => u.v_UserName == systemUser.v_UserName);
             if (systemUserDb != null)
@@ -129,8 +129,8 @@ namespace SL.Sigesoft.Data.Repositories
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Error en {nameof(ValidateLogin)}: " + ex.Message);
-                }              
+                    _logger.LogError($"Error en {nameof(ValidateLogin_)}: " + ex.Message);
+                }
 
             }
             return (false, null);
@@ -209,6 +209,42 @@ namespace SL.Sigesoft.Data.Repositories
             
 
             return oAccessSysteUserModelDto;
+        }
+
+       public async Task<(bool result, SystemUserLoginModel systemUser)> ValidateLogin(SystemUser systemUser)
+        {
+            var systemUserDb = await _dbSet.Include(u => u.Permissions).FirstOrDefaultAsync(u => u.v_UserName == systemUser.v_UserName);
+            
+            if (systemUserDb != null)
+            {
+                try
+                {
+                    var resultado = _passwordHasher.VerifyHashedPassword(systemUserDb, systemUserDb.v_Password, systemUser.v_Password);
+
+                    var systemUserModel = await (from A in _context.SystemUser  
+                                                 where A.v_UserName == systemUser.v_UserName && A.i_IsDeleted == YesNo.No
+                                              select new SystemUserLoginModel
+                                              {
+                                                  UserName = A.v_UserName,
+                                                  SystemUserId = A.i_SystemUserId,
+                                                  Roles =  (from A1 in _context.Permission 
+                                                            join B1  in _context.Role on A1.i_RoleId equals B1.i_RoleId
+                                                            where A1.i_IsDeleted == YesNo.No && A1.i_SystemUserId == A.i_SystemUserId
+                                                            group B1.v_Description by B1.v_Description into g
+                                                            select new RoleModel { 
+                                                                RolName =g.Key
+                                                            }).ToList()
+                                              }).FirstOrDefaultAsync();
+
+                    return (resultado == PasswordVerificationResult.Success ? true : false, systemUserModel);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error en {nameof(ValidateLogin)}: " + ex.Message);
+                }
+
+            }
+            return (false, null);
         }
     }
 }

@@ -43,10 +43,11 @@ namespace SL.Sigesoft.WebApi.Controllers
                 return BadRequest("Usuario/Contraseña Inválidos.");
             }
             var oValidatedAccessDto = new ValidatedAccessDto();
-            oValidatedAccessDto.SystemUserId = resultadoValidacion.systemUser.i_SystemUserId;
+            oValidatedAccessDto.SystemUserId = resultadoValidacion.systemUser.SystemUserId;
             oValidatedAccessDto.Token = _tokenService.GenerarToken(resultadoValidacion.systemUser);
             return oValidatedAccessDto;
 
         }
+
     }
 }
