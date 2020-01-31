@@ -157,7 +157,9 @@ namespace SL.Sigesoft.Data.Repositories
                                  RolName = E.v_Description,
                                  ApplicationHierarchyId = G.i_ApplicationHierarchyId,
                                  ApplicationHierarchyName = G.v_Description,
-                                 ParentId = G.i_ParentId
+                                 ParentId = G.i_ParentId,
+                                 Path = G.v_Path,
+                                 PathDashboard = E.v_PathDashboard
                              }
                             ).ToListAsync();
 
@@ -176,7 +178,7 @@ namespace SL.Sigesoft.Data.Repositories
                 var roles = new List<Roles>();
                 foreach (var itemRol in rolesDb)
                 {
-                    var oRole = new Roles { RolId = itemRol.RolId, RolName= itemRol.RolName };
+                    var oRole = new Roles { RolId = itemRol.RolId, RolName= itemRol.RolName, PathDashboard = itemRol.PathDashboard };
                     roles.Add(oRole);
 
                     var ModulesDb = query.Where(w => w.RolId == oRole.RolId && w.ParentId == -1).GroupBy(g => g.RolId).Select(s => s.First()).ToList();
@@ -185,13 +187,13 @@ namespace SL.Sigesoft.Data.Repositories
                     {
                         var oModule = new Module { ModuleId = itemModule.ApplicationHierarchyId , ModuleName = itemModule.ApplicationHierarchyName};
                         modules.Add(oModule);
-
+                            
                         var OptionsDb = query.Where(w => w.RolId == oRole.RolId && w.ParentId != -1).GroupBy(g => g.ApplicationHierarchyId).Select(s => s.First()).ToList();
                         var Options = new List<Option>();
 
                         foreach (var itemOption in OptionsDb)
                         {
-                            var oOption = new Option { OptionId = itemOption.ApplicationHierarchyId, OptionName= itemOption.ApplicationHierarchyName };
+                            var oOption = new Option { OptionId = itemOption.ApplicationHierarchyId, OptionName= itemOption.ApplicationHierarchyName, Path = itemOption.Path };
                             Options.Add(oOption);
                         }
                         oModule.Options = Options;

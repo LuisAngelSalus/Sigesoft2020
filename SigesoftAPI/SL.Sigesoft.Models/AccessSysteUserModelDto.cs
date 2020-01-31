@@ -24,6 +24,8 @@ namespace SL.Sigesoft.Models
     {
         public int RolId { get; set; }
         public string RolName { get; set; }
+        public string PathDashboard { get; set; }
+        
         public List<Module> Modules { get; set; }
     }
 
@@ -38,6 +40,7 @@ namespace SL.Sigesoft.Models
     {
         public int OptionId { get; set; }
         public string OptionName { get; set; }
+        public string Path { get; set; }
     }
 
 }

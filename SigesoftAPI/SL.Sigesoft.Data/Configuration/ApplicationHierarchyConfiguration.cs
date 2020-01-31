@@ -24,6 +24,8 @@ namespace SL.Sigesoft.Data.Configuration
 
             entity.Property(e => e.i_InsertUserId).HasColumnName("i_InsertUserId");
 
+            entity.Property(e => e.v_Path).HasColumnName("v_Path");
+            
             entity.Property(e => e.i_IsDeleted).HasColumnName("i_IsDeleted");
 
             entity.Property(e => e.i_ParentId).HasColumnName("i_ParentId");
