@@ -77,9 +77,7 @@ namespace SL.Sigesoft.Data.Repositories
             var profile = new ProtocolProfileModel();
             try
             {
-                var protocolProfile = await _dbSet.Include(i => i.ProfileDetail).SingleOrDefaultAsync(c => c.i_ProtocolProfileId == protocolProfileId && c.i_IsDeleted == YesNo.No);
-
-            
+                var protocolProfile = await _dbSet.Include(i => i.ProfileDetail).SingleOrDefaultAsync(c => c.i_ProtocolProfileId == protocolProfileId && c.i_IsDeleted == YesNo.No);            
             
             var selectedCategories = protocolProfile.ProfileDetail.AsEnumerable()
                        .Where(s => s.i_CategoryId != -1)

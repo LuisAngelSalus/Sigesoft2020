@@ -503,7 +503,15 @@ namespace SL.Sigesoft.WebApi.Profiles
             .ForMember(u => u.Code, p => p.MapFrom(m => m.v_Code))
             .ReverseMap();
 
-            
+
+            this.CreateMap<PriceList, PriceListDto>()
+            .ForMember(u => u.CompanyId, p => p.MapFrom(m => m.i_CompanyId))
+            .ForMember(u => u.ComponentId, p => p.MapFrom(m => m.v_ComponentId))
+            .ForMember(u => u.Price, p => p.MapFrom(m => m.r_Price))
+            .ForMember(u => u.InsertUserId, p => p.MapFrom(m => m.i_InsertUserId))
+            .ForMember(u => u.UpdateUserId, p => p.MapFrom(m => m.i_UpdateUserId))
+            .ReverseMap();
+
         }
     }
 }

@@ -40,7 +40,7 @@ namespace SL.Sigesoft.Data
         public virtual DbSet<AdditionalComponentsQuote> AdditionalComponentsQuote { get; set; }
         public virtual DbSet<Secuential> Secuential { get; set; }
         public virtual DbSet<QuoteTracking> QuoteTracking { get; set; }
-
+        public virtual DbSet<PriceList> PriceList { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -70,6 +70,7 @@ namespace SL.Sigesoft.Data
             modelBuilder.ApplyConfiguration(new SecuentialConfiguration());
             modelBuilder.ApplyConfiguration(new QuoteTrackingConfiguration());
             modelBuilder.ApplyConfiguration(new AdditionalComponentsQuoteConfiguration());
+            modelBuilder.ApplyConfiguration(new PriceListConfiguration());
 
         }
     }
