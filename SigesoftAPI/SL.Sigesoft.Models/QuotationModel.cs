@@ -70,7 +70,7 @@ namespace SL.Sigesoft.Models
         public string StartDate { get; set; }
         public string EndDate { get; set; }
         public string CompanyName { get; set; }
-        public int StatusQuotationId { get; set; }
+        public int[] StatusQuotationId { get; set; }
     }
 
     public class AdditionalComponentsQuoteModel

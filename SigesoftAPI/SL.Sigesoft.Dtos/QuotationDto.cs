@@ -239,6 +239,7 @@ namespace SL.Sigesoft.Dtos
     {
         public int QuoteTrackingId { get; set; }
         public int QuotationId { get; set; }
+        public int Version { get; set; }
         public DateTime? Date { get; set; }
         public string Commentary { get; set; }
         public string StatusName { get; set; }

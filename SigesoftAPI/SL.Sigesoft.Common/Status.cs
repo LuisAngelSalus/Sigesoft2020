@@ -18,4 +18,12 @@
         Agregado = 2,
         EliminadoLogico = 3
     }
+
+    public enum StatusQuotation
+    {
+        Seguimiento = 1,
+        Aceptada = 2,
+        Descartada = 3,
+        Potencial = 4
+    }
 }

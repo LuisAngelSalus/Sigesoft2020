@@ -33,11 +33,12 @@ namespace SL.Sigesoft.Data.Repositories
         {
             #region Code
             entity.v_Code = Utils.Code("COT", entity.i_UserCreatedId.ToString(),await _secuentialRespository.GetCode("COT", entity.i_UserCreatedId, 1));
+            entity.i_Version = 1;
             entity.i_IsProccess = YesNo.Yes;
             #endregion
 
             #region AUDIT
-            entity.d_ShippingDate = DateTime.UtcNow;
+            //entity.d_ShippingDate = DateTime.UtcNow;
             entity.i_IsDeleted = YesNo.No;
             entity.d_InsertDate = DateTime.UtcNow;
             entity.i_InsertUserId = entity.i_InsertUserId;
@@ -86,7 +87,10 @@ namespace SL.Sigesoft.Data.Repositories
 
             #region AUDIT
             entity.i_Version = GetLastVersion(entity.v_Code) + 1;
-            entity.d_ShippingDate = DateTime.UtcNow;
+
+            if (entity.i_StatusQuotationId == (int)StatusQuotation.Seguimiento)
+                entity.d_ShippingDate = DateTime.UtcNow;
+
             entity.i_IsDeleted = YesNo.No;
             entity.d_InsertDate = DateTime.UtcNow;
             entity.i_InsertUserId = entity.i_InsertUserId;
@@ -251,16 +255,18 @@ namespace SL.Sigesoft.Data.Repositories
             //Solo para actulizar Estado de cotización dentro de la matriz
             if (string.IsNullOrEmpty(entity.v_Code))
             {
-                entityDb.i_StatusQuotationId = entity.i_StatusQuotationId;
-                if (entity.i_StatusQuotationId == 2)
+                if (entity.i_StatusQuotationId == (int)StatusQuotation.Seguimiento)
+                    entityDb.d_ShippingDate = DateTime.Now;
+
+                if (entity.i_StatusQuotationId == (int)StatusQuotation.Aceptada)
                     entityDb.d_AcceptanceDate = DateTime.UtcNow;
 
+                entityDb.i_StatusQuotationId = entity.i_StatusQuotationId;               
             }
             else
             {
                 #region Update Quotation
                 entityDb.v_Code = entity.v_Code;
-                //entityDb.i_Version = entity.i_Version + 1;
                 entityDb.i_CompanyId = entity.i_CompanyId;
                 entityDb.i_CompanyHeadquarterId = entity.i_CompanyHeadquarterId;
                 entityDb.v_FullName = entity.v_FullName;
@@ -466,7 +472,7 @@ namespace SL.Sigesoft.Data.Repositories
 
             string nroQuotation = string.IsNullOrWhiteSpace(parameters.NroQuotation) ? null : parameters.NroQuotation;
             string companyName = string.IsNullOrWhiteSpace(parameters.CompanyName) ? null : parameters.CompanyName;
-            int statusQuotationId = parameters.StatusQuotationId;
+            var statusQuotationId =  parameters.StatusQuotationId.ToList();
             bool validfi = DateTime.TryParseExact(parameters.StartDate, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime fi);
             bool validff = DateTime.TryParseExact(parameters.EndDate, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime ff);
 
@@ -478,7 +484,8 @@ namespace SL.Sigesoft.Data.Repositories
                               where A.i_IsDeleted == 0
                               && (companyName ==null || B.v_Name.Contains(companyName) || B.v_IdentificationNumber.Contains(companyName))                              
                               && (nroQuotation == null || A.v_Code.Contains(nroQuotation))
-                              &&(statusQuotationId == -1 || A.i_StatusQuotationId == statusQuotationId)
+                              //&&(statusQuotationId == -1 || A.i_StatusQuotationId == statusQuotationId)
+                              && (statusQuotationId.Contains(A.i_StatusQuotationId.Value))
                               && (!validfi || A.d_InsertDate >= fi)
                               && (!validff || A.d_InsertDate <= ff)
                               && (A.i_IsProccess == YesNo.Yes)
@@ -491,7 +498,10 @@ namespace SL.Sigesoft.Data.Repositories
                                   AcceptanceDate = A.d_AcceptanceDate,
                                   CompanyName = B.v_Name,
                                   Total = A.r_TotalQuotation,
-                                  Indicator = GetIndicator(A.d_ShippingDate),
+                                  Indicator = GetIndicator((from A2 in _context.QuoteTracking
+                                                            where A2.i_QuotationId == A.i_QuotationId && A2.i_IsDeleted == YesNo.No
+                                                            orderby A2.d_Date descending
+                                                            select A2).FirstOrDefault().d_Date),
                                   USDate = (from A2 in _context.QuoteTracking
                                             where A2.i_QuotationId == A.i_QuotationId && A2.i_IsDeleted == YesNo.No
                                             orderby A2.d_Date descending select A2).FirstOrDefault().d_Date,
@@ -501,11 +511,14 @@ namespace SL.Sigesoft.Data.Repositories
                                                          select A2).FirstOrDefault().v_Commentary,
                                   StatusQuotationId = A.i_StatusQuotationId.Value,
                                   StatusQuotationName = C.v_Value1,
-                                  QuoteTrackings = (from A1 in _context.QuoteTracking 
-                                                    where A1.i_QuotationId == A.i_QuotationId && A1.i_IsDeleted == YesNo.No
+                                  QuoteTrackings = (from A1 in _context.QuoteTracking
+                                                    join B1 in _context.Quotation on A1.i_QuotationId equals B1.i_QuotationId
+                                                        //where A1.i_QuotationId == A.i_QuotationId && A1.i_IsDeleted == YesNo.No
+                                                    where B1.v_Code == A.v_Code && A1.i_IsDeleted == YesNo.No
                                                     orderby A1.d_Date descending
                                                     select new QuoteTrackingFilterModel { 
                                                         Commentary =  A1.v_Commentary,
+                                                        Version = B1.i_Version,
                                                         Date =  A1.d_Date,
                                                         QuotationId =  A1.i_QuotationId,
                                                         QuoteTrackingId =  A1.i_QuoteTrackingId,
@@ -518,24 +531,27 @@ namespace SL.Sigesoft.Data.Repositories
 
         private string GetIndicator(DateTime? shippingDate)
         {
-            var dateNow = DateTime.Now;
+            if (shippingDate == null) return "";
+
             var diff = (DateTime.Now - shippingDate.Value).TotalDays;
 
-            if ( diff <= 10)
+            if (diff <= 10)
             {
                 return "GREEN";
             }
             else if (diff > 10 && diff <= 20)
             {
-                return "AMBER";                
+                return "AMBER";
             }
-            else if (diff > 21 )
+            else if (diff > 21)
             {
                 return "RED";
             }
 
             return "";
         }
+
+
 
         public Task<IEnumerable<Quotation>> GetAllAsync()
         {

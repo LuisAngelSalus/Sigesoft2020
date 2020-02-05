@@ -407,6 +407,7 @@ namespace SL.Sigesoft.WebApi.Profiles
             this.CreateMap<QuoteTrackingFilterModel, QuoteTrackingFilterDto>()
                 .ForMember(u => u.QuoteTrackingId, p => p.MapFrom(m => m.QuoteTrackingId))
                 .ForMember(u => u.QuotationId, p => p.MapFrom(m => m.QuotationId))
+                .ForMember(u => u.Version, p => p.MapFrom(m => m.Version))
                 .ForMember(u => u.Date, p => p.MapFrom(m => m.Date))
                 .ForMember(u => u.Commentary, p => p.MapFrom(m => m.Commentary))
                 .ForMember(u => u.StatusName, p => p.MapFrom(m => m.StatusName))
