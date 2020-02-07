@@ -77,20 +77,27 @@ namespace SL.Sigesoft.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<PersonDto>> Post(PersonDto personDto)
+        public async Task<ActionResult<Response<PersonDto>>> Post(PersonRegistertDto personDto)
         {
+            var response = new Response<PersonDto>();
             try
             {
                 var person = _mapper.Map<Person>(personDto);
-                var nuevoProducto = await _personsRepository.AddAsync(person);
 
-                if (nuevoProducto == null)
+                var newPerson = await _personsRepository.AddAsync(person);
+
+                if (newPerson == null)
                 {
                     return BadRequest();
                 }
-                var newPersonDto = _mapper.Map<PersonDto>(nuevoProducto);
 
-                return CreatedAtAction(nameof(Post), new { id = newPersonDto.PersonId }, newPersonDto);
+                var newPersonDto = _mapper.Map<PersonDto>(newPerson);
+                response.Data = newPersonDto;
+                response.IsSuccess = true;
+                response.Message = "Se grabó correctamente";
+
+                return Ok(response);
+                
             }
             catch (Exception ex)
             {
@@ -103,23 +110,24 @@ namespace SL.Sigesoft.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<PersonDto>> Put(int id, [FromBody]PersonDto personDto)
+        public async Task<ActionResult<Response<PersonRegistertDto>>> Put(int id, [FromBody]PersonUpdateDto personDto)
         {
+            var response = new Response<PersonRegistertDto>();
             try
             {
                 if (personDto == null)
-                {
                     return NotFound();
-                }
 
                 var person = _mapper.Map<Person>(personDto);
-
                 var resultado = await _personsRepository.UpdateAsync(person);
                 if (!resultado)
-                {
                     return BadRequest();
-                }
-                return personDto;
+
+                response.Data = _mapper.Map<PersonRegistertDto>(person);
+                response.IsSuccess = true;
+                response.Message = "Se actualizó correctamente";
+
+                return response;
             }
             catch (Exception ex)
             {

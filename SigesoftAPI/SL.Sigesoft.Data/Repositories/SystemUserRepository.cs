@@ -18,6 +18,8 @@ namespace SL.Sigesoft.Data.Repositories
         private readonly ILogger<SystemUserRepository> _logger;
         private readonly IPasswordHasher<SystemUser> _passwordHasher;
         private DbSet<SystemUser> _dbSet;
+        private DbSet<Permission> _dbSetPermission;
+        private DbSet<Access> _dbSetAccess;
 
         public SystemUserRepository(SigesoftCoreContext context,
             ILogger<SystemUserRepository> logger,
@@ -27,6 +29,8 @@ namespace SL.Sigesoft.Data.Repositories
             this._logger = logger;
             this._passwordHasher = passwordHasher;
             this._dbSet = _context.Set<SystemUser>();
+            this._dbSetPermission = _context.Set<Permission>();
+            this._dbSetAccess = _context.Set<Access>();
         }
 
         #region CRUD
@@ -83,6 +87,7 @@ namespace SL.Sigesoft.Data.Repositories
             systemUserDb.v_UserName = systemUser.v_UserName;
             systemUserDb.v_Email = systemUser.v_Email;
             systemUserDb.v_Phone = systemUser.v_Phone;
+            systemUserDb.v_Password = _passwordHasher.HashPassword(systemUser, systemUser.v_Password);
             try
             {
                 return await _context.SaveChangesAsync() > 0 ? true : false;
@@ -136,83 +141,125 @@ namespace SL.Sigesoft.Data.Repositories
             return (false, null);
         }
         public async Task<AccessSysteUserModelDto> GetAccess(int id)
-        {           
-            var query = await  (from A in _context.SystemUser
-                             join B in _context.Permission on A.i_SystemUserId equals B.i_SystemUserId
-                             join C in _context.Access on B.i_PermissionId equals C.i_PermissionId
-                             join D in _context.OwnerCompany on C.i_OwnerCompanyId equals D.i_OwnerCompanyId
-                             join E in _context.Role on B.i_RoleId equals E.i_RoleId
-                             join F in  _context.Profile on E.i_RoleId equals F.i_RoleId
-                             join G in _context.ApplicationHierarchy on F.i_ApplicationHierarchyId equals   G.i_ApplicationHierarchyId
-                             join H in _context.Person on A.i_PersonId equals H.i_PersonId
-                             where A.i_SystemUserId == id
-                             select new
-                             {
-                                 SystemUserId = A.i_SystemUserId,
-                                 UserName = A.v_UserName,
-                                 FullName = H.v_FirstName + " " + H.v_FirstLastName + " " + H.v_SecondLastName,
-                                 CompanyId = D.i_OwnerCompanyId,
-                                 CompanyName = D.v_BusinessName,
-                                 RolId = E.i_RoleId,
-                                 RolName = E.v_Description,
-                                 ApplicationHierarchyId = G.i_ApplicationHierarchyId,
-                                 ApplicationHierarchyName = G.v_Description,
-                                 ParentId = G.i_ParentId,
-                                 Path = G.v_Path,
-                                 PathDashboard = E.v_PathDashboard
-                             }
+        {
+            try
+            {
+                var query = await (from A in _context.SystemUser
+                                   join B in _context.Permission on A.i_SystemUserId equals B.i_SystemUserId into B_join
+                                   from B in B_join.DefaultIfEmpty()
+                                   join C in _context.Access on B.i_PermissionId equals C.i_PermissionId into C_join
+                                   from C in C_join.DefaultIfEmpty()
+                                   join D in _context.OwnerCompany on C.i_OwnerCompanyId equals D.i_OwnerCompanyId into D_join
+                                   from D in D_join.DefaultIfEmpty()
+                                   join E in _context.Role on B.i_RoleId equals E.i_RoleId into E_join
+                                   from E in E_join.DefaultIfEmpty()
+                                   join F in _context.Profile on E.i_RoleId equals F.i_RoleId into F_join
+                                   from F in F_join.DefaultIfEmpty()
+                                   join G in _context.ApplicationHierarchy on F.i_ApplicationHierarchyId equals G.i_ApplicationHierarchyId into G_join
+                                   from G in G_join.DefaultIfEmpty()
+                                   join H in _context.Person on A.i_PersonId equals H.i_PersonId
+                                   where A.i_SystemUserId == id
+                                          && (B.i_IsDeleted == YesNo.No)
+                                          && (C.i_IsDeleted == YesNo.No)
+                                          && (D.i_IsDeleted == YesNo.No)
+                                          && (E.i_IsDeleted == YesNo.No)
+                                          && (F.i_IsDeleted == YesNo.No)
+                                          && (G.i_IsDeleted == YesNo.No)
+                                          && (H.i_IsDeleted == YesNo.No)
+                                   select new
+                                   {
+                                       SystemUserId = A.i_SystemUserId,
+                                       UserName = A.v_UserName,
+                                       FullName = H.v_FirstName + " " + H.v_FirstLastName + " " + H.v_SecondLastName,
+                                       CompanyId = D.i_OwnerCompanyId,
+                                       CompanyName = D.v_BusinessName,
+                                       RolId = E.i_RoleId,
+                                       RolName = E.v_Description,
+                                       ApplicationHierarchyId = G.i_ApplicationHierarchyId,
+                                       ApplicationHierarchyName = G.v_Description,
+                                       ParentId = G.i_ParentId,
+                                       Path = G.v_Path,
+                                       PathDashboard = E.v_PathDashboard
+                                   }
                             ).ToListAsync();
 
-            var oAccessSysteUserModelDto = new AccessSysteUserModelDto();
-            oAccessSysteUserModelDto.SystemUserId = query[0].SystemUserId;
-            oAccessSysteUserModelDto.UserName = query[0].UserName;
-            oAccessSysteUserModelDto.FullName = query[0].FullName;
-
-            var companiesDb = query.GroupBy(g => g.CompanyId).Select(s => s.First()).ToList();
-            var companies = new List<Companies>();
-            foreach (var itemComp in companiesDb)
-            {
-                var oCompanies = new Companies{CompanyId = itemComp.CompanyId, CompanyName = itemComp.CompanyName };                
-
-                var rolesDb = query.Where(w => w.CompanyId == oCompanies.CompanyId).GroupBy(g => g.RolId).Select(s => s.First()).ToList();
-                var roles = new List<Roles>();
-                foreach (var itemRol in rolesDb)
+                if (query.Count == 0)
                 {
-                    var oRole = new Roles { RolId = itemRol.RolId, RolName= itemRol.RolName, PathDashboard = itemRol.PathDashboard };
-                    roles.Add(oRole);
+                    var queryOpt = await (from A in _context.SystemUser
+                                          join H in _context.Person on A.i_PersonId equals H.i_PersonId
+                                          where A.i_SystemUserId == id
+                                          select new
+                                          {
+                                              SystemUserId = A.i_InsertUserId,
+                                              UserName =A.v_UserName,
+                                              FullName = H.v_FirstName + " " + H.v_FirstLastName + " " + H.v_SecondLastName
+                                          }).ToListAsync();
 
-                    var ModulesDb = query.Where(w => w.RolId == oRole.RolId && w.ParentId == -1).GroupBy(g => g.RolId).Select(s => s.First()).ToList();
-                    var modules = new List<Module>();
-                    foreach (var itemModule in ModulesDb)
-                    {
-                        var oModule = new Module { ModuleId = itemModule.ApplicationHierarchyId , ModuleName = itemModule.ApplicationHierarchyName};
-                        modules.Add(oModule);
-                            
-                        var OptionsDb = query.Where(w => w.RolId == oRole.RolId && w.ParentId != -1).GroupBy(g => g.ApplicationHierarchyId).Select(s => s.First()).ToList();
-                        var Options = new List<Option>();
+                    var oAccessSysteUserModelDtoOpt = new AccessSysteUserModelDto();
 
-                        foreach (var itemOption in OptionsDb)
-                        {
-                            var oOption = new Option { OptionId = itemOption.ApplicationHierarchyId, OptionName= itemOption.ApplicationHierarchyName, Path = itemOption.Path };
-                            Options.Add(oOption);
-                        }
-                        oModule.Options = Options;
-                    }
-                    oRole.Modules = modules;
+                    oAccessSysteUserModelDtoOpt.SystemUserId = id;
+                    oAccessSysteUserModelDtoOpt.UserName = queryOpt[0].UserName;
+                    oAccessSysteUserModelDtoOpt.FullName = queryOpt[0].FullName;
+
+                    return oAccessSysteUserModelDtoOpt;
 
                 }
 
-                oCompanies.Roles = roles;
-                companies.Add(oCompanies);
+                var oAccessSysteUserModelDto = new AccessSysteUserModelDto();
+
+                oAccessSysteUserModelDto.SystemUserId = query[0].SystemUserId;
+                oAccessSysteUserModelDto.UserName = query[0].UserName;
+                oAccessSysteUserModelDto.FullName = query[0].FullName;
+
+                var companiesDb = query.GroupBy(g => g.CompanyId).Select(s => s.First()).ToList();
+                var companies = new List<Companies>();
+                foreach (var itemComp in companiesDb)
+                {
+                    var oCompanies = new Companies { CompanyId = itemComp.CompanyId, CompanyName = itemComp.CompanyName };
+
+                    var rolesDb = query.Where(w => w.CompanyId == oCompanies.CompanyId).GroupBy(g => g.RolId).Select(s => s.First()).ToList();
+                    var roles = new List<Roles>();
+                    foreach (var itemRol in rolesDb)
+                    {
+                        var oRole = new Roles { RolId = itemRol.RolId, RolName = itemRol.RolName, PathDashboard = itemRol.PathDashboard };
+                        roles.Add(oRole);
+
+                        var ModulesDb = query.Where(w => w.RolId == oRole.RolId && w.ParentId == -1).GroupBy(g => g.RolId).Select(s => s.First()).ToList();
+                        var modules = new List<Module>();
+                        foreach (var itemModule in ModulesDb)
+                        {
+                            var oModule = new Module { ModuleId = itemModule.ApplicationHierarchyId, ModuleName = itemModule.ApplicationHierarchyName };
+                            modules.Add(oModule);
+
+                            var OptionsDb = query.Where(w => w.RolId == oRole.RolId && w.ParentId != -1).GroupBy(g => g.ApplicationHierarchyId).Select(s => s.First()).ToList();
+                            var Options = new List<Option>();
+
+                            foreach (var itemOption in OptionsDb)
+                            {
+                                var oOption = new Option { OptionId = itemOption.ApplicationHierarchyId, OptionName = itemOption.ApplicationHierarchyName, Path = itemOption.Path };
+                                Options.Add(oOption);
+                            }
+                            oModule.Options = Options;
+                        }
+                        oRole.Modules = modules;
+
+                    }
+
+                    oCompanies.Roles = roles;
+                    companies.Add(oCompanies);
+                }
+                oAccessSysteUserModelDto.Companies = companies;
+
+                return oAccessSysteUserModelDto;
             }
-            oAccessSysteUserModelDto.Companies = companies;
+            catch (Exception ex)
+            {
 
-
+                throw;
+            }
             
-
-            return oAccessSysteUserModelDto;
         }
-       public async Task<(bool result, SystemUserLoginModel systemUser)> ValidateLogin(SystemUser systemUser)
+        public async Task<(bool result, SystemUserLoginModel systemUser)> ValidateLogin(SystemUser systemUser)
         {
             var systemUserDb = await _dbSet.Include(u => u.Permissions).FirstOrDefaultAsync(u => u.v_UserName == systemUser.v_UserName);
             
@@ -246,6 +293,67 @@ namespace SL.Sigesoft.Data.Repositories
 
             }
             return (false, null);
+        }
+        public async Task<bool> UpdateAccess(List<UpdateAccessModel> updateAccessDto)
+        {
+            try
+            {
+                if (updateAccessDto.Count == 0) return true;
+
+                var userId = updateAccessDto[0].UserId;
+
+                //CAMBIAR DE ESTADO A LOS REGISTROS ANTIGUOS
+                var permissionsDB = await _dbSetPermission.Include(acc => acc.Accesses).Where(i => i.i_SystemUserId == userId).ToListAsync();
+                foreach (var permiDB in permissionsDB)
+                {
+                    permiDB.i_IsDeleted = YesNo.Yes;
+
+                    foreach (var acceDB in permiDB.Accesses)
+                    {
+                        acceDB.i_IsDeleted = YesNo.Yes;
+                    }
+                }
+               await _context.SaveChangesAsync();
+                //AGREGAR NUEVOS PERMISOS
+                foreach (var permi in updateAccessDto)
+                {
+                    var roles = permi.Roles;
+
+                    foreach (var rol in roles)
+                    {
+                        var newPerm = new Permission();
+                        newPerm.i_SystemUserId = userId;
+                        newPerm.i_RoleId = rol;
+                        newPerm.i_UpdateUserId = permi.UpdateUserId;
+                        newPerm.d_UpdateDate = DateTime.Now;
+
+                       _dbSetPermission.Add(newPerm);
+
+                        await _context.SaveChangesAsync();
+                        InsertAccess(newPerm.i_PermissionId, permi);
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+           
+        }
+
+        private  void InsertAccess(int permissionId, UpdateAccessModel permi)
+        {
+            var access = new Access();
+            access.i_PermissionId = permissionId;
+            access.i_OwnerCompanyId = permi.OwnerCompanyId;
+            access.i_UpdateUserId = permi.UpdateUserId;
+            access.d_UpdateDate = DateTime.Now;
+
+            _dbSetAccess.Add(access);
+
+            _context.SaveChanges();
         }
     }
 }

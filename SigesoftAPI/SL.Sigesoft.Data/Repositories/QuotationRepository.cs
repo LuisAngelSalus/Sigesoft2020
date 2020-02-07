@@ -550,9 +550,7 @@ namespace SL.Sigesoft.Data.Repositories
 
             return "";
         }
-
-
-
+               
         public Task<IEnumerable<Quotation>> GetAllAsync()
         {
             throw new NotImplementedException();

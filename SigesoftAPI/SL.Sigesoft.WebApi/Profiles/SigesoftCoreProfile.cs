@@ -22,6 +22,20 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.FirstLastName, p => p.MapFrom(m => m.v_FirstLastName))
                 .ForMember(u => u.SecondLastName, p => p.MapFrom(m => m.v_SecondLastName))
                 .ReverseMap();
+
+            this.CreateMap<Person, PersonRegistertDto>()                
+                .ForMember(u => u.FirstName, p => p.MapFrom(m => m.v_FirstName))
+                .ForMember(u => u.FirstLastName, p => p.MapFrom(m => m.v_FirstLastName))
+                .ForMember(u => u.SecondLastName, p => p.MapFrom(m => m.v_SecondLastName))
+                .ReverseMap();
+
+            this.CreateMap<Person, PersonUpdateDto>()
+                .ForMember(u => u.PersonId, p => p.MapFrom(m => m.i_PersonId))
+                .ForMember(u => u.FirstName, p => p.MapFrom(m => m.v_FirstName))
+                .ForMember(u => u.FirstLastName, p => p.MapFrom(m => m.v_FirstLastName))
+                .ForMember(u => u.SecondLastName, p => p.MapFrom(m => m.v_SecondLastName))
+                .ReverseMap();
+
             this.CreateMap<SystemUser, LoginModelDto>().ReverseMap();
           
             this.CreateMap<SystemUser, ListSystemUserDto>()
@@ -44,6 +58,22 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.Email, p => p.MapFrom(m => m.v_Email))
                 .ForMember(u => u.Phone, p => p.MapFrom(m => m.v_Phone))
                 .ReverseMap();
+
+            this.CreateMap<SystemUser, SystemUserRegisterDto>()
+                .ForMember(u => u.PersonId, p => p.MapFrom(m => m.i_PersonId))
+                .ForMember(u => u.UserName, p => p.MapFrom(m => m.v_UserName))
+                .ForMember(u => u.Password, p => p.MapFrom(m => m.v_Password))
+                .ForMember(u => u.Email, p => p.MapFrom(m => m.v_Email))
+                .ForMember(u => u.Phone, p => p.MapFrom(m => m.v_Phone))
+            .ReverseMap();
+
+            this.CreateMap<SystemUser, SystemUserUpdateDataDto>()
+                .ForMember(u => u.SystemUserId, p => p.MapFrom(m => m.i_SystemUserId))
+                .ForMember(u => u.UserName, p => p.MapFrom(m => m.v_UserName))
+                .ForMember(u => u.Password, p => p.MapFrom(m => m.v_Password))
+                .ForMember(u => u.Email, p => p.MapFrom(m => m.v_Email))
+                .ForMember(u => u.Phone, p => p.MapFrom(m => m.v_Phone))
+            .ReverseMap();
 
             this.CreateMap<Company, ListCompanyDto>()
                 .ForMember(u => u.CompanyId, p => p.MapFrom(m => m.i_CompanyId))

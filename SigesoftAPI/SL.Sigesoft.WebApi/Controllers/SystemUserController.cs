@@ -238,5 +238,32 @@ namespace SL.Sigesoft.WebApi.Controllers
 
         }
 
+
+        [HttpPost]
+        [Route("actualizarAccesos")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Response<bool>>> UpdateAccess(List<UpdateAccessModel> registerAccessDto)
+        {
+            var response = new Response<bool>();
+            try
+            {
+                var result = await _systemUserRepository.UpdateAccess(registerAccessDto);
+                if (!result)
+                {
+                    return BadRequest();
+                }
+                response.Data = result;
+                response.IsSuccess = true;
+                response.Message = "Se grabó correctamente";
+
+                return Ok(response);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
     }
 }
