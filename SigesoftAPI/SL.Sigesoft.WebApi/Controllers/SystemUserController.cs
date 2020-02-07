@@ -51,20 +51,23 @@ namespace SL.Sigesoft.WebApi.Controllers
             }
         }
 
-        // GET: api/usuarios/5
+        // GET: api/SystemUser/5
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ListSystemUserDto>> Get(int id)
+        public async Task<ActionResult<Response<GetSystemUserDto>>> Get(int id)
         {
+            var response = new Response<GetSystemUserDto>();
             try
             {
                 var systemUser = await _systemUserRepository.GetAsync(id);
-                if (systemUser == null)
+                response.Data = _mapper.Map<GetSystemUserDto>(systemUser); ;
+                if (response.Data != null)
                 {
-                    return NotFound();
+                    response.IsSuccess = true;
+                    response.Message = "Consulta Exitosa";
                 }
-                return _mapper.Map<ListSystemUserDto>(systemUser); ;
+                return response;
             }
             catch (Exception ex)
             {

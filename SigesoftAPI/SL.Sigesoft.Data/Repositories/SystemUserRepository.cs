@@ -212,7 +212,6 @@ namespace SL.Sigesoft.Data.Repositories
 
             return oAccessSysteUserModelDto;
         }
-
        public async Task<(bool result, SystemUserLoginModel systemUser)> ValidateLogin(SystemUser systemUser)
         {
             var systemUserDb = await _dbSet.Include(u => u.Permissions).FirstOrDefaultAsync(u => u.v_UserName == systemUser.v_UserName);

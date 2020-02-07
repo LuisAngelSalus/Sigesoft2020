@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SL.Sigesoft.Common;
 using SL.Sigesoft.Data;
 using SL.Sigesoft.Data.Contracts;
 using SL.Sigesoft.Dtos;
@@ -15,7 +16,7 @@ using SL.Sigesoft.Models;
 
 namespace SL.Sigesoft.WebApi.Controllers
 {
-    [Authorize(Roles = "Administrador")]
+    [Authorize(Roles = "Administrador,Sistemas")]
     [Route("api/[controller]")]
     [ApiController]
     public class PeopleController : ControllerBase
@@ -50,18 +51,20 @@ namespace SL.Sigesoft.WebApi.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<PersonDto>> Get(int id)
+        public async Task<ActionResult<Response<PersonDto>>> Get(int id)
         {
+            var response = new Response<PersonDto>();
             try
             {
                 var person = await _personsRepository.GetPersonAsync(id);
-
-                if (person == null)
+                response.Data = _mapper.Map<PersonDto>(person);
+                if (response.Data != null)
                 {
-                    return NotFound();
+                    response.IsSuccess = true;
+                    response.Message = "Consulta Exitosa";
                 }
 
-                return _mapper.Map<PersonDto>(person);
+                return response;
             }
             catch (Exception ex)
             {
@@ -87,7 +90,7 @@ namespace SL.Sigesoft.WebApi.Controllers
                 }
                 var newPersonDto = _mapper.Map<PersonDto>(nuevoProducto);
 
-                return CreatedAtAction(nameof(Post), new { id = newPersonDto.i_PersonId }, newPersonDto);
+                return CreatedAtAction(nameof(Post), new { id = newPersonDto.PersonId }, newPersonDto);
             }
             catch (Exception ex)
             {

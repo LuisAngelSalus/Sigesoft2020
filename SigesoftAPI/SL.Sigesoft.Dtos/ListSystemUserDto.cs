@@ -16,4 +16,14 @@ namespace SL.Sigesoft.Dtos
         public string Email { get; set; }
         public List<PermissionDto> permissions { get; set; }
     }
+
+
+    public class GetSystemUserDto
+    {
+        public int Id { get; set; }
+        public int PersonId { get; set; }
+        public string UserName { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+    }
 }

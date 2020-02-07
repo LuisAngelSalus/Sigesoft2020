@@ -16,11 +16,16 @@ namespace SL.Sigesoft.WebApi.Profiles
     {
         public SigesoftCoreProfile()
         {
-            this.CreateMap<Person, PersonDto>().ReverseMap();
+            this.CreateMap<Person, PersonDto>()
+                .ForMember(u => u.PersonId, p => p.MapFrom(m => m.i_PersonId))
+                .ForMember(u => u.FirstName, p => p.MapFrom(m => m.v_FirstName))
+                .ForMember(u => u.FirstLastName, p => p.MapFrom(m => m.v_FirstLastName))
+                .ForMember(u => u.SecondLastName, p => p.MapFrom(m => m.v_SecondLastName))
+                .ReverseMap();
             this.CreateMap<SystemUser, LoginModelDto>().ReverseMap();
           
             this.CreateMap<SystemUser, ListSystemUserDto>()
-                .ForMember(u => u.Id, p => p.MapFrom(m => m.i_SystemUserId))
+                .ForMember(u => u.Id, p => p.MapFrom(m => m.i_SystemUserId))                              
                 .ForMember(u => u.UserName, p => p.MapFrom(m => m.v_UserName))
                 .ForMember(u => u.FullName, p => p.MapFrom(m => string.Format("{0} {1}",
                         m.Person.v_FirstName, m.Person.v_FirstLastName)))
@@ -30,6 +35,14 @@ namespace SL.Sigesoft.WebApi.Profiles
             this.CreateMap<Permission, PermissionDto>()
                 .ForMember(u => u.RolId, p => p.MapFrom(m => m.i_RoleId))
                 .ForMember(u => u.RolName, p => p.MapFrom(m => m.Roles.v_Description))
+                .ReverseMap();
+
+            this.CreateMap<SystemUser, GetSystemUserDto>()
+                .ForMember(u => u.Id, p => p.MapFrom(m => m.i_SystemUserId))
+                .ForMember(u => u.PersonId, p => p.MapFrom(m => m.i_PersonId))
+                .ForMember(u => u.UserName, p => p.MapFrom(m => m.v_UserName))
+                .ForMember(u => u.Email, p => p.MapFrom(m => m.v_Email))
+                .ForMember(u => u.Phone, p => p.MapFrom(m => m.v_Phone))
                 .ReverseMap();
 
             this.CreateMap<Company, ListCompanyDto>()
