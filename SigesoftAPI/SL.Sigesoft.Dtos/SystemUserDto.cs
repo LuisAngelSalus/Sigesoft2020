@@ -6,5 +6,8 @@ namespace SL.Sigesoft.Dtos
 {
    public class SystemUserDto
     {
+        public int SystemUserId { get; set; }
+        public int? PersonId { get; set; }
+        public string UserName { get; set; }
     }
 }

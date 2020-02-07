@@ -513,6 +513,23 @@ namespace SL.Sigesoft.WebApi.Profiles
             .ForMember(u => u.UpdateUserId, p => p.MapFrom(m => m.i_UpdateUserId))
             .ReverseMap();
 
+            this.CreateMap<SystemUser, SystemUserDto>()
+                .ForMember(u => u.SystemUserId, p => p.MapFrom(m => m.i_SystemUserId))
+                .ForMember(u => u.PersonId, p => p.MapFrom(m => m.i_PersonId))
+                .ForMember(u => u.UserName, p => p.MapFrom(m => m.v_UserName))
+                .ReverseMap();
+
+            this.CreateMap<Role,ListRoleDto>()
+                .ForMember(u => u.RoleId, p => p.MapFrom(m => m.i_RoleId))
+                .ForMember(u => u.RoleName, p => p.MapFrom(m => m.v_Description))
+                .ReverseMap();
+
+
+            this.CreateMap<OwnerCompany, ListOwnerCompanyDto>()
+                .ForMember(u => u.OwnerCompanyId, p => p.MapFrom(m => m.i_OwnerCompanyId))
+                .ForMember(u => u.OwnerCompanyName, p => p.MapFrom(m => m.v_BusinessName))
+                .ReverseMap();
+            
         }
     }
 }

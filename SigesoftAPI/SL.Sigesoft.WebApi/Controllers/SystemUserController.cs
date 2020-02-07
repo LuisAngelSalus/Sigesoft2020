@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SL.Sigesoft.Common;
 using SL.Sigesoft.Data.Contracts;
 using SL.Sigesoft.Dtos;
 using SL.Sigesoft.Models;
@@ -29,12 +30,20 @@ namespace SL.Sigesoft.WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<ListSystemUserDto>>> Get()
+        public async Task<ActionResult<Response<IEnumerable<SystemUserDto>>>> Get()
         {
+            var response = new Response<IEnumerable<SystemUserDto>>();
             try
-            {
+            {                
                 var systemUsers = await _systemUserRepository.GetAllAsync();
-                return _mapper.Map<List<ListSystemUserDto>>(systemUsers);
+                response.Data = _mapper.Map<List<SystemUserDto>>(systemUsers);
+                
+                if (response.Data != null)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Consulta Exitosa";
+                }
+                return response;
             }
             catch (Exception ex)
             {
