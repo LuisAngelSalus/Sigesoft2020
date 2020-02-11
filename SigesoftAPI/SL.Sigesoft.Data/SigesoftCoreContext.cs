@@ -41,6 +41,8 @@ namespace SL.Sigesoft.Data
         public virtual DbSet<Secuential> Secuential { get; set; }
         public virtual DbSet<QuoteTracking> QuoteTracking { get; set; }
         public virtual DbSet<PriceList> PriceList { get; set; }
+        public virtual DbSet<Protocol> Protocol { get; set; }
+        public virtual DbSet<ProtocolDetail> ProtocolDetail { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -71,6 +73,10 @@ namespace SL.Sigesoft.Data
             modelBuilder.ApplyConfiguration(new QuoteTrackingConfiguration());
             modelBuilder.ApplyConfiguration(new AdditionalComponentsQuoteConfiguration());
             modelBuilder.ApplyConfiguration(new PriceListConfiguration());
+
+            modelBuilder.ApplyConfiguration(new ProtocolConfiguration());
+            modelBuilder.ApplyConfiguration(new ProtocolDetailConfiguration());
+
 
         }
     }

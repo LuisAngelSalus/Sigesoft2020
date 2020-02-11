@@ -14,7 +14,7 @@ namespace SL.Sigesoft.Data.Configuration
             entity.HasKey(e => e.i_ProtocolProfileId)
                 .HasName("PK_ProtocolProfile");
 
-            entity.ToTable("ProtocolProfile", "protocol");
+            entity.ToTable("ProtocolProfile", "commercial");
             entity.HasIndex(e => e.i_ProtocolProfileId);
             entity.Property(e => e.i_ProtocolProfileId).HasColumnName("i_ProtocolProfileId");
             entity.Property(e => e.v_Name).HasColumnName("v_Name");
