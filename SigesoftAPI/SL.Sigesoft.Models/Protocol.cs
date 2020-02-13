@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SL.Sigesoft.Models
 {
-   public class Protocol
+   public partial class Protocol
     {
         public Protocol()
         {

@@ -216,5 +216,28 @@ namespace SL.Sigesoft.WebApi.Controllers
             return response;
         }
 
+        [HttpPost]
+        [Route("MigrateToProtocols")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Response<bool>>> MigrateQuotationToProtocols(QuotationMigrateDto quotationMigrateDto)
+        {
+            var response = new Response<bool>();
+            if (quotationMigrateDto == null)
+                return NotFound();
+
+            var quotation = _mapper.Map<Quotation>(quotationMigrateDto);
+            var result = await _quotationRepository.MigrateQuotationToProtocols(quotation.i_QuotationId);
+            if (!result)
+                return BadRequest();
+
+            response.Data = result;
+            response.IsSuccess = true;
+            response.Message = "Se migró a protocolos correctamente";
+
+            return response;
+        }
+
     }
 }

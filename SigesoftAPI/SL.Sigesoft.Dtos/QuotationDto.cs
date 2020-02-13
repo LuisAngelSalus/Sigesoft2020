@@ -152,6 +152,11 @@ namespace SL.Sigesoft.Dtos
         public string Code { get; set; }
     }
 
+    public class QuotationMigrateDto
+    {
+        public int QuotationId { get; set; }
+    }
+
     #region Update
     public class QuotationUpdateDto
     {

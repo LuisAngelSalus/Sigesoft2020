@@ -217,7 +217,33 @@ namespace SL.Sigesoft.WebApi.Controllers
 
         }
 
+        [HttpGet("{value}/AutocompleteByName")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Response<List<CompanyDto>>>> AutocompleteByName(string value)
+        {
+            var response = new Response<List<CompanyDto>>();
+            try
+            {
+                var companies = await _companyRepository.AutocompleteByName(value);
+                if (companies == null)
+                {
+                    return NotFound();
+                }
+                response.Data = _mapper.Map<List<CompanyDto>>(companies);
+                if (response.Data != null)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Consulta Exitosa";
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return response;
 
+        }
 
     }
 }

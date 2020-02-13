@@ -572,7 +572,61 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.OwnerCompanyId, p => p.MapFrom(m => m.i_OwnerCompanyId))
                 .ForMember(u => u.OwnerCompanyName, p => p.MapFrom(m => m.v_BusinessName))
                 .ReverseMap();
-            
+
+            this.CreateMap<ProtocolListModel, ProtocolListDto>()
+                .ForMember(u => u.ProtocolId, p => p.MapFrom(m => m.i_ProtocolId))
+                .ForMember(u => u.CompanyId, p => p.MapFrom(m => m.i_CompanyId))
+                .ForMember(u => u.CompanyName, p => p.MapFrom(m => m.v_CompanyName))
+                .ForMember(u => u.ProtocolName, p => p.MapFrom(m => m.v_ProtocolName))
+                .ForMember(u => u.ServiceTypeId, p => p.MapFrom(m => m.i_ServiceTypeId))
+                .ForMember(u => u.ServiceTypeName, p => p.MapFrom(m => m.v_ServiceTypeName))
+                .ForMember(u => u.TypeFormatId, p => p.MapFrom(m => m.i_TypeFormatId))
+                .ForMember(u => u.TypeFormatName, p => p.MapFrom(m => m.v_TypeFormatName))
+                .ForMember(u => u.QuotationProfileIdRef, p => p.MapFrom(m => m.i_QuotationProfileIdRef))
+                .ReverseMap();
+
+            this.CreateMap<ProtocolDetail, ProtocolDetailListDto>()
+                .ForMember(u => u.ProtocolDetailId, p => p.MapFrom(m => m.i_ProtocolDetailId))
+                .ForMember(u => u.ProtocolId, p => p.MapFrom(m => m.i_ProtocolId))
+                .ForMember(u => u.CategoryId, p => p.MapFrom(m => m.i_CategoryId))
+                .ForMember(u => u.CategoryName, p => p.MapFrom(m => m.v_CategoryName))
+                .ForMember(u => u.ComponentId, p => p.MapFrom(m => m.v_ComponentId))
+                .ForMember(u => u.ComponentName, p => p.MapFrom(m => m.v_ComponentName))
+                .ForMember(u => u.MinPrice, p => p.MapFrom(m => m.r_MinPrice))
+                .ForMember(u => u.PriceList, p => p.MapFrom(m => m.r_PriceList))
+                .ForMember(u => u.SalePrice, p => p.MapFrom(m => m.r_SalePrice))
+                .ForMember(u => u.AgeConditionalId, p => p.MapFrom(m => m.i_AgeConditionalId))
+                .ForMember(u => u.Age, p => p.MapFrom(m => m.i_Age))
+                .ForMember(u => u.GenderConditionalId, p => p.MapFrom(m => m.i_GenderConditionalId))
+                .ForMember(u => u.QuotationProfileIdRef, p => p.MapFrom(m => m.i_QuotationProfileIdRef))
+                .ReverseMap();
+
+            this.CreateMap<Protocol, ProtocolRegisterDto>()
+                .ForMember(u => u.CompanyId, p => p.MapFrom(m => m.i_CompanyId))
+                .ForMember(u => u.ProtocolName, p => p.MapFrom(m => m.v_ProtocolName))
+                .ForMember(u => u.ServiceTypeId, p => p.MapFrom(m => m.i_ServiceTypeId))
+                .ForMember(u => u.TypeFormatId, p => p.MapFrom(m => m.i_TypeFormatId))
+                .ForMember(u => u.QuotationProfileIdRef, p => p.MapFrom(m => m.i_QuotationProfileIdRef))
+                .ReverseMap();
+
+            this.CreateMap<ProtocolDetail, ProtocolDetailRegisterDto>()
+                .ForMember(u => u.ProtocolId, p => p.MapFrom(m => m.i_ProtocolId))
+                .ForMember(u => u.CategoryId, p => p.MapFrom(m => m.i_CategoryId))
+                .ForMember(u => u.CategoryName, p => p.MapFrom(m => m.v_CategoryName))
+                .ForMember(u => u.ComponentId, p => p.MapFrom(m => m.v_ComponentId))
+                .ForMember(u => u.ComponentName, p => p.MapFrom(m => m.v_ComponentName))
+                .ForMember(u => u.MinPrice, p => p.MapFrom(m => m.r_MinPrice))
+                .ForMember(u => u.PriceList, p => p.MapFrom(m => m.r_PriceList))
+                .ForMember(u => u.SalePrice, p => p.MapFrom(m => m.r_SalePrice))
+                .ForMember(u => u.AgeConditionalId, p => p.MapFrom(m => m.i_AgeConditionalId))
+                .ForMember(u => u.Age, p => p.MapFrom(m => m.i_Age))
+                .ForMember(u => u.GenderConditionalId, p => p.MapFrom(m => m.i_GenderConditionalId))
+                .ForMember(u => u.QuotationProfileIdRef, p => p.MapFrom(m => m.i_QuotationProfileIdRef))
+                .ReverseMap();
+
+            this.CreateMap<Quotation, QuotationMigrateDto>()
+                .ForMember(u => u.QuotationId, p => p.MapFrom(m => m.i_QuotationId))
+                .ReverseMap();
         }
     }
 }

@@ -16,17 +16,23 @@ namespace SL.Sigesoft.Data.Repositories
     public class QuotationRepository : IQuotationRepository
     {
         private ISecuentialRespository _secuentialRespository;
+        private IProtocolRepository _protocolRepository;
+        private IProtocolDetailRepository _protocolDetailRepository;
         private readonly SigesoftCoreContext _context;
         private readonly ILogger<QuotationRepository> _logger;
         private DbSet<Quotation> _dbSet;
+        private DbSet<QuotationProfile> _dbSetQuotationProfile;
 
         public QuotationRepository(SigesoftCoreContext context,
-          ILogger<QuotationRepository> logger, ISecuentialRespository secuentialRespository)
+          ILogger<QuotationRepository> logger, ISecuentialRespository secuentialRespository, IProtocolRepository protocolRepository, IProtocolDetailRepository protocolDetailRepository)
         {
             this._context = context;
             this._logger = logger;
             this._dbSet = _context.Set<Quotation>();
+            this._dbSetQuotationProfile = _context.Set<QuotationProfile>();
             this._secuentialRespository = secuentialRespository;
+            this._protocolRepository = protocolRepository;
+            this._protocolDetailRepository = protocolDetailRepository;
         }
 
         public async Task<Quotation> AddAsync(Quotation entity)
@@ -586,6 +592,52 @@ namespace SL.Sigesoft.Data.Repositories
                                 
         }
 
+        public async Task<bool> MigrateQuotationToProtocols(int quotationId)
+        {            
+
+            var quotation = await _dbSet.Include(i => i.QuotationProfiles)
+                            .ThenInclude(p => p.ProfileComponents)
+                            .Where(w => w.i_QuotationId == quotationId).FirstOrDefaultAsync();
+
+            foreach (var profile in quotation.QuotationProfiles)
+            {
+                var newProtocol = new Protocol();
+                newProtocol.i_CompanyId = quotation.i_CompanyId;
+                newProtocol.v_ProtocolName = profile.v_ProfileName;
+                newProtocol.i_ServiceTypeId = profile.i_ServiceTypeId.Value;
+                newProtocol.i_TypeFormatId = profile.i_TypeFormatId;
+                newProtocol.i_QuotationProfileIdRef = profile.i_QuotationProfileId;
+                await _protocolRepository.AddAsync(newProtocol);
+                InsertProtocolDetail(newProtocol.i_ProtocolId, profile.ProfileComponents);
+            }
+
+            return true;
+        }
+
+        private void InsertProtocolDetail(int protocolId, List<ProfileComponent> profileComponents)
+        {
+            foreach (var detail in profileComponents)
+            {
+                var newProtocolDetail = new ProtocolDetail();
+                newProtocolDetail.i_ProtocolId = protocolId;
+
+                newProtocolDetail.i_ProtocolId = protocolId;
+                newProtocolDetail.i_CategoryId = detail.i_CategoryId.Value;
+                newProtocolDetail.v_CategoryName = detail.v_CategoryName;
+                newProtocolDetail.v_ComponentId = detail.v_ComponentId;
+                newProtocolDetail.v_ComponentName = detail.v_ComponentName;
+                newProtocolDetail.r_MinPrice = detail.r_MinPrice;
+                newProtocolDetail.r_PriceList = detail.r_PriceList;
+                newProtocolDetail.r_SalePrice = detail.r_SalePrice;
+                newProtocolDetail.i_AgeConditionalId = detail.i_AgeConditionalId;
+                newProtocolDetail.i_Age = detail.i_Age;
+                newProtocolDetail.i_GenderConditionalId = detail.i_GenderConditionalId;
+                newProtocolDetail.i_QuotationProfileIdRef = detail.i_QuotationProfileId;
+
+                _protocolDetailRepository.AddAsync(newProtocolDetail);
+            }
+        }
+
         private int GetLastVersion(string code)
         {
             var sql = (from A in _context.Quotation
@@ -598,5 +650,7 @@ namespace SL.Sigesoft.Data.Repositories
             }
             return 0;
         }
+
+
     }
 }

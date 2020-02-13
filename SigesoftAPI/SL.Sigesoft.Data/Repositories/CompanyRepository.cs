@@ -233,5 +233,10 @@ namespace SL.Sigesoft.Data.Repositories
             }
             
         }
+
+        public async Task<List<Company>> AutocompleteByName(string value)
+        {
+            return await _dbSet.Where(c => c.i_IsDeleted == YesNo.No && c.v_Name.Contains(value)).ToListAsync();
+        }
     }
 }

@@ -1,7 +1,11 @@
-﻿using SL.Sigesoft.Data.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using SL.Sigesoft.Data.Contracts;
 using SL.Sigesoft.Models;
+using SL.Sigesoft.Models.Enum;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,9 +13,33 @@ namespace SL.Sigesoft.Data.Repositories
 {
     public class ProtocolDetailRepository : IProtocolDetailRepository
     {
-        public Task<ProtocolDetail> AddAsync(ProtocolDetail entity)
+        private readonly SigesoftCoreContext _context;
+        private readonly ILogger<ProtocolDetailRepository> _logger;
+        private DbSet<ProtocolDetail> _dbSet;
+
+        public ProtocolDetailRepository(SigesoftCoreContext context,
+            ILogger<ProtocolDetailRepository> logger)
         {
-            throw new NotImplementedException();
+            this._context = context;
+            this._logger = logger;
+            this._dbSet = _context.Set<ProtocolDetail>();
+        }
+
+
+        public async Task<ProtocolDetail> AddAsync(ProtocolDetail entity)
+        {
+            entity.d_InsertDate = DateTime.Now;
+            entity.i_IsDeleted = YesNo.No;
+            _dbSet.Add(entity);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en {nameof(AddAsync)}: " + ex.Message);
+            }
+            return entity;
         }
 
         public Task<bool> DeleteAsync(int id)
@@ -22,6 +50,20 @@ namespace SL.Sigesoft.Data.Repositories
         public Task<IEnumerable<ProtocolDetail>> GetAllAsync()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<ProtocolDetail>> GetAllByProtocolIdAsync(int protocolId)
+        {
+            try
+            {
+                return await _dbSet.Where(u => u.i_IsDeleted == YesNo.No && u.i_ProtocolId == protocolId).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            
         }
 
         public Task<ProtocolDetail> GetAsync(int id)
