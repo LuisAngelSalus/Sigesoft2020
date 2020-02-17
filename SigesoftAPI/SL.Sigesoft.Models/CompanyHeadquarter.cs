@@ -22,13 +22,13 @@ namespace SL.Sigesoft.Models
         public RecordStatus RecordStatus { get; set; }
         [NotMapped]
         public RecordType RecordType { get; set; } 
-
         public YesNo i_IsDeleted { get; set; }
         public int? i_InsertUserId { get; set; }
         public DateTime? d_InsertDate { get; set; }
         public int? i_UpdateUserId { get; set; }
         public DateTime? d_UpdateDate { get; set; }
 
+        public virtual Company Company { get; set; }
         public virtual ICollection<CompanyContact> CompanyContact { get; set; }
 
     }

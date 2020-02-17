@@ -20,6 +20,7 @@ namespace SL.Sigesoft.Data.Repositories
             _context = context;
             this._logger = logger;
         }
+
         public async Task<Person> AddAsync(Person person)
         {
             #region AUDIT

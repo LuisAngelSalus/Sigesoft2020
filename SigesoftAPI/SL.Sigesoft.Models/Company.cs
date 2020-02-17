@@ -26,7 +26,7 @@ namespace SL.Sigesoft.Models
         public DateTime? d_InsertDate { get; set; }
         public int? i_UpdateUserId { get; set; }
         public DateTime? d_UpdateDate { get; set; }
-
+        
         public virtual ICollection<CompanyHeadquarter> CompanyHeadquarter { get; set; }
     }
 }

@@ -51,7 +51,6 @@ namespace SL.Sigesoft.WebApi.Controllers
             }
         }
 
-        // GET: api/SystemUser/5
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -77,7 +76,6 @@ namespace SL.Sigesoft.WebApi.Controllers
 
         }
 
-        // POST: api/usuarios
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -103,7 +101,6 @@ namespace SL.Sigesoft.WebApi.Controllers
             }
         }
 
-        // PUT: api/usuarios/5
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -121,7 +118,6 @@ namespace SL.Sigesoft.WebApi.Controllers
             return _mapper.Map<ListSystemUserDto>(systemUser);
         }
 
-        // DELETE: api/usuarios/5
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -142,7 +138,6 @@ namespace SL.Sigesoft.WebApi.Controllers
             }
         }
                 
-        // POST: api/usuarios/cambiarperfil
         [HttpPost]
         [Route("cambiarperfil")]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -166,7 +161,6 @@ namespace SL.Sigesoft.WebApi.Controllers
             }
         }
 
-        // POST: api/usuarios/validarusuario
         [HttpPost]
         [Route("validarusuario")]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -191,7 +185,6 @@ namespace SL.Sigesoft.WebApi.Controllers
             }
         }
 
-        // POST: api/usuarios/cambiarcontrasena
         [HttpPost]
         [Route("cambiarcontrasena")]
         [ProducesResponseType(StatusCodes.Status201Created)]

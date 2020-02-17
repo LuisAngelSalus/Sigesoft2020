@@ -112,7 +112,6 @@ namespace SL.Sigesoft.WebApi.Controllers
             }
         }
 
-        // PUT: api/usuarios/5
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -136,7 +135,6 @@ namespace SL.Sigesoft.WebApi.Controllers
             return response;
         }
 
-        // DELETE: api/usuarios/5
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -164,8 +162,6 @@ namespace SL.Sigesoft.WebApi.Controllers
             }
         }
 
-
-        // GET: api/ordenes/5/detalles
         [HttpGet("{id}/sedes")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -187,8 +183,6 @@ namespace SL.Sigesoft.WebApi.Controllers
             return response;
         }
 
-
-        // GET: api/usuarios/5
         [HttpGet("{ruc}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

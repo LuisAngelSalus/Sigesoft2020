@@ -50,7 +50,6 @@ namespace SL.Sigesoft.WebApi.Controllers.Win
 
 
         [HttpGet("{value}")]
-        //[Route("ComponentByName")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Response<IEnumerable<ListComponentDto>>>> GetByName(string value)

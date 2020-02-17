@@ -12,8 +12,6 @@ namespace SL.Sigesoft.Dtos
 
     public class ProfileDetailRegisterDto
     {
-        //public int ProfileDetailId { get; set; }
-        //public int ProtocolProfileId { get; set; }
         public string ComponentId { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }

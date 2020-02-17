@@ -25,7 +25,6 @@ namespace SL.Sigesoft.Data.Repositories
             this._dbSet = _context.Set<CompanyHeadquarter>();
         }
 
-
         public async Task<CompanyHeadquarter> AddAsync(CompanyHeadquarter entity)
         {
             entity.i_IsDeleted = YesNo.No;

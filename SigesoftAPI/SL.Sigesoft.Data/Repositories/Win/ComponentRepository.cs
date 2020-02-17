@@ -17,7 +17,6 @@ namespace SL.Sigesoft.Data.Repositories.Win
         private readonly SigesoftWinContext _context;
         private readonly ILogger<ComponentRepository> _logger;
         private DbSet<Component> _dbSet;
-        //private DbSet<ProtocolProfile> _dbSetProtocolProfile;
 
         public ComponentRepository(SigesoftWinContext context,
            ILogger<ComponentRepository> logger)
@@ -25,7 +24,6 @@ namespace SL.Sigesoft.Data.Repositories.Win
             this._context = context;
             this._logger = logger;
             this._dbSet = _context.Set<Component>();
-            //this._dbSetProtocolProfile = _context.Set<ProtocolProfile>();
         }
 
         public async Task<List<Component>> GetAllAsync()

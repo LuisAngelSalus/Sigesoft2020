@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SL.Sigesoft.Data
+namespace SL.Sigesoft.Data.Configuration
 {
     public class QuoteTrackingConfiguration : IEntityTypeConfiguration<QuoteTracking>
     {

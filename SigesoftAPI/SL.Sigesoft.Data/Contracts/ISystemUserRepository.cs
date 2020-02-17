@@ -11,7 +11,6 @@ namespace SL.Sigesoft.Data.Contracts
         Task<bool> ChangePassword(SystemUser systemUser);
         Task<bool> ChangeProfile(SystemUser systemUser);
         Task<bool> ValidatePassword(SystemUser systemUser);
-        //Task<(bool result, SystemUser systemUser)> ValidateLogin(SystemUser systemUser);
         Task<(bool result, SystemUserLoginModel systemUser)> ValidateLogin(SystemUser systemUser);
         Task<AccessSysteUserModelDto> GetAccess(int id);
         Task<bool> UpdateAccess(List<UpdateAccessModel> updateAccessDto);

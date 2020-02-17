@@ -25,7 +25,7 @@ namespace SL.Sigesoft.WebApi.Controllers
             this._mapper = mapper;
         }
 
-        // GET: api/usuarios/5
+
         [HttpGet("{ruc}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

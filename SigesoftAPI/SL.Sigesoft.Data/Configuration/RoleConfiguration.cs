@@ -23,6 +23,7 @@ namespace SL.Sigesoft.Data.Configuration
                 .IsUnicode(false);
 
             entity.Property(e => e.v_PathDashboard).HasColumnName("v_PathDashboard");
+
             entity.Property(e => e.i_IsDeleted).HasColumnName("i_IsDeleted");
             entity.Property(e => e.i_InsertUserId).HasColumnName("i_InsertUserId");
             entity.Property(e => e.d_InsertDate).HasColumnName("d_InsertDate");

@@ -20,7 +20,6 @@ namespace SL.Sigesoft.WebApi.Controllers
         private IRoleRepository _RoleRepository;
         private readonly IMapper _mapper;
 
-
         public RoleController(IRoleRepository RoleRepository, IMapper mapper)
         {
             this._RoleRepository = RoleRepository;
