@@ -2,17 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace SL.Sigesoft.Models
 {
-   public partial class CompanyHeadquarter
+    public partial class CompanyHeadquarter
     {
         public CompanyHeadquarter()
         {
-            CompanyContact = new HashSet<CompanyContact>();
+            Quotation = new HashSet<Quotation>();
         }
-        
+
         public int i_CompanyHeadquarterId { get; set; }
         public int i_CompanyId { get; set; }
         public string v_Name { get; set; }
@@ -21,7 +20,7 @@ namespace SL.Sigesoft.Models
         [NotMapped]
         public RecordStatus RecordStatus { get; set; }
         [NotMapped]
-        public RecordType RecordType { get; set; } 
+        public RecordType RecordType { get; set; }
         public YesNo i_IsDeleted { get; set; }
         public int? i_InsertUserId { get; set; }
         public DateTime? d_InsertDate { get; set; }
@@ -29,7 +28,6 @@ namespace SL.Sigesoft.Models
         public DateTime? d_UpdateDate { get; set; }
 
         public virtual Company Company { get; set; }
-        public virtual ICollection<CompanyContact> CompanyContact { get; set; }
-
+        public virtual ICollection<Quotation> Quotation { get; set; }
     }
 }

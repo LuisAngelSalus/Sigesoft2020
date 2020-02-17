@@ -1,11 +1,10 @@
 ﻿using SL.Sigesoft.Models.Enum;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SL.Sigesoft.Models
 {
-   public class QuoteTracking
+    public partial class QuoteTracking
     {
         public int i_QuoteTrackingId { get; set; }
         public int i_QuotationId { get; set; }
@@ -18,5 +17,6 @@ namespace SL.Sigesoft.Models
         public int? i_UpdateUserId { get; set; }
         public DateTime? d_UpdateDate { get; set; }
 
+        public virtual Quotation Quotation { get; set; }
     }
 }

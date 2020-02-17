@@ -49,14 +49,14 @@ namespace SL.Sigesoft.Data.Repositories
             entity.d_InsertDate = DateTime.UtcNow;
             entity.i_InsertUserId = entity.i_InsertUserId;
          
-            foreach (var item in entity.QuotationProfiles)
+            foreach (var item in entity.QuotationProfile)
             {
                 #region AUDIT
                 item.i_IsDeleted = YesNo.No;
                 item.d_InsertDate = DateTime.UtcNow;
                 item.i_InsertUserId = entity.i_InsertUserId;
                 #endregion
-                foreach (var item2 in item.ProfileComponents)
+                foreach (var item2 in item.ProfileComponent)
                 {
                     #region AUDIT
                     item2.i_IsDeleted = YesNo.No;
@@ -66,7 +66,7 @@ namespace SL.Sigesoft.Data.Repositories
                 }
             }
 
-            foreach (var item in entity.AdditionalComponentsQuotes)
+            foreach (var item in entity.AdditionalComponentsQuote)
             {
                 #region AUDIT
                 item.i_IsDeleted = YesNo.No;
@@ -101,14 +101,14 @@ namespace SL.Sigesoft.Data.Repositories
             entity.d_InsertDate = DateTime.UtcNow;
             entity.i_InsertUserId = entity.i_InsertUserId;
 
-            foreach (var item in entity.QuotationProfiles)
+            foreach (var item in entity.QuotationProfile)
             {
                 #region AUDIT
                 item.i_IsDeleted = YesNo.No;
                 item.d_InsertDate = DateTime.UtcNow;
                 item.i_InsertUserId = entity.i_InsertUserId;
                 #endregion
-                foreach (var item2 in item.ProfileComponents)
+                foreach (var item2 in item.ProfileComponent)
                 {
                     #region AUDIT
                     //PARCHE
@@ -127,7 +127,7 @@ namespace SL.Sigesoft.Data.Repositories
                 }
             }
 
-            foreach (var item in entity.AdditionalComponentsQuotes)
+            foreach (var item in entity.AdditionalComponentsQuote)
             {
                 #region AUDIT
                 item.i_IsDeleted = YesNo.No;
@@ -185,9 +185,9 @@ namespace SL.Sigesoft.Data.Repositories
                                        FullName = A.v_FullName,
                                        Email = A.v_Email,
                                        CommercialTerms = A.v_CommercialTerms,
-                                       StatusQuotationId = A.i_StatusQuotationId.Value,
+                                       StatusQuotationId = A.i_StatusQuotationId,
                                        QuotationProfiles = (from A1 in _context.QuotationProfile
-                                                            join C1 in _context.SystemParameter on new { a = A1.i_ServiceTypeId.Value, b = 101 }
+                                                            join C1 in _context.SystemParameter on new { a = A1.i_ServiceTypeId, b = 101 }
                                                                                                equals new { a = C1.i_ParameterId, b = C1.i_GroupId } into C1_join
                                                             from C1 in C1_join.DefaultIfEmpty()
                                                             where A1.i_QuotationId == A.i_QuotationId && A1.i_IsDeleted == YesNo.No
@@ -249,8 +249,8 @@ namespace SL.Sigesoft.Data.Repositories
 
         public async Task<bool> UpdateAsync(Quotation entity)
         {
-            var entityDb = await _dbSet.Include(i => i.QuotationProfiles)
-                                    .ThenInclude(i => i.ProfileComponents)
+            var entityDb = await _dbSet.Include(i => i.QuotationProfile)
+                                    //.ThenInclude(i => i.ProfileComponents)
                                 .FirstOrDefaultAsync(u => u.i_QuotationId == entity.i_QuotationId);
 
             if (entityDb == null)
@@ -287,10 +287,10 @@ namespace SL.Sigesoft.Data.Repositories
                 #endregion
 
 
-                UpdateAddittionalExamn(entity.AdditionalComponentsQuotes, entityDb);
+                //UpdateAddittionalExamn(entity.AdditionalComponentsQuote, entityDb);
 
                 #region QuotationProfiles
-                UpdateQuotationProfiles(entity.QuotationProfiles, entityDb);
+                //UpdateQuotationProfiles(entity.QuotationProfile, entityDb);
                 #endregion
 
             }
@@ -307,104 +307,104 @@ namespace SL.Sigesoft.Data.Repositories
             return false;
         }
 
-        private void UpdateQuotationProfiles(List<QuotationProfile> quotationProfiles, Quotation entityDb)
-        {
-            try
-            {
-                foreach (var item in quotationProfiles)
-                {
-                    if (item.RecordType == RecordType.Temporal && item.RecordStatus == RecordStatus.Agregado)
-                    {
-                        var o = new QuotationProfile();
-                        o.i_QuotationId = item.i_QuotationId;
-                        o.v_ProfileName = item.v_ProfileName;
-                        o.i_ServiceTypeId = item.i_ServiceTypeId;
-                        o.i_InsertUserId = item.i_UpdateUserId;
-                        o.i_IsDeleted = YesNo.No;
-                        entityDb.QuotationProfiles.Add(o);
-                    }
-                    if (item.RecordType == RecordType.NoTemporal && (item.RecordStatus == RecordStatus.Modificado || item.RecordStatus == RecordStatus.Grabado))
-                    {
-                        var o = entityDb.QuotationProfiles.Where(w => w.i_QuotationProfileId == item.i_QuotationProfileId).FirstOrDefault();
-                        o.i_ServiceTypeId = item.i_ServiceTypeId;
-                        o.v_ProfileName = item.v_ProfileName;
-                        o.d_UpdateDate = DateTime.UtcNow;
-                        o.i_UpdateUserId = item.i_UpdateUserId;
-                        entityDb.QuotationProfiles.Add(o);
-                    }
-                    if (item.RecordType == RecordType.NoTemporal && item.RecordStatus == RecordStatus.EliminadoLogico)
-                    {
-                        var o = entityDb.QuotationProfiles.Where(w => w.i_QuotationProfileId == item.i_QuotationProfileId).FirstOrDefault();
-                        o.i_IsDeleted = YesNo.Yes;
-                        o.d_UpdateDate = DateTime.UtcNow;
-                        o.i_UpdateUserId = item.i_UpdateUserId;
-                        entityDb.QuotationProfiles.Add(o);
-                    }
+        //private void UpdateQuotationProfiles(ICollection<QuotationProfile> quotationProfiles, Quotation entityDb)
+        //{
+        //    try
+        //    {
+        //        foreach (var item in quotationProfiles)
+        //        {
+        //            if (item.RecordType == RecordType.Temporal && item.RecordStatus == RecordStatus.Agregado)
+        //            {
+        //                var o = new QuotationProfile();
+        //                o.i_QuotationId = item.i_QuotationId;
+        //                o.v_ProfileName = item.v_ProfileName;
+        //                o.i_ServiceTypeId = item.i_ServiceTypeId;
+        //                o.i_InsertUserId = item.i_UpdateUserId;
+        //                o.i_IsDeleted = YesNo.No;
+        //                entityDb.QuotationProfile.Add(o);
+        //            }
+        //            if (item.RecordType == RecordType.NoTemporal && (item.RecordStatus == RecordStatus.Modificado || item.RecordStatus == RecordStatus.Grabado))
+        //            {
+        //                var o = entityDb.QuotationProfile.Where(w => w.i_QuotationProfileId == item.i_QuotationProfileId).FirstOrDefault();
+        //                o.i_ServiceTypeId = item.i_ServiceTypeId;
+        //                o.v_ProfileName = item.v_ProfileName;
+        //                o.d_UpdateDate = DateTime.UtcNow;
+        //                o.i_UpdateUserId = item.i_UpdateUserId;
+        //                entityDb.QuotationProfile.Add(o);
+        //            }
+        //            if (item.RecordType == RecordType.NoTemporal && item.RecordStatus == RecordStatus.EliminadoLogico)
+        //            {
+        //                var o = entityDb.QuotationProfile.Where(w => w.i_QuotationProfileId == item.i_QuotationProfileId).FirstOrDefault();
+        //                o.i_IsDeleted = YesNo.Yes;
+        //                o.d_UpdateDate = DateTime.UtcNow;
+        //                o.i_UpdateUserId = item.i_UpdateUserId;
+        //                entityDb.QuotationProfile.Add(o);
+        //            }
 
-                    #region ProfileComponents
-                    var x = entityDb.QuotationProfiles.Find(p => p.i_QuotationProfileId == item.i_QuotationProfileId);
-                    UpdateProfileComponent(item.ProfileComponents, x);
-                    #endregion
-                }
-            }
-            catch (Exception ex)
-            {
+        //            #region ProfileComponents
+        //            var x = entityDb.QuotationProfile.Find(p => p.i_QuotationProfileId == item.i_QuotationProfileId);
+        //            UpdateProfileComponent(item.ProfileComponent, x);
+        //            #endregion
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                throw;
-            }
+        //        throw;
+        //    }
          
-        }
+        //}
 
-        private void UpdateAddittionalExamn(List<AdditionalComponentsQuote> additionalComponents, Quotation entityDb)
-        {
-            try
-            {
-                foreach (var item in additionalComponents)
-                {
-                    if (item.RecordType == RecordType.Temporal && item.RecordStatus == RecordStatus.Agregado)
-                    {
-                        var o = new AdditionalComponentsQuote();
-                        o.i_QuotationId = item.i_QuotationId;
-                        o.v_CategoryName = item.v_CategoryName;
-                        o.i_CategoryId = item.i_CategoryId;
+        //private void UpdateAddittionalExamn(ICollection<AdditionalComponentsQuote> additionalComponents, Quotation entityDb)
+        //{
+        //    try
+        //    {
+        //        foreach (var item in additionalComponents)
+        //        {
+        //            if (item.RecordType == RecordType.Temporal && item.RecordStatus == RecordStatus.Agregado)
+        //            {
+        //                var o = new AdditionalComponentsQuote();
+        //                o.i_QuotationId = item.i_QuotationId;
+        //                o.v_CategoryName = item.v_CategoryName;
+        //                o.i_CategoryId = item.i_CategoryId;
 
-                        o.v_ComponentId = item.v_ComponentId;
-                        o.v_ComponentName = item.v_ComponentName;
-                        o.r_MinPrice = item.r_MinPrice;
-                        o.r_PriceList = item.r_PriceList;
-                        o.r_SalePrice = item.r_SalePrice;
+        //                o.v_ComponentId = item.v_ComponentId;
+        //                o.v_ComponentName = item.v_ComponentName;
+        //                o.r_MinPrice = item.r_MinPrice;
+        //                o.r_PriceList = item.r_PriceList;
+        //                o.r_SalePrice = item.r_SalePrice;
 
-                        o.i_InsertUserId = item.i_UpdateUserId;
-                        o.i_IsDeleted = YesNo.No;
-                        entityDb.AdditionalComponentsQuotes.Add(o);
-                    }
-                    if (item.RecordType == RecordType.NoTemporal && (item.RecordStatus == RecordStatus.Modificado || item.RecordStatus == RecordStatus.Grabado))
-                    {
-                        //var o = entityDb.QuotationProfiles.Where(w => w.i_QuotationProfileId == item.i_QuotationProfileId).FirstOrDefault();
-                        //o.i_ServiceTypeId = item.i_ServiceTypeId;
-                        //o.v_ProfileName = item.v_ProfileName;
-                        //o.d_UpdateDate = DateTime.UtcNow;
-                        //o.i_UpdateUserId = item.i_UpdateUserId;
-                        //entityDb.QuotationProfiles.Add(o);
-                    }
-                    if (item.RecordType == RecordType.NoTemporal && item.RecordStatus == RecordStatus.EliminadoLogico)
-                    {
-                        //var o = entityDb.QuotationProfiles.Where(w => w.i_QuotationProfileId == item.i_QuotationProfileId).FirstOrDefault();
-                        //o.i_IsDeleted = YesNo.Yes;
-                        //o.d_UpdateDate = DateTime.UtcNow;
-                        //o.i_UpdateUserId = item.i_UpdateUserId;
-                        //entityDb.QuotationProfiles.Add(o);
-                    }
+        //                o.i_InsertUserId = item.i_UpdateUserId;
+        //                o.i_IsDeleted = YesNo.No;
+        //                entityDb.AdditionalComponentsQuote.Add(o);
+        //            }
+        //            if (item.RecordType == RecordType.NoTemporal && (item.RecordStatus == RecordStatus.Modificado || item.RecordStatus == RecordStatus.Grabado))
+        //            {
+        //                //var o = entityDb.QuotationProfiles.Where(w => w.i_QuotationProfileId == item.i_QuotationProfileId).FirstOrDefault();
+        //                //o.i_ServiceTypeId = item.i_ServiceTypeId;
+        //                //o.v_ProfileName = item.v_ProfileName;
+        //                //o.d_UpdateDate = DateTime.UtcNow;
+        //                //o.i_UpdateUserId = item.i_UpdateUserId;
+        //                //entityDb.QuotationProfiles.Add(o);
+        //            }
+        //            if (item.RecordType == RecordType.NoTemporal && item.RecordStatus == RecordStatus.EliminadoLogico)
+        //            {
+        //                //var o = entityDb.QuotationProfiles.Where(w => w.i_QuotationProfileId == item.i_QuotationProfileId).FirstOrDefault();
+        //                //o.i_IsDeleted = YesNo.Yes;
+        //                //o.d_UpdateDate = DateTime.UtcNow;
+        //                //o.i_UpdateUserId = item.i_UpdateUserId;
+        //                //entityDb.QuotationProfiles.Add(o);
+        //            }
                   
-                }
-            }
-            catch (Exception ex)
-            {
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                throw;
-            }
+        //        throw;
+        //    }
 
-        }
+        //}
 
         private void UpdateProfileComponent(List<ProfileComponent> profileComponents, QuotationProfile quotationProfile)
         {
@@ -423,26 +423,26 @@ namespace SL.Sigesoft.Data.Repositories
                     o.i_Age = component.i_Age;
                     o.i_GenderConditionalId = component.i_GenderConditionalId;
                     o.i_IsDeleted = YesNo.No;
-                    quotationProfile.ProfileComponents.Add(o);
+                    quotationProfile.ProfileComponent.Add(o);
                 }
                 if (component.RecordType == RecordType.NoTemporal && (component.RecordStatus == RecordStatus.Modificado || component.RecordStatus == RecordStatus.Grabado))
                 {
-                    var o = quotationProfile.ProfileComponents.Where(w => w.i_ProfileComponentId == component.i_ProfileComponentId).FirstOrDefault();
+                    var o = quotationProfile.ProfileComponent.Where(w => w.i_ProfileComponentId == component.i_ProfileComponentId).FirstOrDefault();
                     o.r_SalePrice = component.r_SalePrice;
                     o.d_UpdateDate = DateTime.UtcNow;
                     o.i_AgeConditionalId = component.i_AgeConditionalId;
                     o.i_Age = component.i_Age;
                     o.i_GenderConditionalId = component.i_GenderConditionalId;
                     o.i_UpdateUserId = component.i_UpdateUserId;
-                    quotationProfile.ProfileComponents.Add(o);
+                    quotationProfile.ProfileComponent.Add(o);
                 }
                 if (component.RecordType == RecordType.NoTemporal && component.RecordStatus == RecordStatus.EliminadoLogico)
                 {
-                    var o = quotationProfile.ProfileComponents.Where(w => w.i_ProfileComponentId == component.i_ProfileComponentId).FirstOrDefault();
+                    var o = quotationProfile.ProfileComponent.Where(w => w.i_ProfileComponentId == component.i_ProfileComponentId).FirstOrDefault();
                     o.i_IsDeleted = YesNo.Yes;
                     o.d_UpdateDate = DateTime.UtcNow;
                     o.i_UpdateUserId = component.i_UpdateUserId;
-                    quotationProfile.ProfileComponents.Add(o);
+                    quotationProfile.ProfileComponent.Add(o);
                 }
             }           
         }
@@ -451,7 +451,7 @@ namespace SL.Sigesoft.Data.Repositories
         {
             var query = await (from A in _context.Quotation
                                join B in _context.Company on A.i_CompanyId equals B.i_CompanyId
-                               join C in _context.SystemParameter on new { a = A.i_StatusQuotationId.Value, b = 103 }
+                               join C in _context.SystemParameter on new { a = A.i_StatusQuotationId, b = 103 }
                                                                equals new { a = C.i_ParameterId, b = C.i_GroupId } into C_join
                                from C in C_join.DefaultIfEmpty()
                                where A.i_IsDeleted == 0 && A.v_Code == code
@@ -465,7 +465,7 @@ namespace SL.Sigesoft.Data.Repositories
                                    ShippingDate = A.d_ShippingDate,                                   
                                    CompanyName = B.v_Name,
                                    Total = A.r_TotalQuotation,
-                                   StatusQuotationId = A.i_StatusQuotationId.Value,
+                                   StatusQuotationId = A.i_StatusQuotationId,
                                    StatusQuotationName = C.v_Value1,
                                }).ToListAsync();
 
@@ -484,14 +484,14 @@ namespace SL.Sigesoft.Data.Repositories
 
             var query = await(from A in _context.Quotation
                               join B in _context.Company on A.i_CompanyId equals B.i_CompanyId
-                              join C in _context.SystemParameter on new { a = A.i_StatusQuotationId.Value, b = 103 }
+                              join C in _context.SystemParameter on new { a = A.i_StatusQuotationId, b = 103 }
                                                                                                equals new { a = C.i_ParameterId, b = C.i_GroupId } into C_join
                               from C in C_join.DefaultIfEmpty()
                               where A.i_IsDeleted == 0
                               && (companyName ==null || B.v_Name.Contains(companyName) || B.v_IdentificationNumber.Contains(companyName))                              
                               && (nroQuotation == null || A.v_Code.Contains(nroQuotation))
                               //&&(statusQuotationId == -1 || A.i_StatusQuotationId == statusQuotationId)
-                              && (statusQuotationId.Contains(A.i_StatusQuotationId.Value))
+                              && (statusQuotationId.Contains(A.i_StatusQuotationId))
                               && (!validfi || A.d_InsertDate >= fi)
                               && (!validff || A.d_InsertDate <= ff)
                               && (A.i_IsProccess == YesNo.Yes)
@@ -515,7 +515,7 @@ namespace SL.Sigesoft.Data.Repositories
                                                          where A2.i_QuotationId == A.i_QuotationId && A2.i_IsDeleted == YesNo.No
                                                          orderby A2.d_Date descending
                                                          select A2).FirstOrDefault().v_Commentary,
-                                  StatusQuotationId = A.i_StatusQuotationId.Value,
+                                  StatusQuotationId = A.i_StatusQuotationId,
                                   StatusQuotationName = C.v_Value1,
                                   QuoteTrackings = (from A1 in _context.QuoteTracking
                                                     join B1 in _context.Quotation on A1.i_QuotationId equals B1.i_QuotationId
@@ -595,26 +595,26 @@ namespace SL.Sigesoft.Data.Repositories
         public async Task<bool> MigrateQuotationToProtocols(int quotationId)
         {            
 
-            var quotation = await _dbSet.Include(i => i.QuotationProfiles)
-                            .ThenInclude(p => p.ProfileComponents)
+            var quotation = await _dbSet.Include(i => i.QuotationProfile)
+                            .ThenInclude(p => p.ProfileComponent)
                             .Where(w => w.i_QuotationId == quotationId).FirstOrDefaultAsync();
 
-            foreach (var profile in quotation.QuotationProfiles)
+            foreach (var profile in quotation.QuotationProfile)
             {
                 var newProtocol = new Protocol();
                 newProtocol.i_CompanyId = quotation.i_CompanyId;
                 newProtocol.v_ProtocolName = profile.v_ProfileName;
-                newProtocol.i_ServiceTypeId = profile.i_ServiceTypeId.Value;
+                newProtocol.i_ServiceTypeId = profile.i_ServiceTypeId;
                 newProtocol.i_TypeFormatId = profile.i_TypeFormatId;
                 newProtocol.i_QuotationProfileIdRef = profile.i_QuotationProfileId;
                 await _protocolRepository.AddAsync(newProtocol);
-                InsertProtocolDetail(newProtocol.i_ProtocolId, profile.ProfileComponents);
+                InsertProtocolDetail(newProtocol.i_ProtocolId, profile.ProfileComponent);
             }
 
             return true;
         }
 
-        private void InsertProtocolDetail(int protocolId, List<ProfileComponent> profileComponents)
+        private void InsertProtocolDetail(int protocolId, ICollection<ProfileComponent> profileComponents)
         {
             foreach (var detail in profileComponents)
             {
@@ -622,7 +622,7 @@ namespace SL.Sigesoft.Data.Repositories
                 newProtocolDetail.i_ProtocolId = protocolId;
 
                 newProtocolDetail.i_ProtocolId = protocolId;
-                newProtocolDetail.i_CategoryId = detail.i_CategoryId.Value;
+                newProtocolDetail.i_CategoryId = detail.i_CategoryId;
                 newProtocolDetail.v_CategoryName = detail.v_CategoryName;
                 newProtocolDetail.v_ComponentId = detail.v_ComponentId;
                 newProtocolDetail.v_ComponentName = detail.v_ComponentName;

@@ -1,11 +1,10 @@
 ﻿using SL.Sigesoft.Models.Enum;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SL.Sigesoft.Models
 {
-    public class PriceList
+    public partial class PriceList
     {
         public int i_PriceListId { get; set; }
         public int i_CompanyId { get; set; }
@@ -16,5 +15,7 @@ namespace SL.Sigesoft.Models
         public DateTime? d_InsertDate { get; set; }
         public int? i_UpdateUserId { get; set; }
         public DateTime? d_UpdateDate { get; set; }
+
+        public virtual Company Company { get; set; }
     }
 }

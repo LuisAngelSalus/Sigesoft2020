@@ -16,10 +16,26 @@ namespace SL.Sigesoft.Data.Configuration
             entity.ToTable("Ubigeo", "sunat");
 
             entity.Property(e => e.i_UbigeoId).HasColumnName("i_UbigeoId");
-            entity.Property(e => e.v_Departamento).HasColumnName("v_Departamento");
-            entity.Property(e => e.v_Provincia).HasColumnName("v_Provincia");
-            entity.Property(e => e.v_Distrito).HasColumnName("v_Distrito");
-            entity.Property(e => e.v_Ubigeo).HasColumnName("v_Ubigeo");
+
+            entity.Property(e => e.v_Departamento)
+                .HasColumnName("v_Departamento")
+                .HasMaxLength(100)
+                .IsUnicode(false);
+
+            entity.Property(e => e.v_Distrito)
+                .HasColumnName("v_Distrito")
+                .HasMaxLength(100)
+                .IsUnicode(false);
+
+            entity.Property(e => e.v_Provincia)
+                .HasColumnName("v_Provincia")
+                .HasMaxLength(100)
+                .IsUnicode(false);
+
+            entity.Property(e => e.v_Ubigeo)
+                .HasColumnName("v_Ubigeo")
+                .HasMaxLength(20)
+                .IsUnicode(false);
         }
 
     }

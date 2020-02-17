@@ -9,6 +9,7 @@ namespace SL.Sigesoft.Models
         public OwnerCompany()
         {
             Access = new HashSet<Access>();
+            Secuential = new HashSet<Secuential>();
         }
 
         public int i_OwnerCompanyId { get; set; }
@@ -21,5 +22,6 @@ namespace SL.Sigesoft.Models
         public DateTime? d_UpdateDate { get; set; }
 
         public virtual ICollection<Access> Access { get; set; }
+        public virtual ICollection<Secuential> Secuential { get; set; }
     }
 }

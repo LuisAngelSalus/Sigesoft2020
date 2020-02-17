@@ -2,21 +2,20 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace SL.Sigesoft.Models
 {
-    public class ProfileComponent
+    public partial class ProfileComponent
     {
         public int i_ProfileComponentId { get; set; }
         public int i_QuotationProfileId { get; set; }
+        public int i_CategoryId { get; set; }
         public string v_CategoryName { get; set; }
-        public int? i_CategoryId { get; set; }
         public string v_ComponentId { get; set; }
         public string v_ComponentName { get; set; }
         public decimal? r_MinPrice { get; set; }
         public decimal? r_PriceList { get; set; }
-        public decimal? r_SalePrice { get; set; }
+        public decimal r_SalePrice { get; set; }
         public int? i_AgeConditionalId { get; set; }
         public int? i_Age { get; set; }
         public int? i_GenderConditionalId { get; set; }
@@ -31,5 +30,6 @@ namespace SL.Sigesoft.Models
         [NotMapped]
         public RecordType RecordType { get; set; }
 
+        public virtual QuotationProfile QuotationProfile { get; set; }
     }
 }

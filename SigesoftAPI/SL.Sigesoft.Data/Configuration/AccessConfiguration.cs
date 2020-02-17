@@ -34,11 +34,13 @@ namespace SL.Sigesoft.Data.Configuration
             entity.HasOne(d => d.OwnerCompany)
                 .WithMany(p => p.Access)
                 .HasForeignKey(d => d.i_OwnerCompanyId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Access_OwnerCompany");
 
             entity.HasOne(d => d.Permission)
-                .WithMany(p => p.Accesses)
+                .WithMany(p => p.Access)
                 .HasForeignKey(d => d.i_PermissionId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Security.Access_Security.Permission");
         }
     }

@@ -65,7 +65,7 @@ namespace SL.Sigesoft.Data.Repositories
         }
         public async Task<IEnumerable<SystemUser>> GetAllAsync()
         {
-            return await _dbSet.Include(su => su.Permissions)
+            return await _dbSet.Include(su => su.Permission)
                                .Where(u => u.i_IsDeleted == YesNo.No)
                                .ToListAsync();
         }
@@ -124,7 +124,7 @@ namespace SL.Sigesoft.Data.Repositories
         }
         public async Task<(bool result, SystemUser systemUser)> ValidateLogin_(SystemUser systemUser)
         {
-            var systemUserDb = await _dbSet.Include(u => u.Permissions).FirstOrDefaultAsync(u => u.v_UserName == systemUser.v_UserName);
+            var systemUserDb = await _dbSet.Include(u => u.Permission).FirstOrDefaultAsync(u => u.v_UserName == systemUser.v_UserName);
             if (systemUserDb != null)
             {
                 try
@@ -261,7 +261,7 @@ namespace SL.Sigesoft.Data.Repositories
         }
         public async Task<(bool result, SystemUserLoginModel systemUser)> ValidateLogin(SystemUser systemUser)
         {
-            var systemUserDb = await _dbSet.Include(u => u.Permissions).FirstOrDefaultAsync(u => u.v_UserName == systemUser.v_UserName);
+            var systemUserDb = await _dbSet.Include(u => u.Permission).FirstOrDefaultAsync(u => u.v_UserName == systemUser.v_UserName);
             
             if (systemUserDb != null)
             {
@@ -303,12 +303,12 @@ namespace SL.Sigesoft.Data.Repositories
                 var userId = updateAccessDto[0].UserId;
 
                 //CAMBIAR DE ESTADO A LOS REGISTROS ANTIGUOS
-                var permissionsDB = await _dbSetPermission.Include(acc => acc.Accesses).Where(i => i.i_SystemUserId == userId).ToListAsync();
+                var permissionsDB = await _dbSetPermission.Include(acc => acc.Access).Where(i => i.i_SystemUserId == userId).ToListAsync();
                 foreach (var permiDB in permissionsDB)
                 {
                     permiDB.i_IsDeleted = YesNo.Yes;
 
-                    foreach (var acceDB in permiDB.Accesses)
+                    foreach (var acceDB in permiDB.Access)
                     {
                         acceDB.i_IsDeleted = YesNo.Yes;
                     }

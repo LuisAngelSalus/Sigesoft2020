@@ -1,23 +1,22 @@
 ﻿using SL.Sigesoft.Models.Enum;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SL.Sigesoft.Models
 {
-    public class ProtocolDetail
+    public partial class ProtocolDetail
     {
-        public int i_ProtocolDetailId  { get; set; }
-        public int i_ProtocolId  { get; set; }
-        public int i_CategoryId  { get; set; }
-        public string v_CategoryName  { get; set; }
+        public int i_ProtocolDetailId { get; set; }
+        public int i_ProtocolId { get; set; }
+        public int i_CategoryId { get; set; }
+        public string v_CategoryName { get; set; }
         public string v_ComponentId { get; set; }
         public string v_ComponentName { get; set; }
         public decimal? r_MinPrice { get; set; }
         public decimal? r_PriceList { get; set; }
-        public decimal? r_SalePrice { get; set; }
+        public decimal r_SalePrice { get; set; }
         public int? i_AgeConditionalId { get; set; }
-        public int? i_Age  { get; set; }
+        public int? i_Age { get; set; }
         public int? i_GenderConditionalId { get; set; }
         public int? i_QuotationProfileIdRef { get; set; }
         public YesNo i_IsDeleted { get; set; }
@@ -25,5 +24,7 @@ namespace SL.Sigesoft.Models
         public DateTime? d_InsertDate { get; set; }
         public int? i_UpdateUserId { get; set; }
         public DateTime? d_UpdateDate { get; set; }
+
+        public virtual Protocol Protocol { get; set; }
     }
 }

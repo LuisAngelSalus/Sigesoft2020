@@ -8,11 +8,13 @@ namespace SL.Sigesoft.Models
     {
         public SystemUser()
         {
-            Permissions = new HashSet<Permission>();
+            Permission = new HashSet<Permission>();
+            Quotation = new HashSet<Quotation>();
+            Secuential = new HashSet<Secuential>();
         }
 
         public int i_SystemUserId { get; set; }
-        public int? i_PersonId { get; set; }
+        public int i_PersonId { get; set; }
         public string v_UserName { get; set; }
         public string v_Password { get; set; }
         public string v_Email { get; set; }
@@ -24,6 +26,8 @@ namespace SL.Sigesoft.Models
         public DateTime? d_UpdateDate { get; set; }
 
         public virtual Person Person { get; set; }
-        public virtual ICollection<Permission> Permissions { get; set; }
+        public virtual ICollection<Permission> Permission { get; set; }
+        public virtual ICollection<Quotation> Quotation { get; set; }
+        public virtual ICollection<Secuential> Secuential { get; set; }
     }
 }

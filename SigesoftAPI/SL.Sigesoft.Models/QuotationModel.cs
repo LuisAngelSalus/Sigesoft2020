@@ -1,6 +1,7 @@
 ﻿using SL.Sigesoft.Models.Enum;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace SL.Sigesoft.Models
@@ -57,9 +58,9 @@ namespace SL.Sigesoft.Models
         public int? Age { get; set; }
         public int? GenderConditionalId { get; set; }
 
-        [notMaped]
+        [NotMapped]
         public RecordStatus RecordStatus { get; set; }
-        [notMaped]
+        [NotMapped]
         public RecordType RecordType { get; set; }
     }
 
@@ -83,9 +84,9 @@ namespace SL.Sigesoft.Models
         public decimal? PriceList { get; set; }
         public decimal? SalePrice { get; set; }
         public int? InsertUserId { get; set; }
-        [notMaped]
+        [NotMapped]
         public RecordStatus RecordStatus { get; set; }
-        [notMaped]
+        [NotMapped]
         public RecordType RecordType { get; set; }
     }
 }

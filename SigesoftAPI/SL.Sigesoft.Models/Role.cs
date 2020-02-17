@@ -9,7 +9,7 @@ namespace SL.Sigesoft.Models
         public Role()
         {
             Permission = new HashSet<Permission>();
-            Profiles = new HashSet<Profile>();
+            Profile = new HashSet<Profile>();
         }
 
         public int i_RoleId { get; set; }
@@ -22,6 +22,6 @@ namespace SL.Sigesoft.Models
         public DateTime? d_UpdateDate { get; set; }
 
         public virtual ICollection<Permission> Permission { get; set; }
-        public virtual ICollection<Profile> Profiles { get; set; }
+        public virtual ICollection<Profile> Profile { get; set; }
     }
 }

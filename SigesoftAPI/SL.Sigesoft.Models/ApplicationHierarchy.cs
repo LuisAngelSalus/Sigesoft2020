@@ -13,8 +13,8 @@ namespace SL.Sigesoft.Models
 
         public int i_ApplicationHierarchyId { get; set; }
         public string v_Description { get; set; }
+        public int i_ParentId { get; set; }
         public string v_Path { get; set; }
-        public int? i_ParentId { get; set; }
         public YesNo i_IsDeleted { get; set; }
         public int? i_InsertUserId { get; set; }
         public DateTime? d_InsertDate { get; set; }

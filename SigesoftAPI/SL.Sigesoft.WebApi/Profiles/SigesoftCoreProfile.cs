@@ -48,7 +48,7 @@ namespace SL.Sigesoft.WebApi.Profiles
 
             this.CreateMap<Permission, PermissionDto>()
                 .ForMember(u => u.RolId, p => p.MapFrom(m => m.i_RoleId))
-                .ForMember(u => u.RolName, p => p.MapFrom(m => m.Roles.v_Description))
+                .ForMember(u => u.RolName, p => p.MapFrom(m => m.Role.v_Description))
                 .ReverseMap();
 
             this.CreateMap<SystemUser, GetSystemUserDto>()

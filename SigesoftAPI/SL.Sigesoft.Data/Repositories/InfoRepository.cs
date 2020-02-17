@@ -27,7 +27,7 @@ namespace SL.Sigesoft.Data.Repositories
 
         public async Task<Info> GetInfo(string ruc)
         {
-            var result = await _dbSet.Include(p => p.Details)
+            var result = await _dbSet.Include(p => p.Detail)
                               .SingleOrDefaultAsync(c => c.Ruc == ruc);
             var ubigeo = result.Ubigeo;
             var obj = await (from A in _context.Ubigeo

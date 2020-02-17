@@ -1,11 +1,10 @@
 ﻿using SL.Sigesoft.Models.Enum;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SL.Sigesoft.Models
 {
-   public partial class ProtocolProfile
+    public partial class ProtocolProfile
     {
         public ProtocolProfile()
         {

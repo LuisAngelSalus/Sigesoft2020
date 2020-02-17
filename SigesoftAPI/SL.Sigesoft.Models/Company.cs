@@ -1,15 +1,17 @@
 ﻿using SL.Sigesoft.Models.Enum;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SL.Sigesoft.Models
 {
-   public partial class Company
-    {   
+    public partial class Company
+    {
         public Company()
         {
             CompanyHeadquarter = new HashSet<CompanyHeadquarter>();
+            PriceList = new HashSet<PriceList>();
+            Protocol = new HashSet<Protocol>();
+            Quotation = new HashSet<Quotation>();
         }
 
         public int i_CompanyId { get; set; }
@@ -26,7 +28,10 @@ namespace SL.Sigesoft.Models
         public DateTime? d_InsertDate { get; set; }
         public int? i_UpdateUserId { get; set; }
         public DateTime? d_UpdateDate { get; set; }
-        
+
         public virtual ICollection<CompanyHeadquarter> CompanyHeadquarter { get; set; }
+        public virtual ICollection<PriceList> PriceList { get; set; }
+        public virtual ICollection<Protocol> Protocol { get; set; }
+        public virtual ICollection<Quotation> Quotation { get; set; }
     }
 }
