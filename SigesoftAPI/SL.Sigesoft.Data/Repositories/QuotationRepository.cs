@@ -517,7 +517,7 @@ namespace SL.Sigesoft.Data.Repositories
                                                          select A2).FirstOrDefault().v_Commentary,
                                   StatusQuotationId = A.i_StatusQuotationId,
                                   StatusQuotationName = C.v_Value1,
-                                  QuoteTrackings = (from A1 in _context.QuoteTracking
+                                  QuoteTracking = (from A1 in _context.QuoteTracking
                                                     join B1 in _context.Quotation on A1.i_QuotationId equals B1.i_QuotationId
                                                         //where A1.i_QuotationId == A.i_QuotationId && A1.i_IsDeleted == YesNo.No
                                                     where B1.v_Code == A.v_Code && A1.i_IsDeleted == YesNo.No

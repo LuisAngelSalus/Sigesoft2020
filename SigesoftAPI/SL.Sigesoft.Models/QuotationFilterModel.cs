@@ -7,6 +7,11 @@ namespace SL.Sigesoft.Models
 {
    public class QuotationFilterModel
     {
+        public QuotationFilterModel()
+        {
+            QuoteTracking = new List<QuoteTrackingFilterModel>();
+        }
+
         public int QuotationId { get; set; }
         public string NroQuotation { get; set; }
         public DateTime? ShippingDate { get; set; }
@@ -20,7 +25,7 @@ namespace SL.Sigesoft.Models
         public int StatusQuotationId { get; set; }
         public DateTime? InsertDate { get; set; }
         public string Indicator { get; set; }
-        public List<QuoteTrackingFilterModel> QuoteTrackings { get; set; }
+        public List<QuoteTrackingFilterModel> QuoteTracking { get; set; }
     }
 
     public class QuoteTrackingFilterModel

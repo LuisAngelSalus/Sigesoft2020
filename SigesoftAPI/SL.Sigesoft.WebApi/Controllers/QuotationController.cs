@@ -31,6 +31,7 @@ namespace SL.Sigesoft.WebApi.Controllers
         [Route("Filter")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Response<IEnumerable<QuotationFilterDto>>>> Get(ParamsQuotationFilterDto parameters)
         {
             var response = new Response<IEnumerable<QuotationFilterDto>>();
@@ -38,6 +39,14 @@ namespace SL.Sigesoft.WebApi.Controllers
             {
                 var quotations = await _quotationRepository.GetFilterAsync(parameters);
                 response.Data = _mapper.Map<List<QuotationFilterDto>>(quotations);
+
+                if (response.Data.Count() == 0)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "No se encontraron coincidencias";
+                    return NotFound(response);
+                }                    
+
                 if (response.Data != null)
                 {
                     response.IsSuccess = true;
@@ -47,7 +56,10 @@ namespace SL.Sigesoft.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest();
+                response.IsSuccess = false;
+                response.Message = "Ocurrió un error";
+                response.Data = null;
+                 return BadRequest(response);
             }
             return response;
         }

@@ -124,11 +124,15 @@ namespace SL.Sigesoft.WebApi.Controllers
             try
             {
                 var profile = await _protocolProfileRepository.AutocompleteByName(value);
-                if (profile == null)
-                {
-                    return NotFound();
-                }
                 response.Data = _mapper.Map<List<DropdownListDto>>(profile);
+
+                if (response.Data.Count() == 0)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "No se encontraron coincidencias";
+                    return NotFound(response);
+                }
+                
                 if (response.Data != null)
                 {
                     response.IsSuccess = true;

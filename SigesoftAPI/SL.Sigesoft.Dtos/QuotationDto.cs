@@ -10,6 +10,12 @@ namespace SL.Sigesoft.Dtos
     
     public class QuotationDto
     {
+        public QuotationDto()
+        {
+            QuotationProfile = new List<QuotationProfileDto>();
+            AdditionalComponentsQuote = new List<AdditionalComponentsQuoteDto>();
+        }
+
         public int QuotationId { get; set; }
         public string Code { get; set; }
         public string Version { get; set; }
@@ -27,12 +33,17 @@ namespace SL.Sigesoft.Dtos
         public int StatusQuotationId { get; set; }
         public decimal? TotalQuotation { get; set; }
         public int? InsertUserId { get; set; }
-        public List<QuotationProfileDto> QuotationProfiles { get; set; }
-        public List<AdditionalComponentsQuoteDto> AdditionalComponentsQuotes { get; set; }
+        public List<QuotationProfileDto> QuotationProfile { get; set; }
+        public List<AdditionalComponentsQuoteDto> AdditionalComponentsQuote { get; set; }
     }
 
     public class QuotationProfileDto
     {
+        public QuotationProfileDto()
+        {
+            ProfileComponent = new List<ProfileComponentDto>();
+        }
+
         public int QuotationProfileId { get; set; }
         public int QuotationId { get; set; }
         public string ProfileName { get; set; }
@@ -42,7 +53,7 @@ namespace SL.Sigesoft.Dtos
         public int? InsertUserId { get; set; }
         public RecordStatus RecordStatus { get; set; }
         public RecordType RecordType { get; set; }
-        public List<ProfileComponentDto> ProfileComponents { get; set; }
+        public List<ProfileComponentDto> ProfileComponent { get; set; }
     }
 
     public class ProfileComponentDto
@@ -84,6 +95,11 @@ namespace SL.Sigesoft.Dtos
 
     public class QuotationRegisterDto
     {
+        public QuotationRegisterDto()
+        {
+            QuotationProfile = new List<QuotationProfileRegisterDto>();
+            AdditionalComponentsQuote = new List<AdditionalComponentsQuoteRegisterDto>();
+        }
         public int QuotationId { get; set; }
         public string Code { get; set; }
         public int Version { get; set; }
@@ -100,19 +116,24 @@ namespace SL.Sigesoft.Dtos
         public int StatusQuotationId { get; set; }
         public decimal? TotalQuotation { get; set; }
         public int? InsertUserId { get; set; }
-        public List<QuotationProfileRegisterDto> QuotationProfiles { get; set; }
-        public List<AdditionalComponentsQuoteRegisterDto> AdditionalComponentsQuotes { get; set; }
+        public List<QuotationProfileRegisterDto> QuotationProfile { get; set; }
+        public List<AdditionalComponentsQuoteRegisterDto> AdditionalComponentsQuote { get; set; }
     }
 
     public class QuotationProfileRegisterDto
     {
+        public QuotationProfileRegisterDto()
+        {
+            ProfileComponent = new List<ProfileComponentRegisterDto>();
+        }
+
         public int QuotationId { get; set; }
         public string ProfileName { get; set; }
         public int? ServiceTypeId { get; set; }
         public int TypeFormatId { get; set; }
         public string ServiceTypeName { get; set; }
         public int? InsertUserId { get; set; }
-        public List<ProfileComponentRegisterDto> ProfileComponents { get; set; }
+        public List<ProfileComponentRegisterDto> ProfileComponent { get; set; }
     }
 
     public class ProfileComponentRegisterDto
@@ -145,21 +166,17 @@ namespace SL.Sigesoft.Dtos
         public int? InsertUserId { get; set; }
     }
 
-    #endregion
-    public class QuotationUpdateProcess
-    {
-        public int QuotationId { get; set; }
-        public string Code { get; set; }
-    }
-
-    public class QuotationMigrateDto
-    {
-        public int QuotationId { get; set; }
-    }
+    #endregion  
 
     #region Update
     public class QuotationUpdateDto
     {
+        public QuotationUpdateDto()
+        {
+            QuotationProfile = new List<QuotationProfileUpdateDto>();
+            AdditionalComponentsQuote = new List<AdditionalComponentsQuoteUpdateDto>();
+        }
+
         public int QuotationId { get; set; }
         public string Code { get; set; }
         public int Version { get; set; }
@@ -171,10 +188,9 @@ namespace SL.Sigesoft.Dtos
         public int StatusQuotationId { get; set; }
         public decimal? TotalQuotation { get; set; }
         public int? UpdateUserId { get; set; }
-        public List<QuotationProfileUpdateDto> QuotationProfiles { get; set; }
-        public List<AdditionalComponentsQuoteUpdateDto> AdditionalComponentsQuotes { get; set; }
+        public List<QuotationProfileUpdateDto> QuotationProfile { get; set; }
+        public List<AdditionalComponentsQuoteUpdateDto> AdditionalComponentsQuote { get; set; }
     }
-
     public class AdditionalComponentsQuoteUpdateDto
     {
         public int QuotationId { get; set; }
@@ -194,6 +210,11 @@ namespace SL.Sigesoft.Dtos
     }
     public class QuotationProfileUpdateDto
     {
+        public QuotationProfileUpdateDto()
+        {
+            ProfileComponent = new List<ProfileComponentUpdateDto>();
+        }
+
         public int QuotationProfileId { get; set; }
         public int QuotationId { get; set; }       
         public int? ServiceTypeId { get; set; }
@@ -202,9 +223,8 @@ namespace SL.Sigesoft.Dtos
         public int? UpdateUserId { get; set; }
         public RecordStatus RecordStatus { get; set; }
         public RecordType RecordType { get; set; }
-        public List<ProfileComponentUpdateDto> ProfileComponents { get; set; }
+        public List<ProfileComponentUpdateDto> ProfileComponent { get; set; }
     }
-
     public class ProfileComponentUpdateDto
     {
         public int ProfileComponentId { get; set; }
@@ -227,6 +247,11 @@ namespace SL.Sigesoft.Dtos
     
     public class QuotationFilterDto
     {
+        public QuotationFilterDto()
+        {
+            QuoteTracking = new List<QuoteTrackingFilterDto>();
+        }
+
         public int QuotationId { get; set; }
         public string NroQuotation { get; set; }
         public DateTime? ShippingDate { get; set; }
@@ -238,7 +263,7 @@ namespace SL.Sigesoft.Dtos
         public int StatusQuotationId { get; set; }
         public string StatusQuotationName { get; set; }
         public string Indicator { get; set; }
-        public List<QuoteTrackingFilterDto> QuoteTrackings { get; set; }
+        public List<QuoteTrackingFilterDto> QuoteTracking { get; set; }
     }
     public class QuoteTrackingFilterDto
     {
@@ -251,13 +276,16 @@ namespace SL.Sigesoft.Dtos
     }
     #endregion
 
-
-
     #region NEW VERSION
 
     public class QuotationNewVersionDto
     {
-        
+        public QuotationNewVersionDto()
+        {
+            QuotationProfile = new List<QuotationProfileNewVersionDto>();
+            AdditionalComponentsQuote = new List<AdditionalComponentsQuoteNewVersionDto>();
+        }
+
         public string Code { get; set; }
         public int Version { get; set; }
         public int UserCreatedId { get; set; }
@@ -273,18 +301,23 @@ namespace SL.Sigesoft.Dtos
         public int StatusQuotationId { get; set; }
         public decimal? TotalQuotation { get; set; }
         public int? InsertUserId { get; set; }
-        public List<QuotationProfileNewVersionDto> QuotationProfiles { get; set; }
-        public List<AdditionalComponentsQuoteNewVersionDto> AdditionalComponentsQuotes { get; set; }
+        public List<QuotationProfileNewVersionDto> QuotationProfile { get; set; }
+        public List<AdditionalComponentsQuoteNewVersionDto> AdditionalComponentsQuote { get; set; }
     }
 
     public class QuotationProfileNewVersionDto
-    {        
+    {
+        public QuotationProfileNewVersionDto()
+        {
+            ProfileComponent = new List<ProfileComponentNewVersionDto>();
+        }
+        
         public string ProfileName { get; set; }
         public int? ServiceTypeId { get; set; }
         public int TypeFormatId { get; set; }
         public string ServiceTypeName { get; set; }
         public int? InsertUserId { get; set; }
-        public List<ProfileComponentNewVersionDto> ProfileComponents { get; set; }
+        public List<ProfileComponentNewVersionDto> ProfileComponent { get; set; }
     }
 
     public class ProfileComponentNewVersionDto
@@ -332,5 +365,16 @@ namespace SL.Sigesoft.Dtos
         public int StatusQuotationId { get; set; }
         public string StatusQuotationName { get; set; }        
         
+    }
+
+    public class QuotationUpdateProcess
+    {
+        public int QuotationId { get; set; }
+        public string Code { get; set; }
+    }
+
+    public class QuotationMigrateDto
+    {
+        public int QuotationId { get; set; }
     }
 }
