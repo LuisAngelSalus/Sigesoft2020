@@ -42,6 +42,8 @@ namespace SL.Sigesoft.Data.Configuration
                 .HasForeignKey(d => d.i_SystemUserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Security.Permission_Security.SystemUser");
+
+            entity.HasQueryFilter(x => x.i_IsDeleted == Models.Enum.YesNo.No);
         }
     }
 }

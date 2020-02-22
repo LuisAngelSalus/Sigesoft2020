@@ -58,7 +58,8 @@ namespace SL.Sigesoft.WebApi
             services.AddScoped<IOwnerCompanyRepository, OwnerCompanyRepository>();
             services.AddScoped<IProtocolRepository, ProtocolRepository>();
             services.AddScoped<IProtocolDetailRepository, ProtocolDetailRepository>();
-
+            services.AddScoped<ISubscriptionRepository, SuscriptionRespository>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<IPasswordHasher<SystemUser>, PasswordHasher<SystemUser>>();            
             services.AddSingleton<TokenService>();
 

@@ -66,6 +66,8 @@ namespace SL.Sigesoft.Data.Configuration
                 .HasForeignKey(d => d.i_QuotationId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_AdditionalComponentsQuote_Quotation");
+
+            entity.HasQueryFilter(x => x.i_IsDeleted == Models.Enum.YesNo.No);
         }
     }
 }

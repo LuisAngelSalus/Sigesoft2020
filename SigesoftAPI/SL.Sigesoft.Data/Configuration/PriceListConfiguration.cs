@@ -44,6 +44,8 @@ namespace SL.Sigesoft.Data.Configuration
                 .HasForeignKey(d => d.i_CompanyId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PriceList_Company");
+
+            entity.HasQueryFilter(x => x.i_IsDeleted == Models.Enum.YesNo.No);
         }
     }
 }

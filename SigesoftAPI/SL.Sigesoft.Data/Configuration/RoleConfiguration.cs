@@ -37,6 +37,8 @@ namespace SL.Sigesoft.Data.Configuration
                 .HasColumnName("v_PathDashboard")
                 .HasMaxLength(100)
                 .IsUnicode(false);
+
+            entity.HasQueryFilter(x => x.i_IsDeleted == Models.Enum.YesNo.No);
         }
     }
 }

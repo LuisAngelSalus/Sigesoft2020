@@ -625,6 +625,13 @@ namespace SL.Sigesoft.WebApi.Profiles
             this.CreateMap<Quotation, QuotationMigrateDto>()
                 .ForMember(u => u.QuotationId, p => p.MapFrom(m => m.i_QuotationId))
                 .ReverseMap();
+
+
+            this.CreateMap<Suscription, SuscriptionRegisterDto>()
+             .ForMember(u => u.SystemUserId, p => p.MapFrom(m => m.i_SystemUserId))
+             .ForMember(u => u.Body, p => p.MapFrom(m => m.v_Body))             
+             .ReverseMap();
+
         }
     }
 }

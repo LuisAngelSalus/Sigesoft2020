@@ -43,6 +43,9 @@ namespace SL.Sigesoft.Data.Repositories
             entity.i_IsProccess = YesNo.Yes;
             #endregion
 
+            if (entity.i_StatusQuotationId == (int)StatusQuotation.Seguimiento)
+                entity.d_ShippingDate = DateTime.UtcNow;
+
             #region AUDIT
             //entity.d_ShippingDate = DateTime.UtcNow;
             entity.i_IsDeleted = YesNo.No;
@@ -186,7 +189,7 @@ namespace SL.Sigesoft.Data.Repositories
                                        Email = A.v_Email,
                                        CommercialTerms = A.v_CommercialTerms,
                                        StatusQuotationId = A.i_StatusQuotationId,
-                                       QuotationProfiles = (from A1 in _context.QuotationProfile
+                                       QuotationProfile = (from A1 in _context.QuotationProfile
                                                             join C1 in _context.SystemParameter on new { a = A1.i_ServiceTypeId, b = 101 }
                                                                                                equals new { a = C1.i_ParameterId, b = C1.i_GroupId } into C1_join
                                                             from C1 in C1_join.DefaultIfEmpty()
@@ -201,7 +204,7 @@ namespace SL.Sigesoft.Data.Repositories
                                                                 TypeFormatId = A1.i_TypeFormatId,
                                                                 RecordStatus = RecordStatus.Grabado,
                                                                 RecordType = RecordType.NoTemporal,
-                                                                ProfileComponents = (from A2 in _context.ProfileComponent
+                                                                ProfileComponent = (from A2 in _context.ProfileComponent
                                                                                      where A2.i_QuotationProfileId == A1.i_QuotationProfileId && A2.i_IsDeleted == YesNo.No
                                                                                      orderby A2.v_CategoryName
                                                                                      select new ProfileComponentModel
@@ -223,7 +226,7 @@ namespace SL.Sigesoft.Data.Repositories
                                                                                      }).ToList()
                                                             }).ToList(),
 
-                                       AdditionalComponentsQuotes = (from A3 in _context.AdditionalComponentsQuote
+                                       AdditionalComponentsQuote = (from A3 in _context.AdditionalComponentsQuote
                                                                      where A3.i_QuotationId == A.i_QuotationId
                                                                      select new AdditionalComponentsQuoteModel {
                                                                          AdditionalComponentsQuoteId =  A3.i_AdditionalComponentsQuoteId,

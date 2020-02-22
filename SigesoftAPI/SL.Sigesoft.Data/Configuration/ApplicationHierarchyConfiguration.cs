@@ -40,6 +40,8 @@ namespace SL.Sigesoft.Data.Configuration
                 .HasColumnName("v_Path")
                 .HasMaxLength(200)
                 .IsUnicode(false);
+
+            entity.HasQueryFilter(x => x.i_IsDeleted == Models.Enum.YesNo.No);
         }
     }
 }

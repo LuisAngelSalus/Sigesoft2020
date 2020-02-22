@@ -25,8 +25,8 @@ namespace SL.Sigesoft.Models
         public string CommercialTerms { get; set; }
         public int StatusQuotationId { get; set; }
         public decimal? TotalQuotation { get; set; }
-        public List<QuotationProfileModel> QuotationProfiles { get; set; }
-        public List<AdditionalComponentsQuoteModel> AdditionalComponentsQuotes { get; set; }
+        public List<QuotationProfileModel> QuotationProfile { get; set; }
+        public List<AdditionalComponentsQuoteModel> AdditionalComponentsQuote { get; set; }
     }
 
     public class QuotationProfileModel
@@ -39,7 +39,7 @@ namespace SL.Sigesoft.Models
         public string ServiceTypeName { get; set; }        
         public RecordStatus RecordStatus { get; set; }        
         public RecordType RecordType { get; set; }
-        public List<ProfileComponentModel> ProfileComponents { get; set; }
+        public List<ProfileComponentModel> ProfileComponent { get; set; }
     }
 
     public class ProfileComponentModel

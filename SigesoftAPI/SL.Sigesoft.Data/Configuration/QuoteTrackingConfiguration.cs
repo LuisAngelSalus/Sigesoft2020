@@ -51,6 +51,7 @@ namespace SL.Sigesoft.Data.Configuration
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_QuoteTracking_Quotation");
 
+            entity.HasQueryFilter(x => x.i_IsDeleted == Models.Enum.YesNo.No);
         }
     }
 }

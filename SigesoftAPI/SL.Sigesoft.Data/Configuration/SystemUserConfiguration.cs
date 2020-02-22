@@ -58,6 +58,8 @@ namespace SL.Sigesoft.Data.Configuration
                 .HasForeignKey(d => d.i_PersonId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_systemuser_person");
+
+            entity.HasQueryFilter(x => x.i_IsDeleted == Models.Enum.YesNo.No);
         }
     }
 }

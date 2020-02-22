@@ -38,6 +38,8 @@ namespace SL.Sigesoft.Data.Configuration
                 .HasColumnName("v_IdentificationNumber")
                 .HasMaxLength(20)
                 .IsUnicode(false);
+
+            entity.HasQueryFilter(x => x.i_IsDeleted == Models.Enum.YesNo.No);
         }
     }
 }

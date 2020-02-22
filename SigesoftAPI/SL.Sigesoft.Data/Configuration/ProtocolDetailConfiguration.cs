@@ -74,6 +74,8 @@ namespace SL.Sigesoft.Data.Configuration
                 .HasForeignKey(d => d.i_ProtocolId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ProtocolDetail_Protocol");
+
+            entity.HasQueryFilter(x => x.i_IsDeleted == Models.Enum.YesNo.No);
         }
     }
 }

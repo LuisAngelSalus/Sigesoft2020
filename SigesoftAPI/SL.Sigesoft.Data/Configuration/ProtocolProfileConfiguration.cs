@@ -32,6 +32,8 @@ namespace SL.Sigesoft.Data.Configuration
                 .HasColumnName("v_Name")
                 .HasMaxLength(50)
                 .IsUnicode(false);
+
+            entity.HasQueryFilter(x => x.i_IsDeleted == Models.Enum.YesNo.No);
         }
     }
 }

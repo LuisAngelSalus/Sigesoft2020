@@ -70,6 +70,7 @@ namespace SL.Sigesoft.Data.Configuration
             entity.Property(e => e.Ubigeo)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+
         }
     }
 }

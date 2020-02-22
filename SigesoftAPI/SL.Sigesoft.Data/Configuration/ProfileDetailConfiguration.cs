@@ -60,6 +60,8 @@ namespace SL.Sigesoft.Data.Configuration
                 .HasForeignKey(d => d.i_ProtocolProfileId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ProfileDetail_ProtocolProfile");
+
+            entity.HasQueryFilter(x => x.i_IsDeleted == Models.Enum.YesNo.No);
         }
     }
 }

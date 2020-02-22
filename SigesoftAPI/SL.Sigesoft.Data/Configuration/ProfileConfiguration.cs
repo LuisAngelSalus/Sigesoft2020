@@ -42,6 +42,8 @@ namespace SL.Sigesoft.Data.Configuration
                 .HasForeignKey(d => d.i_RoleId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Profile_Role");
+
+            entity.HasQueryFilter(x => x.i_IsDeleted == Models.Enum.YesNo.No);
         }
     }
 }

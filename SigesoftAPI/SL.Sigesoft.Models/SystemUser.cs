@@ -29,5 +29,7 @@ namespace SL.Sigesoft.Models
         public virtual ICollection<Permission> Permission { get; set; }
         public virtual ICollection<Quotation> Quotation { get; set; }
         public virtual ICollection<Secuential> Secuential { get; set; }
+        public virtual ICollection<Suscription> Suscription { get; set; }
+        public virtual ICollection<Notification> Notification { get; set; }
     }
 }
