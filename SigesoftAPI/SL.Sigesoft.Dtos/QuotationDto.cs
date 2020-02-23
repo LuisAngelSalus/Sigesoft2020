@@ -112,7 +112,7 @@ namespace SL.Sigesoft.Dtos
         public int CompanyHeadquarterId { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
-        public string CommercialTerms { get; set; }
+        public string CommercialTerms { get; set; } = "perfil potencial";
         public int StatusQuotationId { get; set; }
         public decimal? TotalQuotation { get; set; }
         public int? InsertUserId { get; set; }

@@ -87,8 +87,11 @@ namespace SL.Sigesoft.Data.Repositories
             catch (Exception ex)
             {
                 _logger.LogError($"Error en {nameof(AddAsync)}: " + ex.Message);
+                return null;
             }
+
             return entity;
+
         }
 
         public async Task<Quotation> NewVersion(Quotation entity)
