@@ -98,29 +98,24 @@ namespace SL.Sigesoft.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Response<QuotationRegisterDto>>> Post(QuotationRegisterDto quotationDto)
         {
-            var response = new Response<QuotationRegisterDto>();
-            try
+            var response = new Response<QuotationRegisterDto>();     
+            
+            var quotation = _mapper.Map<Quotation>(quotationDto);
+            var newQuotation = await _quotationRepository.AddAsync(quotation);
+            if (newQuotation == null)
             {
-                var quotation = _mapper.Map<Quotation>(quotationDto);
+                response.Data = null;
+                response.IsSuccess = false;
+                response.Message = "Error en la operación";
+                return BadRequest(response);
+            }
 
-                var newQuotation = await _quotationRepository.AddAsync(quotation);
-                if (newQuotation == null)
-                {
-                    return BadRequest();
-                }
-
-                var newQuotationDto = _mapper.Map<QuotationRegisterDto>(newQuotation);
-                response.Data = newQuotationDto;
-                response.IsSuccess = true;
-                response.Message = "Se grabó correctamente";
+            var newQuotationDto = _mapper.Map<QuotationRegisterDto>(newQuotation);
+            response.Data = newQuotationDto;
+            response.IsSuccess = true;
+            response.Message = "Se grabó correctamente";
                 
-                return Ok(response);
-
-            }
-            catch (Exception ex)
-            {
-                return BadRequest();
-            }
+            return Ok(response);            
         }
 
 
@@ -155,28 +150,24 @@ namespace SL.Sigesoft.WebApi.Controllers
         public async Task<ActionResult<Response<QuotationRegisterDto>>> NewVersion(QuotationNewVersionDto quotationDto)
         {
             var response = new Response<QuotationRegisterDto>();
-            try
+          
+            var quotation = _mapper.Map<Quotation>(quotationDto);
+
+            var newQuotation = await _quotationRepository.NewVersion(quotation);
+            if (newQuotation == null)
             {
-                var quotation = _mapper.Map<Quotation>(quotationDto);
-
-                var newQuotation = await _quotationRepository.NewVersion(quotation);
-                if (newQuotation == null)
-                {
-                    return BadRequest();
-                }
-
-                var newQuotationDto = _mapper.Map<QuotationRegisterDto>(newQuotation);
-                response.Data = newQuotationDto;
-                response.IsSuccess = true;
-                response.Message = "Se grabó correctamente";
-
-                return Ok(response);
-
+                response.Data = null;
+                response.IsSuccess = false;
+                response.Message = "Error en la operación";
+                return BadRequest(response);
             }
-            catch (Exception ex)
-            {
-                return BadRequest();
-            }
+
+            var newQuotationDto = _mapper.Map<QuotationRegisterDto>(newQuotation);
+            response.Data = newQuotationDto;
+            response.IsSuccess = true;
+            response.Message = "Se grabó correctamente";
+
+            return Ok(response);          
         }
 
         [HttpGet]

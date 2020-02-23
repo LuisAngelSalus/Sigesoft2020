@@ -37,123 +37,132 @@ namespace SL.Sigesoft.Data.Repositories
 
         public async Task<Quotation> AddAsync(Quotation entity)
         {
-            #region Code
-            entity.v_Code = Utils.Code("COT", entity.i_UserCreatedId.ToString(),await _secuentialRespository.GetCode("COT", entity.i_UserCreatedId, 1));
-            entity.i_Version = 1;
-            entity.i_IsProccess = YesNo.Yes;
-            #endregion
-
-            if (entity.i_StatusQuotationId == (int)StatusQuotation.Seguimiento)
-                entity.d_ShippingDate = DateTime.UtcNow;
-
-            #region AUDIT
-            //entity.d_ShippingDate = DateTime.UtcNow;
-            entity.i_IsDeleted = YesNo.No;
-            entity.d_InsertDate = DateTime.UtcNow;
-            entity.i_InsertUserId = entity.i_InsertUserId;
-         
-            foreach (var item in entity.QuotationProfile)
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
-                #region AUDIT
-                item.i_IsDeleted = YesNo.No;
-                item.d_InsertDate = DateTime.UtcNow;
-                item.i_InsertUserId = entity.i_InsertUserId;
+                #region Code
+                entity.v_Code = Utils.Code("COT", entity.i_UserCreatedId.ToString(), await _secuentialRespository.GetCode(Constants.PROC_REG_QUOTATION, entity.i_UserCreatedId, 1));
+                entity.i_Version = 1;
+                entity.i_IsProccess = YesNo.Yes;
                 #endregion
-                foreach (var item2 in item.ProfileComponent)
+
+                if (entity.i_StatusQuotationId == (int)StatusQuotation.Seguimiento)
+                    entity.d_ShippingDate = DateTime.UtcNow;
+
+                #region AUDIT
+                entity.i_IsDeleted = YesNo.No;
+                entity.d_InsertDate = DateTime.UtcNow;
+                entity.i_InsertUserId = entity.i_InsertUserId;
+
+                foreach (var item in entity.QuotationProfile)
                 {
                     #region AUDIT
-                    item2.i_IsDeleted = YesNo.No;
-                    item2.d_InsertDate = DateTime.UtcNow;
-                    item2.i_InsertUserId = entity.i_InsertUserId;
+                    item.i_IsDeleted = YesNo.No;
+                    item.d_InsertDate = DateTime.UtcNow;
+                    item.i_InsertUserId = entity.i_InsertUserId;
+                    #endregion
+                    foreach (var item2 in item.ProfileComponent)
+                    {
+                        #region AUDIT
+                        item2.i_IsDeleted = YesNo.No;
+                        item2.d_InsertDate = DateTime.UtcNow;
+                        item2.i_InsertUserId = entity.i_InsertUserId;
+                        #endregion
+                    }
+                }
+
+                foreach (var item in entity.AdditionalComponentsQuote)
+                {
+                    #region AUDIT
+                    item.i_IsDeleted = YesNo.No;
+                    item.d_InsertDate = DateTime.UtcNow;
+                    item.i_InsertUserId = entity.i_InsertUserId;
                     #endregion
                 }
-            }
 
-            foreach (var item in entity.AdditionalComponentsQuote)
-            {
-                #region AUDIT
-                item.i_IsDeleted = YesNo.No;
-                item.d_InsertDate = DateTime.UtcNow;
-                item.i_InsertUserId = entity.i_InsertUserId;
                 #endregion
-            }
 
-            #endregion
-            _dbSet.Add(entity);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error en {nameof(AddAsync)}: " + ex.Message);
-                return null;
-            }
+                _dbSet.Add(entity);
+                
+                try
+                {                    
+                    await _context.SaveChangesAsync();
+                    //throw new Exception("Test Exception");
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error en {nameof(AddAsync)}: " + ex.Message);
+                    transaction.Rollback();
+                    return null;
+                }
 
-            return entity;
-
+                return entity;
+            }
         }
 
         public async Task<Quotation> NewVersion(Quotation entity)
         {
 
-            #region AUDIT
-            entity.i_Version = GetLastVersion(entity.v_Code) + 1;
-
-            if (entity.i_StatusQuotationId == (int)StatusQuotation.Seguimiento)
-                entity.d_ShippingDate = DateTime.UtcNow;
-
-            entity.i_IsDeleted = YesNo.No;
-            entity.d_InsertDate = DateTime.UtcNow;
-            entity.i_InsertUserId = entity.i_InsertUserId;
-
-            foreach (var item in entity.QuotationProfile)
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 #region AUDIT
-                item.i_IsDeleted = YesNo.No;
-                item.d_InsertDate = DateTime.UtcNow;
-                item.i_InsertUserId = entity.i_InsertUserId;
-                #endregion
-                foreach (var item2 in item.ProfileComponent)
+                entity.i_Version = GetLastVersion(entity.v_Code) + 1;
+
+                if (entity.i_StatusQuotationId == (int)StatusQuotation.Seguimiento)
+                    entity.d_ShippingDate = DateTime.UtcNow;
+
+                entity.i_IsDeleted = YesNo.No;
+                entity.d_InsertDate = DateTime.UtcNow;
+                entity.i_InsertUserId = entity.i_InsertUserId;
+
+                foreach (var item in entity.QuotationProfile)
                 {
                     #region AUDIT
-                    //PARCHE
-                    if (item2.RecordStatus == RecordStatus.EliminadoLogico)
+                    item.i_IsDeleted = YesNo.No;
+                    item.d_InsertDate = DateTime.UtcNow;
+                    item.i_InsertUserId = entity.i_InsertUserId;
+                    #endregion
+                    foreach (var item2 in item.ProfileComponent)
                     {
-                        item2.i_IsDeleted = YesNo.Yes;
+                        #region AUDIT
+                        //ELIMINADO LÓGICO DE UN PERFIL COMPONENT
+                        if (item2.RecordStatus == RecordStatus.EliminadoLogico)                        
+                            item2.i_IsDeleted = YesNo.Yes;                        
+                        else
+                            item2.i_IsDeleted = YesNo.No;
+
+                        item2.d_InsertDate = DateTime.UtcNow;
+                        item2.i_InsertUserId = entity.i_InsertUserId;
+                        #endregion
                     }
-                    else
-                    {
-                        item2.i_IsDeleted = YesNo.No;
-                    }
-                    
-                    item2.d_InsertDate = DateTime.UtcNow;
-                    item2.i_InsertUserId = entity.i_InsertUserId;
+                }
+
+                foreach (var item in entity.AdditionalComponentsQuote)
+                {
+                    #region AUDIT
+                    item.i_IsDeleted = YesNo.No;
+                    item.d_InsertDate = DateTime.UtcNow;
+                    item.i_InsertUserId = entity.i_InsertUserId;
                     #endregion
                 }
-            }
 
-            foreach (var item in entity.AdditionalComponentsQuote)
-            {
-                #region AUDIT
-                item.i_IsDeleted = YesNo.No;
-                item.d_InsertDate = DateTime.UtcNow;
-                item.i_InsertUserId = entity.i_InsertUserId;
                 #endregion
-            }
+                _dbSet.Add(entity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    //throw new Exception("Test Exception");
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error en {nameof(NewVersion)}: " + ex.Message);
+                    transaction.Rollback();
+                    return null;
+                }
+                return entity;
 
-            #endregion
-            _dbSet.Add(entity);
-            try
-            {
-                await _context.SaveChangesAsync();
             }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error en {nameof(NewVersion)}: " + ex.Message);
-                return null;
-            }
-            return entity;
         }
 
         public Task<bool> DeleteAsync(int id)
