@@ -55,6 +55,11 @@ namespace SL.Sigesoft.Data.Repositories
             return false;
         }
 
+        public async Task<AccountSetting> GetAccountSettingBySystemUserId(int systemUserId)
+        {
+            return await _dbSet.SingleOrDefaultAsync(c => c.i_SystemUserId == systemUserId && c.i_IsDeleted == YesNo.No);
+        }
+
         public async Task<IEnumerable<AccountSetting>> GetAllAsync()
         {
             return await _dbSet.Where(u => u.i_IsDeleted == YesNo.No)
@@ -68,17 +73,19 @@ namespace SL.Sigesoft.Data.Repositories
 
         public async Task<bool> UpdateAsync(AccountSetting entity)
         {
-            var entityDb = await _dbSet.FirstOrDefaultAsync(u => u.i_AccountSettingId== entity.i_AccountSettingId);
+            var entityDb = await _dbSet.FirstOrDefaultAsync(u => u.i_SystemUserId== entity.i_SystemUserId);
 
             if (entityDb == null)
             {
-                _logger.LogError($"Error en {nameof(UpdateAsync)}: No existe el AccountSetting con Id: {entity.i_AccountSettingId}");
+                _logger.LogError($"Error en {nameof(UpdateAsync)}: No existe el AccountSetting con Id: {entity.i_SystemUserId}");
                 return false;
             }
 
             entityDb.i_OwnerCompanyId = entity.i_OwnerCompanyId;
             entityDb.i_RoleId = entity.i_RoleId;
-            
+            //AUDIT
+            entityDb.d_UpdateDate = DateTime.Now;
+            entityDb.i_UpdateUserId = entity.i_UpdateUserId;
             try
             {
                 return await _context.SaveChangesAsync() > 0 ? true : false;

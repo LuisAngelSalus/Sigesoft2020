@@ -632,6 +632,28 @@ namespace SL.Sigesoft.WebApi.Profiles
              .ForMember(u => u.Body, p => p.MapFrom(m => m.v_Body))             
              .ReverseMap();
 
+            this.CreateMap<AccountSetting, ListAccountSettingDto>()                
+            .ForMember(u => u.AccountSettingId, p => p.MapFrom(m => m.i_AccountSettingId))
+            .ForMember(u => u.SystemUserId  , p => p.MapFrom(m => m.i_SystemUserId))
+            .ForMember(u => u.OwnerCompanyId, p => p.MapFrom(m => m.i_OwnerCompanyId))
+            .ForMember(u => u.RoleId, p => p.MapFrom(m => m.i_RoleId))
+             .ReverseMap();
+
+            this.CreateMap<AccountSetting, AccountSettingRegisterDto>()            
+            .ForMember(u => u.SystemUserId, p => p.MapFrom(m => m.i_SystemUserId))
+            .ForMember(u => u.OwnerCompanyId, p => p.MapFrom(m => m.i_OwnerCompanyId))
+            .ForMember(u => u.RoleId, p => p.MapFrom(m => m.i_RoleId))
+            .ForMember(u => u.InsertUserId, p => p.MapFrom(m => m.i_InsertUserId))
+            .ReverseMap();
+
+            this.CreateMap<AccountSetting, AccountSettingUpdateDto>()                
+            .ForMember(u => u.AccountSettingId, p => p.MapFrom(m => m.i_AccountSettingId))
+            .ForMember(u => u.SystemUserId, p => p.MapFrom(m => m.i_SystemUserId))
+            .ForMember(u => u.OwnerCompanyId, p => p.MapFrom(m => m.i_OwnerCompanyId))
+            .ForMember(u => u.RoleId, p => p.MapFrom(m => m.i_RoleId))
+            .ForMember(u => u.UpdateUserId, p => p.MapFrom(m => m.i_UpdateUserId))
+            .ReverseMap();
+            
         }
     }
 }
