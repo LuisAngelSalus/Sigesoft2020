@@ -45,6 +45,7 @@ namespace SL.Sigesoft.Data
         public virtual DbSet<ProtocolDetail> ProtocolDetail { get; set; }
         public virtual DbSet<Suscription> Suscription { get; set; }
         public virtual DbSet<Notification> Notification { get; set; }
+        public virtual DbSet<AccountSetting> AccountSetting { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -76,9 +77,9 @@ namespace SL.Sigesoft.Data
             modelBuilder.ApplyConfiguration(new PriceListConfiguration());
             modelBuilder.ApplyConfiguration(new ProtocolConfiguration());
             modelBuilder.ApplyConfiguration(new ProtocolDetailConfiguration());
-
             modelBuilder.ApplyConfiguration(new SuscriptionConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationConfiguration());
+            modelBuilder.ApplyConfiguration(new AccountSettingConfiguration());
         }
     }
 }
