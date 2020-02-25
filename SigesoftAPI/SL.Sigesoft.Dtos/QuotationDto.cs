@@ -19,7 +19,7 @@ namespace SL.Sigesoft.Dtos
         public int QuotationId { get; set; }
         public string Code { get; set; }
         public int Version { get; set; }
-        public int UserCreatedId { get; set; }
+        public int ResponsibleSystemUserId { get; set; }
         public string UserName { get; set; }
         public int CompanyId { get; set; }
         public string CompanyRuc { get; set; }
@@ -101,9 +101,9 @@ namespace SL.Sigesoft.Dtos
             AdditionalComponentsQuote = new List<AdditionalComponentsQuoteRegisterDto>();
         }
         public int QuotationId { get; set; }
+        public int ResponsibleSystemUserId { get; set; }
         public string Code { get; set; }
         public int Version { get; set; }
-        public int UserCreatedId { get; set; }
         public string UserName { get; set; }
         public int CompanyId { get; set; }
         public string CompanyName { get; set; }

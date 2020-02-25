@@ -11,7 +11,7 @@ namespace SL.Sigesoft.Models
         public int QuotationId { get; set; }
         public string Code { get; set; }
         public int Version { get; set; }
-        public int UserCreatedId { get; set; }
+        public int ResponsibleSystemUserId { get; set; }
         public string UserName { get; set; }
         public int CompanyId { get; set; }
         public string CompanyRuc { get; set; }        
@@ -66,6 +66,7 @@ namespace SL.Sigesoft.Models
 
     public class ParamsQuotationFilterDto
     {
+        public int ResponsibleSystemUserId { get; set; }
         public string NroQuotation { get; set; }
         public string StartDate { get; set; }
         public string EndDate { get; set; }
@@ -88,5 +89,17 @@ namespace SL.Sigesoft.Models
         public RecordStatus RecordStatus { get; set; }
         [NotMapped]
         public RecordType RecordType { get; set; }
+    }
+
+    public class ParamsTrackingChartModel
+    {        
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
+        public int ResponsibleSystemUserId { get; set; }
+    }
+
+    public class ListTrackingChartModel
+    {
+        public int StatusQuotationId { get; set; }
     }
 }

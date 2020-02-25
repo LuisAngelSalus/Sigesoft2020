@@ -10,6 +10,7 @@ using SL.Sigesoft.Common;
 using SL.Sigesoft.Data.Contracts;
 using SL.Sigesoft.Dtos;
 using SL.Sigesoft.Models;
+using static SL.Sigesoft.Models.CompanyFilterModel;
 
 namespace SL.Sigesoft.WebApi.Controllers
 {
@@ -27,15 +28,17 @@ namespace SL.Sigesoft.WebApi.Controllers
             this._mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpPost]
+        [Route("Filter")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Response<IEnumerable<ListCompanyDto>>>> Get()
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Response<IEnumerable<ListCompanyDto>>>> Get(ParamsCompanyFilterModel paramsCompany)
         {
             var response = new Response<IEnumerable<ListCompanyDto>>();
             try
             {
-                var companies = await _companyRepository.GetAllAsync();
+                var companies = await _companyRepository.GetAllFilterAsync(paramsCompany);
                 response.Data = _mapper.Map<List<ListCompanyDto>>(companies);
                 if (response.Data != null)
                 {
@@ -94,15 +97,15 @@ namespace SL.Sigesoft.WebApi.Controllers
                 var newCompany = await _companyRepository.AddAsync(company);
                 if (newCompany == null)
                 {
-                    return BadRequest();
+                    response.IsSuccess = false;
+                    response.Message = "error al grabar empresa";
+                    return BadRequest(response);
                 }
 
                 var newCompanyDto = _mapper.Map<ListCompanyDto>(newCompany);
                 response.Data = newCompanyDto;
                 response.IsSuccess = true;
-                response.Message = "Se grabó correctamente";
-                //return CreatedAtAction(nameof(Post), new { id = newCompany.i_CompanyId }, newCompanyDto);
-                //return response;
+                response.Message = "Se grabó correctamente";                
                 return Ok(response);
 
             }
@@ -124,8 +127,12 @@ namespace SL.Sigesoft.WebApi.Controllers
 
             var company = _mapper.Map<Company>(companyDto);
             var result = await _companyRepository.UpdateAsync(company);
-            if (!result)
-                return BadRequest();
+            if (!result) {
+                response.Data = new ListCompanyDto();
+                response.IsSuccess = false;
+                response.Message = "Error en la operación";
+                return BadRequest(response);
+            }                
 
             response.Data = _mapper.Map<ListCompanyDto>(company);
             response.IsSuccess = true;

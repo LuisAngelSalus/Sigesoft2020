@@ -18,6 +18,8 @@ namespace SL.Sigesoft.Data.Configuration
 
             entity.Property(e => e.i_QuotationId).HasColumnName("i_QuotationId");
 
+            entity.Property(e => e.i_ResponsibleSystemUserId).HasColumnName("i_ResponsibleSystemUserId");
+
             entity.Property(e => e.d_AcceptanceDate)
                 .HasColumnName("d_AcceptanceDate")
                 .HasColumnType("datetime");
@@ -43,8 +45,6 @@ namespace SL.Sigesoft.Data.Configuration
             entity.Property(e => e.i_StatusQuotationId).HasColumnName("i_StatusQuotationId");
 
             entity.Property(e => e.i_UpdateUserId).HasColumnName("i_UpdateUserId");
-
-            entity.Property(e => e.i_UserCreatedId).HasColumnName("i_UserCreatedId");
 
             entity.Property(e => e.i_Version).HasColumnName("i_Version");
 
@@ -88,9 +88,9 @@ namespace SL.Sigesoft.Data.Configuration
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Quotation_Company");
 
-            entity.HasOne(d => d.UserCreated)
+            entity.HasOne(d => d.ResponsibleSystemUser)
                 .WithMany(p => p.Quotation)
-                .HasForeignKey(d => d.i_UserCreatedId)
+                .HasForeignKey(d => d.i_ResponsibleSystemUserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Quotation_SystemUser");
 

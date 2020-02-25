@@ -40,7 +40,7 @@ namespace SL.Sigesoft.Data.Repositories
             using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 #region Code
-                entity.v_Code = Utils.Code("COT", entity.i_UserCreatedId.ToString(), await _secuentialRespository.GetCode(Constants.PROC_REG_QUOTATION, entity.i_UserCreatedId, 1));
+                entity.v_Code = Utils.Code("COT", entity.i_ResponsibleSystemUserId.ToString(), await _secuentialRespository.GetCode(Constants.PROC_REG_QUOTATION, entity.i_ResponsibleSystemUserId, 1));
                 entity.i_Version = 1;
                 entity.i_IsProccess = YesNo.Yes;
                 #endregion
@@ -182,14 +182,14 @@ namespace SL.Sigesoft.Data.Repositories
 
                 var query = await (from A in _context.Quotation
                                    join B in _context.Company on A.i_CompanyId equals B.i_CompanyId
-                                   join C in _context.SystemUser on A.i_UserCreatedId equals C.i_SystemUserId
+                                   join C in _context.SystemUser on A.i_ResponsibleSystemUserId equals C.i_SystemUserId
                                    where A.i_QuotationId == id && A.i_IsDeleted == YesNo.No
                                    select new QuotationModel
                                    {
                                        QuotationId = A.i_QuotationId,
                                        Code = A.v_Code,
                                        Version = A.i_Version,
-                                       UserCreatedId = A.i_UserCreatedId,
+                                       ResponsibleSystemUserId = A.i_ResponsibleSystemUserId,
                                        UserName = C.v_UserName,
                                        CompanyRuc = B.v_IdentificationNumber,
                                        CompanyId = A.i_CompanyId,
@@ -320,106 +320,7 @@ namespace SL.Sigesoft.Data.Repositories
                 _logger.LogError($"Error en {nameof(UpdateAsync)}: " + ex.Message);
             }
             return false;
-        }
-
-        //private void UpdateQuotationProfiles(ICollection<QuotationProfile> quotationProfiles, Quotation entityDb)
-        //{
-        //    try
-        //    {
-        //        foreach (var item in quotationProfiles)
-        //        {
-        //            if (item.RecordType == RecordType.Temporal && item.RecordStatus == RecordStatus.Agregado)
-        //            {
-        //                var o = new QuotationProfile();
-        //                o.i_QuotationId = item.i_QuotationId;
-        //                o.v_ProfileName = item.v_ProfileName;
-        //                o.i_ServiceTypeId = item.i_ServiceTypeId;
-        //                o.i_InsertUserId = item.i_UpdateUserId;
-        //                o.i_IsDeleted = YesNo.No;
-        //                entityDb.QuotationProfile.Add(o);
-        //            }
-        //            if (item.RecordType == RecordType.NoTemporal && (item.RecordStatus == RecordStatus.Modificado || item.RecordStatus == RecordStatus.Grabado))
-        //            {
-        //                var o = entityDb.QuotationProfile.Where(w => w.i_QuotationProfileId == item.i_QuotationProfileId).FirstOrDefault();
-        //                o.i_ServiceTypeId = item.i_ServiceTypeId;
-        //                o.v_ProfileName = item.v_ProfileName;
-        //                o.d_UpdateDate = DateTime.UtcNow;
-        //                o.i_UpdateUserId = item.i_UpdateUserId;
-        //                entityDb.QuotationProfile.Add(o);
-        //            }
-        //            if (item.RecordType == RecordType.NoTemporal && item.RecordStatus == RecordStatus.EliminadoLogico)
-        //            {
-        //                var o = entityDb.QuotationProfile.Where(w => w.i_QuotationProfileId == item.i_QuotationProfileId).FirstOrDefault();
-        //                o.i_IsDeleted = YesNo.Yes;
-        //                o.d_UpdateDate = DateTime.UtcNow;
-        //                o.i_UpdateUserId = item.i_UpdateUserId;
-        //                entityDb.QuotationProfile.Add(o);
-        //            }
-
-        //            #region ProfileComponents
-        //            var x = entityDb.QuotationProfile.Find(p => p.i_QuotationProfileId == item.i_QuotationProfileId);
-        //            UpdateProfileComponent(item.ProfileComponent, x);
-        //            #endregion
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        throw;
-        //    }
-         
-        //}
-
-        //private void UpdateAddittionalExamn(ICollection<AdditionalComponentsQuote> additionalComponents, Quotation entityDb)
-        //{
-        //    try
-        //    {
-        //        foreach (var item in additionalComponents)
-        //        {
-        //            if (item.RecordType == RecordType.Temporal && item.RecordStatus == RecordStatus.Agregado)
-        //            {
-        //                var o = new AdditionalComponentsQuote();
-        //                o.i_QuotationId = item.i_QuotationId;
-        //                o.v_CategoryName = item.v_CategoryName;
-        //                o.i_CategoryId = item.i_CategoryId;
-
-        //                o.v_ComponentId = item.v_ComponentId;
-        //                o.v_ComponentName = item.v_ComponentName;
-        //                o.r_MinPrice = item.r_MinPrice;
-        //                o.r_PriceList = item.r_PriceList;
-        //                o.r_SalePrice = item.r_SalePrice;
-
-        //                o.i_InsertUserId = item.i_UpdateUserId;
-        //                o.i_IsDeleted = YesNo.No;
-        //                entityDb.AdditionalComponentsQuote.Add(o);
-        //            }
-        //            if (item.RecordType == RecordType.NoTemporal && (item.RecordStatus == RecordStatus.Modificado || item.RecordStatus == RecordStatus.Grabado))
-        //            {
-        //                //var o = entityDb.QuotationProfiles.Where(w => w.i_QuotationProfileId == item.i_QuotationProfileId).FirstOrDefault();
-        //                //o.i_ServiceTypeId = item.i_ServiceTypeId;
-        //                //o.v_ProfileName = item.v_ProfileName;
-        //                //o.d_UpdateDate = DateTime.UtcNow;
-        //                //o.i_UpdateUserId = item.i_UpdateUserId;
-        //                //entityDb.QuotationProfiles.Add(o);
-        //            }
-        //            if (item.RecordType == RecordType.NoTemporal && item.RecordStatus == RecordStatus.EliminadoLogico)
-        //            {
-        //                //var o = entityDb.QuotationProfiles.Where(w => w.i_QuotationProfileId == item.i_QuotationProfileId).FirstOrDefault();
-        //                //o.i_IsDeleted = YesNo.Yes;
-        //                //o.d_UpdateDate = DateTime.UtcNow;
-        //                //o.i_UpdateUserId = item.i_UpdateUserId;
-        //                //entityDb.QuotationProfiles.Add(o);
-        //            }
-                  
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        throw;
-        //    }
-
-        //}
+        }        
 
         private void UpdateProfileComponent(List<ProfileComponent> profileComponents, QuotationProfile quotationProfile)
         {
@@ -496,20 +397,22 @@ namespace SL.Sigesoft.Data.Repositories
             var statusQuotationId =  parameters.StatusQuotationId.ToList();
             bool validfi = DateTime.TryParseExact(parameters.StartDate, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime fi);
             bool validff = DateTime.TryParseExact(parameters.EndDate, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime ff);
+            int? responsibleSystemUser = parameters.ResponsibleSystemUserId;
 
             var query = await(from A in _context.Quotation
                               join B in _context.Company on A.i_CompanyId equals B.i_CompanyId
                               join C in _context.SystemParameter on new { a = A.i_StatusQuotationId, b = 103 }
-                                                                                               equals new { a = C.i_ParameterId, b = C.i_GroupId } into C_join
+                                    equals new { a = C.i_ParameterId, b = C.i_GroupId } into C_join
                               from C in C_join.DefaultIfEmpty()
                               where A.i_IsDeleted == 0
+                              && (A.i_ResponsibleSystemUserId == responsibleSystemUser)
                               && (companyName ==null || B.v_Name.Contains(companyName) || B.v_IdentificationNumber.Contains(companyName))                              
                               && (nroQuotation == null || A.v_Code.Contains(nroQuotation))
-                              //&&(statusQuotationId == -1 || A.i_StatusQuotationId == statusQuotationId)
                               && (statusQuotationId.Contains(A.i_StatusQuotationId))
                               && (!validfi || A.d_InsertDate >= fi)
                               && (!validff || A.d_InsertDate <= ff)
                               && (A.i_IsProccess == YesNo.Yes)
+
                               orderby A.d_ShippingDate descending
                               select new QuotationFilterModel
                               {
@@ -533,8 +436,7 @@ namespace SL.Sigesoft.Data.Repositories
                                   StatusQuotationId = A.i_StatusQuotationId,
                                   StatusQuotationName = C.v_Value1,
                                   QuoteTracking = (from A1 in _context.QuoteTracking
-                                                    join B1 in _context.Quotation on A1.i_QuotationId equals B1.i_QuotationId
-                                                        //where A1.i_QuotationId == A.i_QuotationId && A1.i_IsDeleted == YesNo.No
+                                                    join B1 in _context.Quotation on A1.i_QuotationId equals B1.i_QuotationId                                                        
                                                     where B1.v_Code == A.v_Code && A1.i_IsDeleted == YesNo.No
                                                     orderby A1.d_Date descending
                                                     select new QuoteTrackingFilterModel { 
@@ -629,6 +531,23 @@ namespace SL.Sigesoft.Data.Repositories
             return true;
         }
 
+        public async Task<List<ListTrackingChartModel>> Trackingchart(ParamsTrackingChartModel trackingchartdto)
+        {
+            string[] formats = { "dd/MM/yyyy", "dd-MM-yyyy", "yyyy-MM-dd" };
+            bool validfi = DateTime.TryParseExact(trackingchartdto.StartDate, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime fi);
+            bool validff = DateTime.TryParseExact(trackingchartdto.EndDate, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime ff);
+            return await (from A in _context.Quotation
+                          where A.i_ResponsibleSystemUserId == trackingchartdto.ResponsibleSystemUserId
+                                && (!validfi || A.d_InsertDate >= fi)
+                                && (!validff || A.d_InsertDate <= ff)
+                                && (A.i_IsProccess == YesNo.Yes)
+                                && A.i_IsDeleted == YesNo.No
+                          select new ListTrackingChartModel
+                          {
+                              StatusQuotationId = A.i_StatusQuotationId
+                          }).ToListAsync();
+        }
+
         private void InsertProtocolDetail(int protocolId, ICollection<ProfileComponent> profileComponents)
         {
             foreach (var detail in profileComponents)
@@ -665,6 +584,8 @@ namespace SL.Sigesoft.Data.Repositories
             }
             return 0;
         }
+
+        
 
 
     }

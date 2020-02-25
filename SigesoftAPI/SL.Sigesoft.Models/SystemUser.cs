@@ -11,6 +11,9 @@ namespace SL.Sigesoft.Models
             Permission = new HashSet<Permission>();
             Quotation = new HashSet<Quotation>();
             Secuential = new HashSet<Secuential>();
+            Suscription = new HashSet<Suscription>();
+            Notification = new HashSet<Notification>();
+            Company = new HashSet<Company>();
         }
 
         public int i_SystemUserId { get; set; }
@@ -31,5 +34,6 @@ namespace SL.Sigesoft.Models
         public virtual ICollection<Secuential> Secuential { get; set; }
         public virtual ICollection<Suscription> Suscription { get; set; }
         public virtual ICollection<Notification> Notification { get; set; }
+        public virtual ICollection<Company> Company { get; set; }
     }
 }

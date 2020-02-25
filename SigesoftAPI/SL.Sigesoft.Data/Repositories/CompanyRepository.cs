@@ -27,7 +27,13 @@ namespace SL.Sigesoft.Data.Repositories
 
         public async Task<Company> AddAsync(Company entity)
         {
+            if(CompanyExistsBD(entity.v_IdentificationNumber)) return null;
+          
             entity.i_IsDeleted = YesNo.No;
+            #region AUDIT
+            entity.i_InsertUserId = entity.i_InsertUserId;
+            entity.d_InsertDate = DateTime.Now;
+            #endregion
             var list = new List<CompanyHeadquarter>();
             foreach (var item in entity.CompanyHeadquarter) 
             {
@@ -35,8 +41,12 @@ namespace SL.Sigesoft.Data.Repositories
                 o.i_CompanyId = item.i_CompanyId;
                 o.v_Name = item.v_Name;
                 o.v_Address = item.v_Address;
-                o.v_PhoneNumber = item.v_PhoneNumber;
+                o.v_PhoneNumber = item.v_PhoneNumber;                
                 o.i_IsDeleted = YesNo.No;
+                #region AUDIT
+                o.i_InsertUserId = entity.i_InsertUserId;
+                o.d_InsertDate = DateTime.Now;
+                #endregion
                 list.Add(o);
             }
 
@@ -85,10 +95,16 @@ namespace SL.Sigesoft.Data.Repositories
         public async Task<bool> UpdateAsync(Company entity)
         {
             var entityDb = await _dbSet.Include(i => i.CompanyHeadquarter).FirstOrDefaultAsync(u => u.i_CompanyId == entity.i_CompanyId);
-
+            
             if (entityDb == null)
             {
                 _logger.LogError($"Error en {nameof(UpdateAsync)}: No existe el usuario con Id: {entity.i_CompanyId}");
+                return false;
+            }
+
+            if (entityDb.i_ResponsibleSystemUserId != null && entityDb.i_ResponsibleSystemUserId != entity.i_ResponsibleSystemUserId)
+            {
+                _logger.LogError($"Error en {nameof(UpdateAsync)}: No hay coincidencia de usuario responsable: {entity.i_CompanyId}");
                 return false;
             }
 
@@ -101,6 +117,11 @@ namespace SL.Sigesoft.Data.Repositories
             entityDb.v_Mail = entity.v_Mail;
             entityDb.v_District = entity.v_District;
             entityDb.v_PhoneCompany = entity.v_PhoneCompany;
+            entityDb.i_ResponsibleSystemUserId = entity.i_ResponsibleSystemUserId;
+            #endregion
+            #region AUDIT
+            entity.i_UpdateUserId = entity.i_UpdateUserId;
+            entity.d_UpdateDate = DateTime.Now;
             #endregion
 
             foreach (var item in entity.CompanyHeadquarter)
@@ -112,7 +133,7 @@ namespace SL.Sigesoft.Data.Repositories
                     o.v_Name = item.v_Name;
                     o.v_Address = item.v_Address;
                     o.v_PhoneNumber = item.v_PhoneNumber;
-                    o.i_IsDeleted = YesNo.No;
+                    o.i_IsDeleted = YesNo.No;                    
                     entityDb.CompanyHeadquarter.Add(o);
                 }
                 if (item.RecordType == RecordType.NoTemporal && (item.RecordStatus == RecordStatus.Modificado || item.RecordStatus == RecordStatus.Grabado))
@@ -236,6 +257,22 @@ namespace SL.Sigesoft.Data.Repositories
         public async Task<List<Company>> AutocompleteByName(string value)
         {
             return await _dbSet.Where(c => c.i_IsDeleted == YesNo.No && c.v_Name.Contains(value)).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Company>> GetAllFilterAsync(ParamsCompanyFilterModel paramsCompany)
+        {
+            return await _dbSet.Include(su => su.CompanyHeadquarter)
+                      .Where(u => u.i_IsDeleted == YesNo.No && u.i_ResponsibleSystemUserId == paramsCompany.ResponsibleSystemUserId)
+                      .ToListAsync();
+        }
+
+        private bool CompanyExistsBD(string ruc)
+        {
+            var entityDb = _dbSet.FirstOrDefault(u => u.v_IdentificationNumber == ruc);
+            if (entityDb != null)
+                return true;
+
+            return false;
         }
     }
 }

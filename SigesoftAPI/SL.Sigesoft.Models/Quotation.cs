@@ -14,10 +14,10 @@ namespace SL.Sigesoft.Models
         }
 
         public int i_QuotationId { get; set; }
+        public int i_ResponsibleSystemUserId { get; set; }
         public string v_Code { get; set; }
         public int i_Version { get; set; }
         public YesNo i_IsProccess { get; set; }
-        public int i_UserCreatedId { get; set; }
         public int i_CompanyId { get; set; }
         public int i_CompanyHeadquarterId { get; set; }
         public string v_FullName { get; set; }
@@ -35,7 +35,7 @@ namespace SL.Sigesoft.Models
 
         public virtual Company Company { get; set; }
         public virtual CompanyHeadquarter CompanyHeadquarter { get; set; }
-        public virtual SystemUser UserCreated { get; set; }
+        public virtual SystemUser ResponsibleSystemUser { get; set; }
         public virtual ICollection<AdditionalComponentsQuote> AdditionalComponentsQuote { get; set; }
         public virtual ICollection<QuotationProfile> QuotationProfile { get; set; }
         public virtual ICollection<QuoteTracking> QuoteTracking { get; set; }

@@ -19,6 +19,8 @@ namespace SL.Sigesoft.Data.Configuration
 
             entity.Property(e => e.i_CompanyId).HasColumnName("i_CompanyId");
 
+            entity.Property(e => e.i_ResponsibleSystemUserId).HasColumnName("i_ResponsibleSystemUserId");
+
             entity.Property(e => e.d_InsertDate).HasColumnName("d_InsertDate");
 
             entity.Property(e => e.d_UpdateDate).HasColumnName("d_UpdateDate");
@@ -70,6 +72,12 @@ namespace SL.Sigesoft.Data.Configuration
                 .HasColumnName("v_PhoneNumber")
                 .HasMaxLength(100)
                 .IsUnicode(false);
+
+            entity.HasOne(d => d.SystemUser)
+                .WithMany(p => p.Company)
+                .HasForeignKey(d => d.i_ResponsibleSystemUserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Company_SystemUser");
 
             entity.HasQueryFilter(x => x.i_IsDeleted == Models.Enum.YesNo.No);
         }

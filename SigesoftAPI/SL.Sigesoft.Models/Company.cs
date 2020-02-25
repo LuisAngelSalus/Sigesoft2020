@@ -15,6 +15,7 @@ namespace SL.Sigesoft.Models
         }
 
         public int i_CompanyId { get; set; }
+        public int? i_ResponsibleSystemUserId { get; set; }
         public string v_Name { get; set; }
         public string v_IdentificationNumber { get; set; }
         public string v_Address { get; set; }
@@ -33,5 +34,6 @@ namespace SL.Sigesoft.Models
         public virtual ICollection<PriceList> PriceList { get; set; }
         public virtual ICollection<Protocol> Protocol { get; set; }
         public virtual ICollection<Quotation> Quotation { get; set; }
+        public virtual SystemUser SystemUser { get; set; }
     }
 }

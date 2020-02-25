@@ -242,5 +242,42 @@ namespace SL.Sigesoft.WebApi.Controllers
             return response;
         }
 
+
+        [HttpPost]
+        [Route("GraficoSeguimiento")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Response<IEnumerable<ListTrackingChartModel>>>> Trackingchart(ParamsTrackingChartModel parameters)
+        {
+            var response = new Response<IEnumerable<ListTrackingChartModel>>();
+            try
+            {
+                var chartModels = await _quotationRepository.Trackingchart(parameters);
+                response.Data = chartModels;
+                if (response.Data.Count() == 0)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "No se encontraron coincidencias";
+                    return NotFound(response);
+                }
+
+                if (response.Data != null)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Consulta Exitosa";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = "Ocurrió un error";
+                response.Data = null;
+                return BadRequest(response);
+            }
+            return response;
+        }
+
     }
 }
