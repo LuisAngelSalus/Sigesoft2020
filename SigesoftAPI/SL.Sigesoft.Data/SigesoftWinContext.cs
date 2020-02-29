@@ -20,7 +20,7 @@ namespace SL.Sigesoft.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
+            modelBuilder.HasAnnotation("ProductVersion", "2.2.0-servicing-10079");
             modelBuilder.ApplyConfiguration(new ComponentConfiguration());
         }
 
