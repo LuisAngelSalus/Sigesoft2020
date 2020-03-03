@@ -599,6 +599,7 @@ namespace SL.Sigesoft.Data.Repositories
             {            
                 var quotation = await _dbSet.Include(i => i.QuotationProfile)
                               .ThenInclude(p => p.ProfileComponent)
+                              .Include(i => i.AdditionalComponentsQuote)
                               .Where(w => w.i_QuotationId == quotationId).FirstOrDefaultAsync();
 
                 foreach (var profile in quotation.QuotationProfile)
@@ -627,7 +628,7 @@ namespace SL.Sigesoft.Data.Repositories
                     _contextWin.Add(newProtocol);
                     await _contextWin.SaveChangesAsync();
 
-                    await InsertProtocolComponent(newProtocol.v_ProtocolId, profile.ProfileComponent);
+                    await InsertProtocolComponent(newProtocol.v_ProtocolId, profile.ProfileComponent, quotation.AdditionalComponentsQuote);
                 }
 
                 return true;
@@ -664,7 +665,7 @@ namespace SL.Sigesoft.Data.Repositories
                 return -1;
         }
 
-        private async Task<bool> InsertProtocolComponent(string protocolId, ICollection<ProfileComponent> profileComponents)
+        private async Task<bool> InsertProtocolComponent(string protocolId, ICollection<ProfileComponent> profileComponents, ICollection<AdditionalComponentsQuote> additionalComponentsQuote)
         {
             try
             {
@@ -674,7 +675,7 @@ namespace SL.Sigesoft.Data.Repositories
                     newProtocolDetail.v_ProtocolComponentId = Utils.GetNewIdWin(Constants.NODE_SIGESOFT2020, await _interfaceSigesoftWinRepository.GetNextSecuentialId(Constants.NODE_SIGESOFT2020, Constants.SIGESOFTWIN_TABLE_PROTOCOL_COMPONENT), "PC");
                     newProtocolDetail.v_ComponentId = detail.v_ComponentId;
                     newProtocolDetail.v_ProtocolId = protocolId;
-                    newProtocolDetail.r_Price = detail.r_MinPrice.Value;
+                    newProtocolDetail.r_Price = detail.r_SalePrice;
 
                     if (detail.i_AgeConditionalId != -1 || detail.i_GenderConditionalId !=-1)
                         newProtocolDetail.i_IsConditionalId = YesNo.Yes ;
@@ -687,8 +688,31 @@ namespace SL.Sigesoft.Data.Repositories
                     newProtocolDetail.d_InsertDate = DateTime.Now;
 
                     _contextWin.Add(newProtocolDetail);
-                    await _contextWin.SaveChangesAsync();
+                    //await _contextWin.SaveChangesAsync();
                 }
+
+                foreach (var item in additionalComponentsQuote)
+                {
+                    var newProtocolDetail = new ProtocolComponentWin();
+                    newProtocolDetail.v_ProtocolComponentId = Utils.GetNewIdWin(Constants.NODE_SIGESOFT2020, await _interfaceSigesoftWinRepository.GetNextSecuentialId(Constants.NODE_SIGESOFT2020, Constants.SIGESOFTWIN_TABLE_PROTOCOL_COMPONENT), "PC");
+                    newProtocolDetail.v_ComponentId = item.v_ComponentId;
+                    newProtocolDetail.v_ProtocolId = protocolId;
+                    newProtocolDetail.r_Price = item.r_SalePrice;
+
+                    //if (detail.i_AgeConditionalId != -1 || detail.i_GenderConditionalId != -1)
+                        newProtocolDetail.i_IsConditionalId = YesNo.No;
+
+                    //newProtocolDetail.i_OperatorId = -1;
+                    //newProtocolDetail.i_Age = 
+                    //newProtocolDetail.i_GenderId = item.i_GenderConditionalId.Value;
+
+                    newProtocolDetail.i_IsDeleted = YesNo.No;
+                    newProtocolDetail.d_InsertDate = DateTime.Now;
+
+                    _contextWin.Add(newProtocolDetail);
+                    //await _contextWin.SaveChangesAsync();
+                }
+                await _contextWin.SaveChangesAsync();
             }
             catch (Exception ex)
             {
