@@ -625,6 +625,7 @@ namespace SL.Sigesoft.Data.Repositories
                     newProtocol.i_ValidInDays = null;
                     newProtocol.i_IsActive = (int)YesNo.Yes;
                     newProtocol.i_TypeReport = EmologarTypeFormat(profile.i_TypeFormatId);
+
                     _contextWin.Add(newProtocol);
                     await _contextWin.SaveChangesAsync();
 
