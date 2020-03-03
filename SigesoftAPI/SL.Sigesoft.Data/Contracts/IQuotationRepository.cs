@@ -15,5 +15,6 @@ namespace SL.Sigesoft.Data.Contracts
         Task<bool> UpdateIsProccess(string code, int quotationId);
         Task<bool> MigrateQuotationToProtocols(int quotationId);
         Task<List<ListTrackingChartModel>> Trackingchart(ParamsTrackingChartModel trackingchartdto);
+        Task<bool> MigrateoProtocolToSIGESoftWin(int quotationId);
     }
 }

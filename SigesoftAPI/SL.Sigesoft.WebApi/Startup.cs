@@ -48,7 +48,7 @@ namespace SL.Sigesoft.WebApi
             services.AddScoped<ICompanyHeadquarterRepository, CompanyHeadquarterRepository>();
             services.AddScoped<ICompanyContactRepository, CompanyContactRepository>();
             services.AddScoped<IInfoRepository, InfoRepository>();
-            services.AddScoped<IComponentRepository, ComponentRepository>();
+            services.AddScoped<IInterfaceSigesoftWinRepository, ComponentRepository>();
             services.AddScoped<IProtocolProfileRepository, ProtocolProfileRepository>();
             services.AddScoped<IQuotationRepository, QuotationRepository>();
             services.AddScoped<ISecuentialRespository, SecuentialRespository>();

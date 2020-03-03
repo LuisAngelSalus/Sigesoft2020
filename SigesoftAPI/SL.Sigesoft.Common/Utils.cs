@@ -10,5 +10,10 @@ namespace SL.Sigesoft.Common
         {
             return string.Format("{0}-{1}{2}", prefix, codeUser, correlative.ToString("000000000"));
         }
+
+        public static string GetNewIdWin(int pintNodeId, int pintSequential, string pstrPrefix)
+        {
+            return string.Format("N{0}-{1}{2}", pintNodeId.ToString("000"), pstrPrefix, pintSequential.ToString("000000000"));
+        }
     }
 }

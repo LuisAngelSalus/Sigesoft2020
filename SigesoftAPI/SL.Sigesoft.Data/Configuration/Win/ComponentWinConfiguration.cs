@@ -27,8 +27,6 @@ namespace SL.Sigesoft.Data.Configuration.Win
             entity.Property(e => e.i_ValidInDays).HasColumnName("i_ValidInDays");
             entity.Property(e => e.i_GroupedComponentId).HasColumnName("i_GroupedComponentId");
             entity.Property(e => e.i_IsDeleted).HasColumnName("i_IsDeleted");
-
-
         }
     }
 }

@@ -10,6 +10,8 @@ using System.Linq;
 using SL.Sigesoft.Models.Enum;
 using SL.Sigesoft.Common;
 using System.Globalization;
+using SL.Sigesoft.Models.Win;
+using SL.Sigesoft.Data.Contracts.Win;
 
 namespace SL.Sigesoft.Data.Repositories
 {
@@ -18,21 +20,27 @@ namespace SL.Sigesoft.Data.Repositories
         private ISecuentialRespository _secuentialRespository;
         private IProtocolRepository _protocolRepository;
         private IProtocolDetailRepository _protocolDetailRepository;
+        private IInterfaceSigesoftWinRepository _interfaceSigesoftWinRepository;
+        private ICompanyRepository _companyRepository;
         private readonly SigesoftCoreContext _context;
+        private readonly SigesoftWinContext _contextWin;
         private readonly ILogger<QuotationRepository> _logger;
         private DbSet<Quotation> _dbSet;
         private DbSet<QuotationProfile> _dbSetQuotationProfile;
 
         public QuotationRepository(SigesoftCoreContext context,
-          ILogger<QuotationRepository> logger, ISecuentialRespository secuentialRespository, IProtocolRepository protocolRepository, IProtocolDetailRepository protocolDetailRepository)
+          ILogger<QuotationRepository> logger, ISecuentialRespository secuentialRespository, IProtocolRepository protocolRepository, IProtocolDetailRepository protocolDetailRepository, IInterfaceSigesoftWinRepository interfaceSigesoftWinRepository, SigesoftWinContext contextWin, ICompanyRepository companyRepository)
         {
             this._context = context;
+            this._contextWin = contextWin;
             this._logger = logger;
             this._dbSet = _context.Set<Quotation>();
             this._dbSetQuotationProfile = _context.Set<QuotationProfile>();
             this._secuentialRespository = secuentialRespository;
             this._protocolRepository = protocolRepository;
             this._protocolDetailRepository = protocolDetailRepository;
+            this._interfaceSigesoftWinRepository = interfaceSigesoftWinRepository;
+            this._companyRepository = companyRepository;
         }
 
         public async Task<Quotation> AddAsync(Quotation entity)
@@ -585,8 +593,110 @@ namespace SL.Sigesoft.Data.Repositories
             return 0;
         }
 
-        
+        public async Task<bool> MigrateoProtocolToSIGESoftWin(int quotationId)
+        {
+            try
+            {            
+                var quotation = await _dbSet.Include(i => i.QuotationProfile)
+                              .ThenInclude(p => p.ProfileComponent)
+                              .Where(w => w.i_QuotationId == quotationId).FirstOrDefaultAsync();
 
+                foreach (var profile in quotation.QuotationProfile)
+                {
+                    var companyDbWeb = await _companyRepository.GetAsync(quotation.i_CompanyId);                 
+                    var organizationProcessed = await _interfaceSigesoftWinRepository.ProcessOrganization(companyDbWeb.v_IdentificationNumber);
+                    
+                    var newProtocol = new ProtocolWin();
+                    newProtocol.v_ProtocolId =  Utils.GetNewIdWin(Constants.NODE_SIGESOFT2020, await _interfaceSigesoftWinRepository.GetNextSecuentialId(Constants.NODE_SIGESOFT2020, Constants.SIGESOFTWIN_TABLE_PROTOCOL), "PR");
+                    newProtocol.v_Name = profile.v_ProfileName;
+                    newProtocol.v_EmployerOrganizationId = organizationProcessed.v_OrganizationId;
+                    newProtocol.v_EmployerLocationId = organizationProcessed.v_LocationId;
+                    newProtocol.i_EsoTypeId = profile.i_ServiceTypeId;
+                    newProtocol.v_GroupOccupationId = organizationProcessed.v_GroupOccupationId;
+                    newProtocol.v_CustomerOrganizationId = organizationProcessed.v_OrganizationId;
+                    newProtocol.v_CustomerLocationId = organizationProcessed.v_LocationId;
+                    newProtocol.v_WorkingOrganizationId = organizationProcessed.v_OrganizationId;
+                    newProtocol.v_WorkingLocationId = organizationProcessed.v_LocationId;
+                    newProtocol.i_MasterServiceId = Constants.SIGESOFTWIN_MASTER_SERVICE;
+                    newProtocol.v_CostCenter = "";
+                    newProtocol.i_MasterServiceTypeId = Constants.SIGESOFTWIN_MASTER_SERVICE_TYPE;
+                    newProtocol.i_HasVigency = 0;
+                    newProtocol.i_ValidInDays = null;
+                    newProtocol.i_IsActive = (int)YesNo.Yes;
+                    newProtocol.i_TypeReport = EmologarTypeFormat(profile.i_TypeFormatId);
+                    _contextWin.Add(newProtocol);
+                    await _contextWin.SaveChangesAsync();
 
+                    await InsertProtocolComponent(newProtocol.v_ProtocolId, profile.ProfileComponent);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private int EmologarTypeFormat(int typeFormatId)
+        {
+            if (typeFormatId == 1)
+                return 1;
+            else if (typeFormatId == 2)
+                return 2;
+            else if (typeFormatId == 3)
+                return 6;
+            else if (typeFormatId == 4)
+                return 3;
+            else if (typeFormatId == 5)
+                return 4;            
+            else
+                return -1;
+        }
+
+        private int EmologarOperator(int operatorId)
+        {
+            if (operatorId == 1)
+                return 5;
+            else if (operatorId == 2)
+                return 3;            
+            else
+                return -1;
+        }
+
+        private async Task<bool> InsertProtocolComponent(string protocolId, ICollection<ProfileComponent> profileComponents)
+        {
+            try
+            {
+                foreach (var detail in profileComponents)
+                {
+                    var newProtocolDetail = new ProtocolComponentWin();
+                    newProtocolDetail.v_ProtocolComponentId = Utils.GetNewIdWin(Constants.NODE_SIGESOFT2020, await _interfaceSigesoftWinRepository.GetNextSecuentialId(Constants.NODE_SIGESOFT2020, Constants.SIGESOFTWIN_TABLE_PROTOCOL_COMPONENT), "PC");
+                    newProtocolDetail.v_ComponentId = detail.v_ComponentId;
+                    newProtocolDetail.v_ProtocolId = protocolId;
+                    newProtocolDetail.r_Price = detail.r_MinPrice.Value;
+
+                    if (detail.i_AgeConditionalId != -1 || detail.i_GenderConditionalId !=-1)
+                        newProtocolDetail.i_IsConditionalId = YesNo.Yes ;
+
+                    newProtocolDetail.i_OperatorId = EmologarOperator(detail.i_AgeConditionalId.Value);
+                    newProtocolDetail.i_Age = detail.i_Age == null ? 0 : detail.i_Age.Value;
+                    newProtocolDetail.i_GenderId = detail.i_GenderConditionalId.Value;                    
+
+                    newProtocolDetail.i_IsDeleted = YesNo.No;
+                    newProtocolDetail.d_InsertDate = DateTime.Now;
+
+                    _contextWin.Add(newProtocolDetail);
+                    await _contextWin.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;     
+            }
+
+            return true;
+            
+        }
     }
 }

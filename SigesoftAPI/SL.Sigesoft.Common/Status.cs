@@ -26,4 +26,13 @@
         Descartada = 3,
         Potencial = 4
     }
+
+    public enum TypeFormat
+    {
+        RM312 = 1,
+        Anexo16 = 2,
+        Anexo16A= 3,
+        Ambos = 4,
+        Componentes = 5
+    }
 }

@@ -15,12 +15,12 @@ namespace SL.Sigesoft.WebApi.Controllers.Win
     [ApiController]
     public class ComponentWinController : ControllerBase
     {
-        private IComponentRepository _componentRepository;
+        private IInterfaceSigesoftWinRepository _interfaceSigesoftWinRepository;
         private readonly IMapper _mapper;
 
-        public ComponentWinController(IComponentRepository componentRepository, IMapper mapper)
+        public ComponentWinController(IInterfaceSigesoftWinRepository interfaceSigesoftWinRepository, IMapper mapper)
         {
-            this._componentRepository = componentRepository;
+            this._interfaceSigesoftWinRepository = interfaceSigesoftWinRepository;
             this._mapper = mapper;
         }
 
@@ -32,7 +32,7 @@ namespace SL.Sigesoft.WebApi.Controllers.Win
             var response = new Response<IEnumerable<ListComponentDto>>();
             try
             {
-                var components = await _componentRepository.GetAllAsync();
+                var components = await _interfaceSigesoftWinRepository.GetAllAsync();
                 response.Data = _mapper.Map<List<ListComponentDto>>(components);
                 if (response.Data != null)
                 {
@@ -57,7 +57,7 @@ namespace SL.Sigesoft.WebApi.Controllers.Win
             var response = new Response<IEnumerable<ListComponentDto>>();
             try
             {
-                var components = await _componentRepository.GetByNameAsync(value);
+                var components = await _interfaceSigesoftWinRepository.GetByNameAsync(value);
                 response.Data = _mapper.Map<List<ListComponentDto>>(components);
                 if (response.Data != null)
                 {
