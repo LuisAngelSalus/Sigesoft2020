@@ -376,5 +376,6 @@ namespace SL.Sigesoft.Dtos
     public class QuotationMigrateDto
     {
         public int QuotationId { get; set; }
+        public int SystemUserId { get; set; }
     }
 }

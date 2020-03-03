@@ -112,7 +112,7 @@ namespace SL.Sigesoft.Data.Repositories.Win
             return objSecuential.i_SecuentialId;
         }
 
-        public async Task<ProcessedOrganizationWin> ProcessOrganization(string ruc)
+        public async Task<ProcessedOrganizationWin> ProcessOrganization(string ruc, int systemUserId)
         {
             try
             {
@@ -147,6 +147,7 @@ namespace SL.Sigesoft.Data.Repositories.Win
                 oOrganizationWin.v_ContacName = organizationDbWeb.v_ContactName;
                 oOrganizationWin.i_IsDeleted = YesNo.No;
                 oOrganizationWin.d_InsertDate = DateTime.Now;
+                oOrganizationWin.i_InsertUserId = systemUserId;
                 _context.Add(oOrganizationWin);
                 await _context.SaveChangesAsync();
 
@@ -156,6 +157,7 @@ namespace SL.Sigesoft.Data.Repositories.Win
                 oLocationWin.v_Name = organizationDbWeb.CompanyHeadquarter.FirstOrDefault().v_Name;
                 oLocationWin.i_IsDeleted = YesNo.No;
                 oLocationWin.d_InsertDate = DateTime.Now;
+                oOrganizationWin.i_InsertUserId = systemUserId;
                 _context.Add(oLocationWin);
                 await _context.SaveChangesAsync();
 
@@ -165,6 +167,7 @@ namespace SL.Sigesoft.Data.Repositories.Win
                 oGroupOccupation.v_Name = "ADMIN/OPER";
                 oGroupOccupation.i_IsDeleted = YesNo.No;
                 oGroupOccupation.d_InsertDate = DateTime.Now;
+                oOrganizationWin.i_InsertUserId = systemUserId;
                 _context.Add(oGroupOccupation);
                 await _context.SaveChangesAsync();
                 

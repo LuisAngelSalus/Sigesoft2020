@@ -289,8 +289,8 @@ namespace SL.Sigesoft.WebApi.Controllers
             if (quotationMigrateDto == null)
                 return NotFound();
 
-            var quotation = _mapper.Map<Quotation>(quotationMigrateDto);
-            var result = await _quotationRepository.MigrateoProtocolToSIGESoftWin(quotation.i_QuotationId);
+            //var quotation = _mapper.Map<Quotation>(quotationMigrateDto);
+            var result = await _quotationRepository.MigrateoProtocolToSIGESoftWin(quotationMigrateDto.QuotationId, quotationMigrateDto.SystemUserId);
             if (!result)
                 return BadRequest();
 

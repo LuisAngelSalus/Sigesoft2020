@@ -593,7 +593,7 @@ namespace SL.Sigesoft.Data.Repositories
             return 0;
         }
 
-        public async Task<bool> MigrateoProtocolToSIGESoftWin(int quotationId)
+        public async Task<bool> MigrateoProtocolToSIGESoftWin(int quotationId, int systemUserId)
         {
             try
             {            
@@ -605,7 +605,7 @@ namespace SL.Sigesoft.Data.Repositories
                 foreach (var profile in quotation.QuotationProfile)
                 {
                     var companyDbWeb = await _companyRepository.GetAsync(quotation.i_CompanyId);                 
-                    var organizationProcessed = await _interfaceSigesoftWinRepository.ProcessOrganization(companyDbWeb.v_IdentificationNumber);
+                    var organizationProcessed = await _interfaceSigesoftWinRepository.ProcessOrganization(companyDbWeb.v_IdentificationNumber, systemUserId);
                     
                     var newProtocol = new ProtocolWin();
                     newProtocol.v_ProtocolId =  Utils.GetNewIdWin(Constants.NODE_SIGESOFT2020, await _interfaceSigesoftWinRepository.GetNextSecuentialId(Constants.NODE_SIGESOFT2020, Constants.SIGESOFTWIN_TABLE_PROTOCOL), "PR");
@@ -626,10 +626,14 @@ namespace SL.Sigesoft.Data.Repositories
                     newProtocol.i_IsActive = (int)YesNo.Yes;
                     newProtocol.i_TypeReport = EmologarTypeFormat(profile.i_TypeFormatId);
 
+                    newProtocol.i_IsDeleted = YesNo.Yes;
+                    newProtocol.i_InsertUserId = EmologarSystemUser(systemUserId);
+                    newProtocol.d_InsertDate = DateTime.Now;
+
                     _contextWin.Add(newProtocol);
                     await _contextWin.SaveChangesAsync();
 
-                    await InsertProtocolComponent(newProtocol.v_ProtocolId, profile.ProfileComponent, quotation.AdditionalComponentsQuote);
+                    await InsertProtocolComponent(newProtocol.v_ProtocolId, profile.ProfileComponent, quotation.AdditionalComponentsQuote, systemUserId);
                 }
 
                 return true;
@@ -666,7 +670,26 @@ namespace SL.Sigesoft.Data.Repositories
                 return -1;
         }
 
-        private async Task<bool> InsertProtocolComponent(string protocolId, ICollection<ProfileComponent> profileComponents, ICollection<AdditionalComponentsQuote> additionalComponentsQuote)
+        private int EmologarSystemUser(int systemUserId)
+        {          
+            if (systemUserId == 8)
+            {
+                return 123;
+            }else if (systemUserId == 7)
+            {
+                return 127;
+            }else if (systemUserId == 9)
+            {
+                return 145;
+            }
+            else if (systemUserId == 14)
+            {
+                return 122;
+            }
+
+            return 11;
+        }
+        private async Task<bool> InsertProtocolComponent(string protocolId, ICollection<ProfileComponent> profileComponents, ICollection<AdditionalComponentsQuote> additionalComponentsQuote, int systemUserId)
         {
             try
             {
@@ -687,9 +710,8 @@ namespace SL.Sigesoft.Data.Repositories
 
                     newProtocolDetail.i_IsDeleted = YesNo.No;
                     newProtocolDetail.d_InsertDate = DateTime.Now;
-
+                    newProtocolDetail.i_InsertUserId = systemUserId;
                     _contextWin.Add(newProtocolDetail);
-                    //await _contextWin.SaveChangesAsync();
                 }
 
                 foreach (var item in additionalComponentsQuote)
@@ -699,19 +721,12 @@ namespace SL.Sigesoft.Data.Repositories
                     newProtocolDetail.v_ComponentId = item.v_ComponentId;
                     newProtocolDetail.v_ProtocolId = protocolId;
                     newProtocolDetail.r_Price = item.r_SalePrice;
-
-                    //if (detail.i_AgeConditionalId != -1 || detail.i_GenderConditionalId != -1)
-                        newProtocolDetail.i_IsConditionalId = YesNo.No;
-
-                    //newProtocolDetail.i_OperatorId = -1;
-                    //newProtocolDetail.i_Age = 
-                    //newProtocolDetail.i_GenderId = item.i_GenderConditionalId.Value;
-
+                    newProtocolDetail.i_IsConditionalId = YesNo.No;
                     newProtocolDetail.i_IsDeleted = YesNo.No;
                     newProtocolDetail.d_InsertDate = DateTime.Now;
+                    newProtocolDetail.i_InsertUserId = systemUserId;
 
-                    _contextWin.Add(newProtocolDetail);
-                    //await _contextWin.SaveChangesAsync();
+                    _contextWin.Add(newProtocolDetail);                    
                 }
                 await _contextWin.SaveChangesAsync();
             }

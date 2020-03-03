@@ -11,7 +11,7 @@ namespace SL.Sigesoft.Data.Contracts.Win
         Task<List<Component>> GetAllAsync();
         Task<List<Component>> GetByNameAsync(string value);
         Task<int> GetNextSecuentialId(int pintNodeId, int pintTableId);
-        Task<ProcessedOrganizationWin> ProcessOrganization(string ruc);
+        Task<ProcessedOrganizationWin> ProcessOrganization(string ruc, int systemUserId);
         Task<bool> AddOrganizationFromSigesoft2020(OrganizationWinRegisterDto organizationWinRegisterDto);
     }
 }

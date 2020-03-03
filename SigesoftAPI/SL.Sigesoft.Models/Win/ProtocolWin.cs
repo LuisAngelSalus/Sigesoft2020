@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SL.Sigesoft.Models.Enum;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -24,7 +25,7 @@ namespace SL.Sigesoft.Models.Win
         public int i_HasVigency { get; set; }
         public int? i_ValidInDays { get; set; }
         public int i_IsActive { get; set; }
-        public int i_IsDeleted { get; set; }
+        public YesNo i_IsDeleted { get; set; }
         public int i_InsertUserId { get; set; }
         public DateTime d_InsertDate { get; set; }
 
