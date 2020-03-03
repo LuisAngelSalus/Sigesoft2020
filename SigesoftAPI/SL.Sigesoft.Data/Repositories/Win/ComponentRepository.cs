@@ -138,6 +138,7 @@ namespace SL.Sigesoft.Data.Repositories.Win
                 oOrganizationWin.v_OrganizationId = Utils.GetNewIdWin(Constants.NODE_SIGESOFT2020, await GetNextSecuentialId(Constants.NODE_SIGESOFT2020, Constants.SIGESOFTWIN_TABLE_ORGANIZATION), "OO");
                 oOrganizationWin.v_OrganizationPadreId = oOrganizationWin.v_OrganizationId;
                 oOrganizationWin.i_OrganizationTypeId = 1; //Empresa Cliente    
+                oOrganizationWin.i_SectorTypeId = 41;
                 oOrganizationWin.v_IdentificationNumber = organizationDbWeb.v_IdentificationNumber;
                 oOrganizationWin.v_Name = organizationDbWeb.v_Name;
                 oOrganizationWin.v_Address = organizationDbWeb.v_Address;
