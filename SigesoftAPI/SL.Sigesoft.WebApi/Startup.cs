@@ -63,6 +63,8 @@ namespace SL.Sigesoft.WebApi
             services.AddScoped<IAccountSettingRepository, AccountSettingRepository>();
             services.AddScoped<IPasswordHasher<SystemUser>, PasswordHasher<SystemUser>>();            
             services.AddSingleton<TokenService>();
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.Configure<EmailSenderOptions>(_configuration.GetSection("EmailSenderOptions"));
 
             //Accedemos a la sección JwtSettings del archivo appsettings.json
             var jwtSettings = _configuration.GetSection("JwtSettings");
