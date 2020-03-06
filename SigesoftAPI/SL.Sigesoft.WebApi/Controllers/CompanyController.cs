@@ -10,7 +10,6 @@ using SL.Sigesoft.Common;
 using SL.Sigesoft.Data.Contracts;
 using SL.Sigesoft.Dtos;
 using SL.Sigesoft.Models;
-using static SL.Sigesoft.Models.CompanyFilterModel;
 
 namespace SL.Sigesoft.WebApi.Controllers
 {

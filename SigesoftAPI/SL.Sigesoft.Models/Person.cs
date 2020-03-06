@@ -22,5 +22,6 @@ namespace SL.Sigesoft.Models
         public DateTime? d_UpdateDate { get; set; }
 
         public virtual ICollection<SystemUser> SystemUser { get; set; }
+        public virtual Worker Worker { get; set; }
     }
 }

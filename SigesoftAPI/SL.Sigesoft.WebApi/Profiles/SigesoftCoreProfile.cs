@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+
 using SL.Sigesoft.Data;
 using SL.Sigesoft.Dtos;
 using SL.Sigesoft.Dtos.Win;
@@ -658,6 +659,23 @@ namespace SL.Sigesoft.WebApi.Profiles
             .ForMember(u => u.RoleId, p => p.MapFrom(m => m.i_RoleId))
             .ForMember(u => u.UpdateUserId, p => p.MapFrom(m => m.i_UpdateUserId))
             .ReverseMap();
+
+            this.CreateMap<DataWorkerModel, WorkerDto>()
+            .ForMember(u => u.WorkerId, p => p.MapFrom(m => m.WorkerId))
+            .ForMember(u => u.WorkerId, p => p.MapFrom(m => m.WorkerId))
+            .ForMember(u => u.FirstName, p => p.MapFrom(m => m.FirstName))
+            .ForMember(u => u.FirstLastName, p => p.MapFrom(m => m.FirstLastName))
+            .ForMember(u => u.SecondLastName, p => p.MapFrom(m => m.SecondLastName))
+            .ForMember(u => u.CurrentPosition, p => p.MapFrom(m => m.CurrentPosition))
+            .ForMember(u => u.HomeAddress, p => p.MapFrom(m => m.HomeAddress))
+            .ForMember(u => u.DateOfBirth, p => p.MapFrom(m => m.DateOfBirth))
+            .ForMember(u => u.GenderId, p => p.MapFrom(m => m.GenderId))
+            .ForMember(u => u.Email, p => p.MapFrom(m => m.Email))
+            .ForMember(u => u.MobileNumber, p => p.MapFrom(m => m.MobileNumber))
+            .ForMember(u => u.TypeDocumentId, p => p.MapFrom(m => m.TypeDocumentId))
+            .ForMember(u => u.NroDocument, p => p.MapFrom(m => m.NroDocument))
+            .ReverseMap();
+
             
         }
     }

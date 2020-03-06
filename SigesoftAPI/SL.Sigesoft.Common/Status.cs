@@ -35,4 +35,11 @@
         Ambos = 4,
         Componentes = 5
     }
+
+    public enum TypeDocument
+    {
+        DNI =1,
+        Pasaporte =2,
+        PTP=3
+    }
 }

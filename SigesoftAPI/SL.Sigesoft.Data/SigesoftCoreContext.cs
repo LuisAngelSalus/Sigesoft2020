@@ -46,6 +46,7 @@ namespace SL.Sigesoft.Data
         public virtual DbSet<Suscription> Suscription { get; set; }
         public virtual DbSet<Notification> Notification { get; set; }
         public virtual DbSet<AccountSetting> AccountSetting { get; set; }
+        public virtual DbSet<Worker> Worker { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -80,6 +81,7 @@ namespace SL.Sigesoft.Data
             modelBuilder.ApplyConfiguration(new SuscriptionConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationConfiguration());
             modelBuilder.ApplyConfiguration(new AccountSettingConfiguration());
+            modelBuilder.ApplyConfiguration(new WorkerConfiguration());
         }
     }
 }
