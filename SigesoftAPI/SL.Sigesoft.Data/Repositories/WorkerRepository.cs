@@ -112,6 +112,7 @@ namespace SL.Sigesoft.Data.Repositories
             entityDb.i_GenderId = entity.i_GenderId;
             entityDb.v_Email = entity.v_Email;
             entityDb.v_MobileNumber = entity.v_MobileNumber;
+            entityDb.v_NroDocument = entity.v_NroDocument;
             #region AUDIT
             entityDb.d_UpdateDate = DateTime.UtcNow;
             entityDb.i_UpdateUserId = entity.i_UpdateUserId;
