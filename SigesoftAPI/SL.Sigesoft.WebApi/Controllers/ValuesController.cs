@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SL.Sigesoft.WebApi.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,17 @@ namespace SL.Sigesoft.WebApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
 
-    public class ValuesController:ControllerBase
+    public class ValuesController : ControllerBase
     {
+        private readonly IEmailSender _emailSender;
+
+        public ValuesController(IEmailSender emailSender)
+        {
+            _emailSender = emailSender;
+        }
+
+
+
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
@@ -24,9 +34,11 @@ namespace SL.Sigesoft.WebApi.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post()
         {
-
+            _emailSender
+               .SendEmailAsync("pool7592@gmail.com", "Asunto", "Mensaje")
+               .ConfigureAwait(false);
         }
 
         [HttpPut]
