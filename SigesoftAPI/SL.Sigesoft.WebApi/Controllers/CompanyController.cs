@@ -13,7 +13,7 @@ using SL.Sigesoft.Models;
 
 namespace SL.Sigesoft.WebApi.Controllers
 {
-    [Authorize(Roles = "Administrador,Comercial")]
+    [Authorize(Roles = "Administrador,Comercial,Cliente")]
     [Route("api/[controller]")]
     [ApiController]
     public class CompanyController : ControllerBase

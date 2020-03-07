@@ -15,6 +15,7 @@ namespace SL.Sigesoft.Models
         public int SystemUserId { get; set; }
         public string UserName { get; set; }
         public string FullName { get; set; }
+        public int? CustomerCompanyId { get; set; }
         public List<Companies> Companies { get; set; }
     }
 

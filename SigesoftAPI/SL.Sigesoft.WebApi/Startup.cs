@@ -62,6 +62,7 @@ namespace SL.Sigesoft.WebApi
             services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<IAccountSettingRepository, AccountSettingRepository>();
             services.AddScoped<IWorkerRepository, WorkerRepository>();
+            services.AddScoped<IClientUserRepository, ClientUserRepository>();
             services.AddScoped<IPasswordHasher<SystemUser>, PasswordHasher<SystemUser>>();            
             services.AddSingleton<TokenService>();
             services.AddTransient<IEmailSender, EmailSender>();

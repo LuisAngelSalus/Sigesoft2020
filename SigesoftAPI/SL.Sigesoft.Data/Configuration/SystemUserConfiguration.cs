@@ -18,6 +18,8 @@ namespace SL.Sigesoft.Data.Configuration
 
             entity.Property(e => e.i_SystemUserId).HasColumnName("i_SystemUserId");
 
+            entity.Property(e => e.i_CustomerCompanyId).HasColumnName("i_CustomerCompanyId");          
+
             entity.Property(e => e.d_InsertDate).HasColumnName("d_InsertDate");
 
             entity.Property(e => e.d_UpdateDate).HasColumnName("d_UpdateDate");

@@ -17,6 +17,7 @@ namespace SL.Sigesoft.Models
         }
 
         public int i_SystemUserId { get; set; }
+        public int? i_CustomerCompanyId { get; set; }
         public int i_PersonId { get; set; }
         public string v_UserName { get; set; }
         public string v_Password { get; set; }

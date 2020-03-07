@@ -94,7 +94,9 @@ namespace SL.Sigesoft.Data.Repositories
         
         public async Task<bool> UpdateAsync(Company entity)
         {
-            var entityDb = await _dbSet.Include(i => i.CompanyHeadquarter).FirstOrDefaultAsync(u => u.i_CompanyId == entity.i_CompanyId);
+            try
+            {
+                var entityDb = await _dbSet.Include(i => i.CompanyHeadquarter).FirstOrDefaultAsync(u => u.i_CompanyId == entity.i_CompanyId);
             
             if (entityDb == null)
             {
@@ -152,8 +154,7 @@ namespace SL.Sigesoft.Data.Repositories
                     entityDb.CompanyHeadquarter.Add(o);
                 }
             }
-            try
-            {
+            
                 return await _context.SaveChangesAsync() > 0 ? true : false;
             }
             catch (Exception ex)

@@ -179,7 +179,8 @@ namespace SL.Sigesoft.Data.Repositories
                                        ApplicationHierarchyName = G.v_Description,
                                        ParentId = G.i_ParentId,
                                        Path = G.v_Path,
-                                       PathDashboard = E.v_PathDashboard
+                                       PathDashboard = E.v_PathDashboard,
+                                       CustomerCompanyId = A.i_CustomerCompanyId
                                    }
                             ).ToListAsync();
 
@@ -210,6 +211,7 @@ namespace SL.Sigesoft.Data.Repositories
                 oAccessSysteUserModelDto.SystemUserId = query[0].SystemUserId;
                 oAccessSysteUserModelDto.UserName = query[0].UserName;
                 oAccessSysteUserModelDto.FullName = query[0].FullName;
+                oAccessSysteUserModelDto.CustomerCompanyId = query[0].CustomerCompanyId;
 
                 var companiesDb = query.GroupBy(g => g.CompanyId).Select(s => s.First()).ToList();
                 var companies = new List<Companies>();
@@ -261,7 +263,10 @@ namespace SL.Sigesoft.Data.Repositories
         }
         public async Task<(bool result, SystemUserLoginModel systemUser)> ValidateLogin(SystemUser systemUser)
         {
-            var systemUserDb = await _dbSet.Include(u => u.Permission).FirstOrDefaultAsync(u => u.v_UserName == systemUser.v_UserName);
+            try
+            {
+                var systemUserDb = await _dbSet.Include(u => u.Permission).FirstOrDefaultAsync(u => u.v_UserName == systemUser.v_UserName);
+            
             
             if (systemUserDb != null)
             {
@@ -293,6 +298,13 @@ namespace SL.Sigesoft.Data.Repositories
 
             }
             return (false, null);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
         }
         public async Task<bool> UpdateAccess(List<UpdateAccessModel> updateAccessDto)
         {
