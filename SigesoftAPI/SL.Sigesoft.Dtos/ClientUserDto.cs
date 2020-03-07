@@ -24,6 +24,7 @@ namespace SL.Sigesoft.Dtos
         public int CompanyId { get; set; }
         public string UserName { get; set; }
         public string FullName { get; set; }
+        public string Password { get; set; }
         public int UserTypeId { get; set; }
         public int TypeDocumentId { get; set; }
         public string NroDocument { get; set; }
@@ -31,6 +32,7 @@ namespace SL.Sigesoft.Dtos
         public string MobileNumber { get; set; }
         public string Email { get; set; }
         public int IsActive { get; set; }
+        public int InsertUserId { get; set; }
     }
 
     public class ClientUserUpdateDto
@@ -45,5 +47,6 @@ namespace SL.Sigesoft.Dtos
         public string MobileNumber { get; set; }
         public string Email { get; set; }
         public int IsActive { get; set; }
+        public int UpdateUserId { get; set; }
     }
 }

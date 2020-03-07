@@ -92,7 +92,7 @@ namespace SL.Sigesoft.Data.Repositories
             entityDb.i_IsActive = entity.i_IsActive;
             #region AUDIT
             entityDb.d_UpdateDate = DateTime.UtcNow;
-            entityDb.i_UpdateUserId = entity.i_InsertUserId;
+            entityDb.i_UpdateUserId = entity.i_UpdateUserId;
             #endregion
 
             try

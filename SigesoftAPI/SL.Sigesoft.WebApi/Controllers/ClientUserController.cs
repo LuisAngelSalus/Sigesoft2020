@@ -27,6 +27,39 @@ namespace SL.Sigesoft.WebApi.Controllers
             this._mapper = mapper;
         }
 
+        [HttpGet("{clientUserId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Response<ClientUserDto>>> Get(int clientUserId)
+        {
+            var response = new Response<ClientUserDto>();
+            try
+            {
+                var clientUser = await _clientUserRepository.GetAsync(clientUserId);
+                if (clientUser == null)
+                {
+                    response.Data = null;
+                    response.IsSuccess = true;
+                    response.Message = "No se encontró registro";
+                    return NotFound(response);
+                }
+                response.Data = _mapper.Map<ClientUserDto>(clientUser);
+                if (response.Data != null)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Consulta Exitosa";
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return response;
+
+        }
+
+
+
         [HttpGet("{companyId}/UsuariosClientes")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
