@@ -24,4 +24,6 @@
     <ProjectReference Include="..\SL.Sigesoft.Dtos\SL.Sigesoft.Dtos.csproj" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
 </Project>
