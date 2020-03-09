@@ -705,7 +705,7 @@ namespace SL.Sigesoft.WebApi.Profiles
            .ForMember(u => u.i_InsertUserId, p => p.MapFrom(m => m.InsertUserId))
            .ReverseMap();
 
-            this.CreateMap<ClientUserUpdateDto, ClientUser>()
+           this.CreateMap<ClientUserUpdateDto, ClientUser>()
            .ForMember(u => u.i_ClientUserId, p => p.MapFrom(m => m.ClientUserId))
            .ForMember(u => u.v_UserName, p => p.MapFrom(m => m.UserName))
            .ForMember(u => u.v_FullName, p => p.MapFrom(m => m.FullName))
@@ -718,6 +718,13 @@ namespace SL.Sigesoft.WebApi.Profiles
            .ForMember(u => u.i_IsActive, p => p.MapFrom(m => m.IsActive))
            .ForMember(u => u.i_UpdateUserId, p => p.MapFrom(m => m.UpdateUserId))
            .ReverseMap();
+
+            this.CreateMap<ClientUserPasswordDto, ClientUser>()
+            .ForMember(u => u.i_ClientUserId, p => p.MapFrom(m => m.ClientUserId))
+            .ForMember(u => u.v_Password, p => p.MapFrom(m => m.Password
+            ))
+            .ForMember(u => u.i_UpdateUserId, p => p.MapFrom(m => m.UpdateUserId))
+            .ReverseMap();
         }
     }
 }

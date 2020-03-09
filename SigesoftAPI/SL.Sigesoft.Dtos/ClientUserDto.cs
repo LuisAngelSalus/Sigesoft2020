@@ -49,4 +49,11 @@ namespace SL.Sigesoft.Dtos
         public int IsActive { get; set; }
         public int UpdateUserId { get; set; }
     }
+
+    public class ClientUserPasswordDto
+    {
+        public int ClientUserId { get; set; }
+        public string Password { get; set; }
+        public int UpdateUserId { get; set; }
+    }
 }

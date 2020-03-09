@@ -18,11 +18,11 @@ namespace SL.Sigesoft.WebApi.Controllers
     [ApiController]
     public class ClientUserController : ControllerBase
     {
-        private IClientUserRepository _clientUserRepository;
+        private IClientUserRepository _clientUserRepository;        
         private readonly IMapper _mapper;
 
         public ClientUserController(IClientUserRepository clientUserRepository, IMapper mapper)
-        {
+        {            
             this._clientUserRepository = clientUserRepository;
             this._mapper = mapper;
         }
@@ -57,9 +57,7 @@ namespace SL.Sigesoft.WebApi.Controllers
             return response;
 
         }
-
-
-
+               
         [HttpGet("{companyId}/UsuariosClientes")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -138,6 +136,56 @@ namespace SL.Sigesoft.WebApi.Controllers
             response.IsSuccess = true;
             response.Message = "Se actualizó correctamente";
             
+            return response;
+        }
+
+        [HttpPost]
+        [Route("cambiarcontrasena")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> ChangePassword(ClientUserPasswordDto clientUserDto)
+        {
+            try
+            {
+                var clientUser = _mapper.Map<ClientUser>(clientUserDto);
+                var result = await _clientUserRepository.ChangePassword(clientUser);
+                if (!result)
+                {
+                    return BadRequest();
+                }
+                return NoContent();
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPut("{id}/actualizarEmpresa")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Response<ListCompanyDto>>> UpdateCompany([FromBody]CompanyUpdateDataDto companyDto)
+        {
+            var response = new Response<ListCompanyDto>();
+            if (companyDto == null)
+                return NotFound();
+
+            var company = _mapper.Map<Company>(companyDto);
+            var result = await _clientUserRepository.UpdateCompany(company);
+            if (!result)
+            {
+                response.Data = new ListCompanyDto();
+                response.IsSuccess = false;
+                response.Message = "Error en la operación";
+                return BadRequest(response);
+            }
+
+            response.Data = _mapper.Map<ListCompanyDto>(company);
+            response.IsSuccess = true;
+            response.Message = "Se actualizó correctamente";
+
             return response;
         }
 
