@@ -12,13 +12,7 @@ namespace SL.Sigesoft.WebApi.Controllers
 
     public class ValuesController : ControllerBase
     {
-        private readonly IEmailSender _emailSender;
-
-        public ValuesController(IEmailSender emailSender)
-        {
-            _emailSender = emailSender;
-        }
-
+        
 
 
         [HttpGet]
@@ -36,9 +30,9 @@ namespace SL.Sigesoft.WebApi.Controllers
         [HttpPost]
         public void Post()
         {
-            _emailSender
-               .SendEmailAsync("pool7592@gmail.com", "Asunto", "Mensaje")
-               .ConfigureAwait(false);
+            //_emailSender
+            //   .SendEmailAsync("pool7592@gmail.com", "Asunto", "Mensaje")
+            //   .ConfigureAwait(false);
         }
 
         [HttpPut]
