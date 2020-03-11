@@ -26,7 +26,7 @@ namespace SL.Sigesoft.Data.Repositories
             #region AUDIT
             person.i_IsDeleted = YesNo.No;
             person.d_InsertDate = DateTime.UtcNow;
-            person.i_InsertUserId = 11;
+            person.i_InsertUserId = person.i_InsertUserId;
             #endregion
 
             _context.Person.Add(person);
@@ -40,15 +40,17 @@ namespace SL.Sigesoft.Data.Repositories
             }
             return person;
         }
+
         public async Task<bool> UpdateAsync(Person person)
         {
             var personDb = await GetPersonAsync(person.i_PersonId);
             personDb.v_FirstName = person.v_FirstName;
             personDb.v_FirstLastName = person.v_FirstLastName;
             personDb.v_SecondLastName = person.v_SecondLastName;
+
             #region AUDIT
             personDb.d_UpdateDate = DateTime.UtcNow;
-            personDb.i_UpdateUserId = 11;
+            personDb.i_UpdateUserId = person.i_UpdateUserId;
             #endregion
 
             try
@@ -61,6 +63,7 @@ namespace SL.Sigesoft.Data.Repositories
             }
             return false;
         }
+
         public async Task<bool> DeleteAsync(int personId)
         {
             var person = await _context.Person
@@ -68,7 +71,7 @@ namespace SL.Sigesoft.Data.Repositories
             #region AUDIT
             person.i_IsDeleted = YesNo.No;
             person.d_UpdateDate = DateTime.UtcNow;
-            person.i_UpdateUserId = 11;
+            //person.i_UpdateUserId = 11;
             #endregion
 
             try
@@ -82,10 +85,12 @@ namespace SL.Sigesoft.Data.Repositories
             return false;
 
         }
+
         public async Task<Person> GetPersonAsync(int personId)
         {
             return await _context.Person.SingleOrDefaultAsync(u => u.i_PersonId == personId && u.i_IsDeleted == YesNo.No);
         }
+
         public async Task<List<Person>> GetPersonsAsync()
         {
             return await _context.Person.OrderBy(u => u.i_PersonId).ToListAsync();

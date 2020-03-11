@@ -7,15 +7,21 @@ using System.Text;
 
 namespace SL.Sigesoft.Data.Configuration
 {
-    public class ProtocolProfileConfiguration : IEntityTypeConfiguration<ProtocolProfile>
+    public class ServiceComponentConfiguration : IEntityTypeConfiguration<ServiceComponent>
     {
-        public void Configure(EntityTypeBuilder<ProtocolProfile> entity)
+        public void Configure(EntityTypeBuilder<ServiceComponent> entity)
         {
-            entity.HasKey(e => e.i_ProtocolProfileId);
+            entity.HasKey(e => e.i_ServiceComponentId);
 
-            entity.ToTable("ProtocolProfile", "commercial");
+            entity.ToTable("ServiceComponent", "Medical");
 
-            entity.Property(e => e.i_ProtocolProfileId).HasColumnName("i_ProtocolProfileId");
+            entity.Property(e => e.i_ServiceComponentId).HasColumnName("i_ServiceComponentId");
+
+            entity.Property(e => e.i_ServiceId).HasColumnName("i_ServiceId");
+
+            entity.Property(e => e.v_ComponentId).HasColumnName("v_ComponentId");
+
+            entity.Property(e => e.i_ServiceComponentStatusId).HasColumnName("i_ServiceComponentStatusId");
 
             entity.Property(e => e.i_IsDeleted).HasColumnName("i_IsDeleted");
 
@@ -27,13 +33,7 @@ namespace SL.Sigesoft.Data.Configuration
 
             entity.Property(e => e.d_UpdateDate).HasColumnName("d_UpdateDate");
 
-            entity.Property(e => e.v_Name)
-                .IsRequired()
-                .HasColumnName("v_Name")
-                .HasMaxLength(50)
-                .IsUnicode(false);
 
-            entity.HasQueryFilter(x => x.i_IsDeleted == Models.Enum.YesNo.No);
         }
     }
 }

@@ -55,8 +55,9 @@ namespace SL.Sigesoft.Data.Repositories
             var clientUser = await _context.ClientUser
                                .SingleOrDefaultAsync(c => c.i_ClientUserId == id);
             #region AUDIT
-            clientUser.i_IsDeleted = YesNo.No;
-            clientUser.d_UpdateDate = DateTime.UtcNow;            
+            clientUser.i_IsDeleted = YesNo.Yes;
+            clientUser.d_UpdateDate = DateTime.UtcNow;
+            //clientUser.i_UpdateUserId = entity.i_UpdateUserId;
             #endregion
 
             try
@@ -118,6 +119,12 @@ namespace SL.Sigesoft.Data.Repositories
         {
             var clientUserDb = await _dbSet.FirstOrDefaultAsync(u => u.i_ClientUserId == clientUser.i_ClientUserId);
             clientUserDb.v_Password = _passwordHasher.HashPassword(clientUserDb, clientUser.v_Password);
+            
+            #region AUDIT
+            clientUserDb.d_UpdateDate = DateTime.UtcNow;
+            clientUserDb.i_UpdateUserId = clientUser.i_UpdateUserId;
+            #endregion
+
             try
             {
                 return await _context.SaveChangesAsync() > 0 ? true : false;

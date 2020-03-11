@@ -36,7 +36,12 @@ namespace SL.Sigesoft.Data.Repositories
         #region CRUD
         public async Task<SystemUser> AddAsync(SystemUser entity)
         {
+            #region AUDIT
             entity.i_IsDeleted = YesNo.No;
+            entity.d_InsertDate = DateTime.UtcNow;
+            entity.i_InsertUserId = entity.i_InsertUserId;
+            #endregion
+
             entity.v_Password = _passwordHasher.HashPassword(entity, entity.v_Password);
             _dbSet.Add(entity);
             try
@@ -49,10 +54,17 @@ namespace SL.Sigesoft.Data.Repositories
             }
             return entity;
         }
+
         public async Task<bool> DeleteAsync(int id)
         {
             var entity = await _dbSet.SingleOrDefaultAsync(u => u.i_SystemUserId == id);
+
+            #region AUDIT
             entity.i_IsDeleted = YesNo.Yes;
+            entity.d_UpdateDate = DateTime.UtcNow;
+            //entity.i_UpdateUserId = entity.i_UpdateUserId;
+            #endregion
+
             try
             {
                 return (await _context.SaveChangesAsync() > 0 ? true : false);
@@ -63,17 +75,20 @@ namespace SL.Sigesoft.Data.Repositories
             }
             return false;
         }
+
         public async Task<IEnumerable<SystemUser>> GetAllAsync()
         {
             return await _dbSet.Include(su => su.Permission)
                                .Where(u => u.i_IsDeleted == YesNo.No)
                                .ToListAsync();
         }
+
         public async Task<SystemUser> GetAsync(int id)
         {
             return await _dbSet.Include(per => per.Person)                               
                                 .SingleOrDefaultAsync(c => c.i_SystemUserId == id && c.i_IsDeleted == YesNo.No);
         }
+
         public async Task<bool> UpdateAsync(SystemUser systemUser)
         {
             var systemUserDb = await _dbSet.FirstOrDefaultAsync(u => u.i_SystemUserId == systemUser.i_SystemUserId);
@@ -88,6 +103,12 @@ namespace SL.Sigesoft.Data.Repositories
             systemUserDb.v_Email = systemUser.v_Email;
             systemUserDb.v_Phone = systemUser.v_Phone;
             systemUserDb.v_Password = _passwordHasher.HashPassword(systemUser, systemUser.v_Password);
+
+            #region AUDIT            
+            systemUserDb.d_UpdateDate = DateTime.UtcNow;
+            systemUserDb.i_UpdateUserId = systemUser.i_UpdateUserId;
+            #endregion
+
             try
             {
                 return await _context.SaveChangesAsync() > 0 ? true : false;
@@ -98,12 +119,19 @@ namespace SL.Sigesoft.Data.Repositories
             }
             return false;
         }
+
         #endregion
 
         public async Task<bool> ChangePassword(SystemUser systemUser)
         {
             var systemUserDb = await _dbSet.FirstOrDefaultAsync(u => u.i_SystemUserId == systemUser.i_SystemUserId);
             systemUserDb.v_Password = _passwordHasher.HashPassword(systemUserDb, systemUser.v_Password);
+
+            #region AUDIT            
+            systemUserDb.d_UpdateDate = DateTime.UtcNow;
+            systemUserDb.i_UpdateUserId = systemUser.i_UpdateUserId;
+            #endregion
+
             try
             {
                 return await _context.SaveChangesAsync() > 0 ? true : false;
@@ -114,14 +142,17 @@ namespace SL.Sigesoft.Data.Repositories
             }
             return false;
         }
+
         public Task<bool> ChangeProfile(SystemUser systemUser)
         {
             throw new NotImplementedException();
         }        
+
         public Task<bool> ValidatePassword(SystemUser systemUser)
         {
             throw new NotImplementedException();
         }
+
         public async Task<(bool result, SystemUser systemUser)> ValidateLogin_(SystemUser systemUser)
         {
             var systemUserDb = await _dbSet.Include(u => u.Permission).FirstOrDefaultAsync(u => u.v_UserName == systemUser.v_UserName);
@@ -140,6 +171,7 @@ namespace SL.Sigesoft.Data.Repositories
             }
             return (false, null);
         }
+
         public async Task<AccessSysteUserModelDto> GetAccess(int id)
         {
             try
@@ -261,6 +293,7 @@ namespace SL.Sigesoft.Data.Repositories
             }
             
         }
+
         public async Task<(bool result, SystemUserLoginModel systemUser)> ValidateLogin(SystemUser systemUser)
         {
             try
@@ -306,6 +339,7 @@ namespace SL.Sigesoft.Data.Repositories
             }
 
         }
+
         public async Task<bool> UpdateAccess(List<UpdateAccessModel> updateAccessDto)
         {
             try
@@ -362,6 +396,12 @@ namespace SL.Sigesoft.Data.Repositories
             access.i_OwnerCompanyId = permi.OwnerCompanyId;
             access.i_UpdateUserId = permi.UpdateUserId;
             access.d_UpdateDate = DateTime.Now;
+
+            #region AUDIT
+            access.i_IsDeleted = YesNo.No;
+            access.d_InsertDate = DateTime.UtcNow;
+            access.i_InsertUserId = permi.InsertUserId;
+            #endregion
 
             _dbSetAccess.Add(access);
 

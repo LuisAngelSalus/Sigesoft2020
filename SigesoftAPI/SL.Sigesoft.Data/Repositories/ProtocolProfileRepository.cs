@@ -33,7 +33,7 @@ namespace SL.Sigesoft.Data.Repositories
             #region AUDIT
             entity.i_IsDeleted = YesNo.No;
             entity.d_InsertDate = DateTime.UtcNow;
-            entity.i_InsertUserId = 11;
+            entity.i_InsertUserId = entity.i_InsertUserId;
             #endregion
 
             foreach (var item in entity.ProfileDetail)

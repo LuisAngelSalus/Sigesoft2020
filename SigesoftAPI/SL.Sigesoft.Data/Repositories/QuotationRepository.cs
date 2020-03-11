@@ -318,6 +318,11 @@ namespace SL.Sigesoft.Data.Repositories
 
             }
 
+            #region AUDIT            
+            entityDb.d_UpdateDate = DateTime.UtcNow;
+            entityDb.i_UpdateUserId = entity.i_UpdateUserId;
+            #endregion
+
 
             try
             {
@@ -503,6 +508,10 @@ namespace SL.Sigesoft.Data.Repositories
                     {
                         item.i_IsProccess = YesNo.Yes;
                     }
+                    #region AUDIT            
+                    item.d_UpdateDate = DateTime.UtcNow;
+                    //item.i_UpdateUserId = entity.i_UpdateUserId;
+                    #endregion
 
                     await _context.SaveChangesAsync();
                 }
@@ -689,6 +698,7 @@ namespace SL.Sigesoft.Data.Repositories
 
             return 11;
         }
+
         private async Task<bool> InsertProtocolComponent(string protocolId, ICollection<ProfileComponent> profileComponents, ICollection<AdditionalComponentsQuote> additionalComponentsQuote, int systemUserId)
         {
             try

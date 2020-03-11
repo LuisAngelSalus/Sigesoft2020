@@ -23,30 +23,31 @@ namespace SL.Sigesoft.Data.Configuration
             entity.Property(e => e.d_AcceptanceDate)
                 .HasColumnName("d_AcceptanceDate")
                 .HasColumnType("datetime");
-
-            entity.Property(e => e.d_InsertDate).HasColumnName("d_InsertDate");
+            
 
             entity.Property(e => e.d_ShippingDate)
                 .HasColumnName("d_ShippingDate")
                 .HasColumnType("datetime");
 
-            entity.Property(e => e.d_UpdateDate).HasColumnName("d_UpdateDate");
-
             entity.Property(e => e.i_CompanyHeadquarterId).HasColumnName("i_CompanyHeadquarterId");
 
-            entity.Property(e => e.i_CompanyId).HasColumnName("i_CompanyId");
-
-            entity.Property(e => e.i_InsertUserId).HasColumnName("i_InsertUserId");
-
-            entity.Property(e => e.i_IsDeleted).HasColumnName("i_IsDeleted");
+            entity.Property(e => e.i_CompanyId).HasColumnName("i_CompanyId");            
 
             entity.Property(e => e.i_IsProccess).HasColumnName("i_IsProccess");
 
-            entity.Property(e => e.i_StatusQuotationId).HasColumnName("i_StatusQuotationId");
+            entity.Property(e => e.i_StatusQuotationId).HasColumnName("i_StatusQuotationId");                      
+
+            entity.Property(e => e.i_Version).HasColumnName("i_Version");
+
+            entity.Property(e => e.i_IsDeleted).HasColumnName("i_IsDeleted");
+
+            entity.Property(e => e.i_InsertUserId).HasColumnName("i_InsertUserId");
+
+            entity.Property(e => e.d_InsertDate).HasColumnName("d_InsertDate");
 
             entity.Property(e => e.i_UpdateUserId).HasColumnName("i_UpdateUserId");
 
-            entity.Property(e => e.i_Version).HasColumnName("i_Version");
+            entity.Property(e => e.d_UpdateDate).HasColumnName("d_UpdateDate");
 
             entity.Property(e => e.r_TotalQuotation)
                 .HasColumnName("r_TotalQuotation")

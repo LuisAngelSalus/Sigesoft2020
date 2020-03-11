@@ -17,19 +17,19 @@ namespace SL.Sigesoft.Data.Configuration
 
             entity.Property(e => e.i_AdditionalComponentsQuoteId).HasColumnName("i_AdditionalComponentsQuoteId");
 
-            entity.Property(e => e.d_InsertDate).HasColumnName("d_InsertDate");
-
-            entity.Property(e => e.d_UpdateDate).HasColumnName("d_UpdateDate");
-
             entity.Property(e => e.i_CategoryId).HasColumnName("i_CategoryId");
-
-            entity.Property(e => e.i_InsertUserId).HasColumnName("i_InsertUserId");
-
-            entity.Property(e => e.i_IsDeleted).HasColumnName("i_IsDeleted");
 
             entity.Property(e => e.i_QuotationId).HasColumnName("i_QuotationId");
 
+            entity.Property(e => e.i_IsDeleted).HasColumnName("i_IsDeleted");
+
+            entity.Property(e => e.i_InsertUserId).HasColumnName("i_InsertUserId");
+
+            entity.Property(e => e.d_InsertDate).HasColumnName("d_InsertDate");
+
             entity.Property(e => e.i_UpdateUserId).HasColumnName("i_UpdateUserId");
+
+            entity.Property(e => e.d_UpdateDate).HasColumnName("d_UpdateDate");
 
             entity.Property(e => e.r_MinPrice)
                 .HasColumnName("r_MinPrice")

@@ -28,8 +28,12 @@ namespace SL.Sigesoft.Data.Repositories
 
         public async Task<ProtocolDetail> AddAsync(ProtocolDetail entity)
         {
-            entity.d_InsertDate = DateTime.Now;
+            #region AUDIT
             entity.i_IsDeleted = YesNo.No;
+            entity.d_InsertDate = DateTime.UtcNow;
+            entity.i_InsertUserId = entity.i_InsertUserId;
+            #endregion
+
             _dbSet.Add(entity);
             try
             {

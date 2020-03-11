@@ -27,10 +27,13 @@ namespace SL.Sigesoft.Data.Repositories
 
         public async Task<QuoteTracking> AddAsync(QuoteTracking entity)
         {
+            #region AUDIT
             entity.i_IsDeleted = YesNo.No;
-            entity.d_Date = DateTime.UtcNow;
             entity.d_InsertDate = DateTime.UtcNow;
             entity.i_InsertUserId = entity.i_InsertUserId;
+            #endregion
+
+            entity.d_Date = DateTime.UtcNow;
             _context.QuoteTracking.Add(entity);
             try
             {
@@ -46,9 +49,11 @@ namespace SL.Sigesoft.Data.Repositories
         public async Task<bool> DeleteAsync(int id)
         {
             var entity = await _dbSet.SingleOrDefaultAsync(u => u.i_QuoteTrackingId == id);
+            #region AUDIT
             entity.i_IsDeleted = YesNo.Yes;
             entity.d_UpdateDate = DateTime.UtcNow;
             entity.i_UpdateUserId = entity.i_UpdateUserId;
+            #endregion
             try
             {
                 return (await _context.SaveChangesAsync() > 0 ? true : false);
@@ -82,12 +87,11 @@ namespace SL.Sigesoft.Data.Repositories
             }
 
             entityDb.v_Commentary = entity.v_Commentary;
+            #region AUDIT
             entityDb.d_UpdateDate = DateTime.UtcNow;
             entityDb.i_UpdateUserId = entity.i_UpdateUserId;
-            //if (entity.s)
-            //{
-
-            //}
+            #endregion
+            
             try
             {
                 return await _context.SaveChangesAsync() > 0 ? true : false;

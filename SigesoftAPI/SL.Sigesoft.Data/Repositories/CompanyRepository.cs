@@ -28,12 +28,13 @@ namespace SL.Sigesoft.Data.Repositories
         public async Task<Company> AddAsync(Company entity)
         {
             if(CompanyExistsBD(entity.v_IdentificationNumber)) return null;
-          
-            entity.i_IsDeleted = YesNo.No;
+            
             #region AUDIT
+            entity.i_IsDeleted = YesNo.No;
             entity.i_InsertUserId = entity.i_InsertUserId;
             entity.d_InsertDate = DateTime.Now;
             #endregion
+
             var list = new List<CompanyHeadquarter>();
             foreach (var item in entity.CompanyHeadquarter) 
             {
@@ -67,7 +68,13 @@ namespace SL.Sigesoft.Data.Repositories
         public async Task<bool> DeleteAsync(int id)
         {
             var entity = await _dbSet.SingleOrDefaultAsync(u => u.i_CompanyId == id);
+
+            #region AUDIT
             entity.i_IsDeleted = YesNo.Yes;
+            entity.d_UpdateDate = DateTime.UtcNow;
+            //entity.i_UpdateUserId = entity.i_UpdateUserId;
+            #endregion
+
             try
             {
                 return (await _context.SaveChangesAsync() > 0 ? true : false);
@@ -211,6 +218,12 @@ namespace SL.Sigesoft.Data.Repositories
             entityDb.v_Mail = entity.v_Mail;
             entityDb.v_District = entity.v_District;
             entityDb.v_PhoneCompany = entity.v_PhoneCompany;
+
+            #region AUDIT            
+            entityDb.d_UpdateDate = DateTime.UtcNow;
+            entityDb.i_UpdateUserId = entity.i_UpdateUserId;
+            #endregion
+
             try
             {
                 return await _context.SaveChangesAsync() > 0 ? true : false;

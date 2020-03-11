@@ -23,12 +23,15 @@ namespace SL.Sigesoft.Data.Repositories
             this._logger = logger;
             this._dbSet = _context.Set<Protocol>();
         }
-
-
+        
         public async Task<Protocol> AddAsync(Protocol entity)
         {
-            entity.d_InsertDate = DateTime.Now;
+            #region AUDIT
             entity.i_IsDeleted = YesNo.No;
+            entity.d_InsertDate = DateTime.UtcNow;
+            entity.i_InsertUserId = entity.i_InsertUserId;
+            #endregion
+
             _dbSet.Add(entity);
             try
             {

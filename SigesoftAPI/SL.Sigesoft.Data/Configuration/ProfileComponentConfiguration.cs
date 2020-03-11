@@ -17,10 +17,6 @@ namespace SL.Sigesoft.Data.Configuration
 
             entity.Property(e => e.i_ProfileComponentId).HasColumnName("i_ProfileComponentId");
 
-            entity.Property(e => e.d_InsertDate).HasColumnName("d_InsertDate");
-
-            entity.Property(e => e.d_UpdateDate).HasColumnName("d_UpdateDate");
-
             entity.Property(e => e.i_Age).HasColumnName("i_Age");
 
             entity.Property(e => e.i_AgeConditionalId).HasColumnName("i_AgeConditionalId");
@@ -29,13 +25,19 @@ namespace SL.Sigesoft.Data.Configuration
 
             entity.Property(e => e.i_GenderConditionalId).HasColumnName("i_GenderConditionalId");
 
-            entity.Property(e => e.i_InsertUserId).HasColumnName("i_InsertUserId");
-
-            entity.Property(e => e.i_IsDeleted).HasColumnName("i_IsDeleted");
-
             entity.Property(e => e.i_QuotationProfileId).HasColumnName("i_QuotationProfileId");
 
             entity.Property(e => e.i_UpdateUserId).HasColumnName("i_UpdateUserId");
+
+            entity.Property(e => e.i_IsDeleted).HasColumnName("i_IsDeleted");
+
+            entity.Property(e => e.i_InsertUserId).HasColumnName("i_InsertUserId");
+
+            entity.Property(e => e.d_InsertDate).HasColumnName("d_InsertDate");
+
+            entity.Property(e => e.i_UpdateUserId).HasColumnName("i_UpdateUserId");
+
+            entity.Property(e => e.d_UpdateDate).HasColumnName("d_UpdateDate");
 
             entity.Property(e => e.r_MinPrice)
                 .HasColumnName("r_MinPrice")
