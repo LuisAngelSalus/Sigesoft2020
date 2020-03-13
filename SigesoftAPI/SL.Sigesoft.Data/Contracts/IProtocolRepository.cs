@@ -8,6 +8,7 @@ namespace SL.Sigesoft.Data.Contracts
 {
     public interface IProtocolRepository : IGenericRepository<Protocol>
     {
-        Task<List<ProtocolListModel>> GetProtocolsByCompanyId(int CompanyId);
+        Task<IEnumerable<ProtocolListModel>> GetProtocolsByCompanyId(int CompanyId);
+        Task<IEnumerable<AdditionalComponentsModel>> GetAdditionalComponents(int ProtocolId);
     }
 }

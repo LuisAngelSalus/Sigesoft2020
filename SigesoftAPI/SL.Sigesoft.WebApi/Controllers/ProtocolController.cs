@@ -13,7 +13,7 @@ using SL.Sigesoft.Models;
 
 namespace SL.Sigesoft.WebApi.Controllers
 {
-    [Authorize(Roles = "Administrador,Comercial")]
+    [Authorize(Roles = "Administrador,Comercial,Cliente")]
     [Route("api/[controller]")]
     [ApiController]
     public class ProtocolController : ControllerBase
@@ -82,6 +82,35 @@ namespace SL.Sigesoft.WebApi.Controllers
             {
                 return BadRequest();
             }
+        }
+
+
+        [HttpGet("{id}/ExamenesAdicionales")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Response<List<AdditionalComponentsModel>>>> GetAdditionalComponents(int id)
+        {
+            var response = new Response<List<AdditionalComponentsModel>>();
+            try
+            {
+                var protocols = await _protocolRepository.GetAdditionalComponents(id);
+                if (protocols == null)
+                {
+                    return NotFound();
+                }
+                response.Data = _mapper.Map<List<AdditionalComponentsModel>>(protocols);
+                if (response.Data != null)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Consulta Exitosa";
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return response;
+
         }
 
     }

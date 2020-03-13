@@ -59,7 +59,7 @@ namespace SL.Sigesoft.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<List<ProtocolListModel>> GetProtocolsByCompanyId(int CompanyId)
+        public async Task<IEnumerable<ProtocolListModel>> GetProtocolsByCompanyId(int CompanyId)
         {
             try
             {
@@ -101,6 +101,30 @@ namespace SL.Sigesoft.Data.Repositories
         public Task<bool> UpdateAsync(Protocol entity)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<AdditionalComponentsModel>> GetAdditionalComponents(int protocolId)
+        {
+            try
+            {
+                var query = await (from A in _context.Protocol
+                                   join B in _context.AdditionalComponentsQuote on A.i_QuotationId equals B.i_QuotationId
+                                   where A.i_ProtocolId == protocolId
+                                   select new AdditionalComponentsModel
+                                   {
+                                       ComponentId = B.v_ComponentId,
+                                       Name = B.v_ComponentName,
+                                       CategoryName = B.v_CategoryName,
+                                       CategoryId = B.i_CategoryId,
+                                       SalePrice = B.r_SalePrice
+                                   }).ToListAsync();
+                return query;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }    
         }
     }
 }

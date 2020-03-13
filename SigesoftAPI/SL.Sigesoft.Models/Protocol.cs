@@ -13,6 +13,7 @@ namespace SL.Sigesoft.Models
 
         public int i_ProtocolId { get; set; }
         public int i_CompanyId { get; set; }
+        public int i_QuotationId { get; set; }
         public string v_ProtocolName { get; set; }
         public int i_ServiceTypeId { get; set; }
         public int i_TypeFormatId { get; set; }

@@ -721,10 +721,10 @@ namespace SL.Sigesoft.WebApi.Profiles
 
             this.CreateMap<ClientUserPasswordDto, ClientUser>()
             .ForMember(u => u.i_ClientUserId, p => p.MapFrom(m => m.ClientUserId))
-            .ForMember(u => u.v_Password, p => p.MapFrom(m => m.Password
-            ))
+            .ForMember(u => u.v_Password, p => p.MapFrom(m => m.Password))
             .ForMember(u => u.i_UpdateUserId, p => p.MapFrom(m => m.UpdateUserId))
             .ReverseMap();
+
         }
     }
 }

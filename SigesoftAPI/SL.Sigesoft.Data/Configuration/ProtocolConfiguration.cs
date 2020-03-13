@@ -17,7 +17,9 @@ namespace SL.Sigesoft.Data.Configuration
 
             entity.Property(e => e.i_ProtocolId).HasColumnName("i_ProtocolId");
 
-            entity.Property(e => e.i_CompanyId).HasColumnName("i_CompanyId");                                 
+            entity.Property(e => e.i_CompanyId).HasColumnName("i_CompanyId");
+
+            entity.Property(e => e.i_QuotationId).HasColumnName("i_QuotationId");
 
             entity.Property(e => e.i_QuotationProfileIdRef).HasColumnName("i_QuotationProfileIdRef");
 
