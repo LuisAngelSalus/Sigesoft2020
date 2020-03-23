@@ -17,27 +17,13 @@ namespace SL.Sigesoft.Data.Configuration
 
             entity.Property(e => e.i_ScheduleId).HasColumnName("i_ScheduleId");
 
-            entity.Property(e => e.i_WorkerId).HasColumnName("i_WorkerId");
-
             entity.Property(e => e.i_ServiceId).HasColumnName("i_ServiceId");
 
             entity.Property(e => e.d_DateTimeCalendar).HasColumnName("d_DateTimeCalendar");
 
-            entity.Property(e => e.d_CircuitStartDate).HasColumnName("d_CircuitStartDate");
+            entity.Property(e => e.d_CircuitStartDate).HasColumnName("d_CircuitStartDate");            
 
-            entity.Property(e => e.d_EntryTimeCM).HasColumnName("d_EntryTimeCM");
-
-            entity.Property(e => e.i_ServiceTypeId).HasColumnName("i_ServiceTypeId");
-
-            entity.Property(e => e.i_CalendarStatusId).HasColumnName("i_CalendarStatusId");
-
-            entity.Property(e => e.i_ServiceModeId).HasColumnName("i_ServiceModeId");
-
-            entity.Property(e => e.i_ProtocolId).HasColumnName("i_ProtocolId");
-
-            entity.Property(e => e.i_NewContinuationId).HasColumnName("i_NewContinuationId");
-
-            entity.Property(e => e.i_LineStatusId).HasColumnName("i_LineStatusId");
+            entity.Property(e => e.i_CalendarStatusId).HasColumnName("i_CalendarStatusId");            
 
             entity.Property(e => e.i_IsVipId).HasColumnName("i_IsVipId");
 

@@ -54,9 +54,10 @@ namespace SL.Sigesoft.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Protocol> GetAsync(int id)
+        public async Task<Protocol> GetAsync(int id)
         {
-            throw new NotImplementedException();
+            var entityDb = await _dbSet.Include(i => i.ProtocolDetail).Where(p => p.i_ProtocolId == id).FirstOrDefaultAsync();
+            return entityDb;
         }
 
         public async Task<IEnumerable<ProtocolListModel>> GetProtocolsByCompanyId(int CompanyId)

@@ -13,7 +13,7 @@ using SL.Sigesoft.Models;
 
 namespace SL.Sigesoft.WebApi.Controllers
 {
-    [Authorize(Roles = "Administrador,Comercial,Cliente")]
+    [Authorize(Roles = "Administrador,Comercial,Cliente,Sistemas")]
     [Route("api/[controller]")]
     [ApiController]
     public class ProtocolController : ControllerBase
@@ -26,6 +26,35 @@ namespace SL.Sigesoft.WebApi.Controllers
             this._protocolRepository = protocolRepository;
             this._mapper = mapper;
         }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Response<ProtocolDto>>> Get(int id)
+        {
+            var response = new Response<ProtocolDto>();
+            try
+            {
+                var protocol = await _protocolRepository.GetAsync(id);
+                if (protocol == null)
+                {
+                    return NotFound();
+                }
+                response.Data = _mapper.Map<ProtocolDto>(protocol);
+                if (response.Data != null)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Consulta Exitosa";
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return response;
+
+        }
+
 
         [HttpGet("{id}/ProcolosPorEmpresa")]
         [ProducesResponseType(StatusCodes.Status200OK)]

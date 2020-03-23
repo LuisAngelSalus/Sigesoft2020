@@ -21,10 +21,6 @@ namespace SL.Sigesoft.Data.Configuration
 
             entity.Property(e => e.i_WorkerId).HasColumnName("i_WorkerId");
 
-            entity.Property(e => e.i_ServiceTypeId).HasColumnName("i_ServiceTypeId");
-
-            entity.Property(e => e.i_ServiceModeId).HasColumnName("i_ServiceModeId");
-
             entity.Property(e => e.i_ServiceStatusId).HasColumnName("i_ServiceStatusId");
 
             entity.Property(e => e.d_ServiceDate).HasColumnName("d_ServiceDate");

@@ -116,7 +116,6 @@ namespace SL.Sigesoft.Data.Repositories.Win
         {
             try
             {
-
                 var organizationDbWin = await (from A in _context.OrganizationWin
                                                join B in _context.LocationWin on A.v_OrganizationId equals B.v_OrganizationId
                                                join C in _context.GroupOccupationWin on B.v_LocationId equals C.v_LocationId

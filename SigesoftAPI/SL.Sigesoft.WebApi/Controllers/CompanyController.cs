@@ -217,6 +217,23 @@ namespace SL.Sigesoft.WebApi.Controllers
 
         }
 
+        [HttpGet("{id}/{ruc}/ValidarResponsable")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<bool>> ValidateUserCompany(int id, string ruc)
+        {
+            try
+            {
+                var result = await _companyRepository.ValidateCompanyIsMine(id, ruc);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }           
+        }
+
         [HttpGet("{value}/AutocompleteByName")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

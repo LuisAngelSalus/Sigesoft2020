@@ -24,12 +24,7 @@ namespace SL.Sigesoft.Dtos
 
 
     public class WorkerRegisterDto
-    {        
-        public int PersonId { get; set; }
-        public int WorkerId { get; set; }
-        public string FirstName { get; set; }
-        public string FirstLastName { get; set; }
-        public string SecondLastName { get; set; }
+    {
         public string CurrentPosition { get; set; }
         public string HomeAddress { get; set; }
         public DateTime? DateOfBirth { get; set; }
@@ -38,5 +33,6 @@ namespace SL.Sigesoft.Dtos
         public string MobileNumber { get; set; }
         public int? TypeDocumentId { get; set; }
         public string NroDocument { get; set; }
+        public PersonRegistertDto Person { get; set; }
     }
 }

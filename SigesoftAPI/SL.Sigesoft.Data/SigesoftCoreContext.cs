@@ -48,6 +48,9 @@ namespace SL.Sigesoft.Data
         public virtual DbSet<AccountSetting> AccountSetting { get; set; }
         public virtual DbSet<Worker> Worker { get; set; }
         public virtual DbSet<ClientUser> ClientUser { get; set; }
+        public virtual DbSet<Schedule> Schedule { get; set; }
+        public virtual DbSet<Service> Service { get; set; }
+        public virtual DbSet<ServiceComponent> ServiceComponent { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -84,6 +87,9 @@ namespace SL.Sigesoft.Data
             modelBuilder.ApplyConfiguration(new AccountSettingConfiguration());
             modelBuilder.ApplyConfiguration(new WorkerConfiguration());
             modelBuilder.ApplyConfiguration(new ClientUserConfiguration());
+            modelBuilder.ApplyConfiguration(new ScheduleConfiguration());
+            modelBuilder.ApplyConfiguration(new ServiceConfiguration());
+            modelBuilder.ApplyConfiguration(new ServiceComponentConfiguration());
         }
     }
 }

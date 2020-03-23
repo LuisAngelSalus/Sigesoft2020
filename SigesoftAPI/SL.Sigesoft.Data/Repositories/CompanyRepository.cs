@@ -239,11 +239,13 @@ namespace SL.Sigesoft.Data.Repositories
         {
             try
             {
+                //Usar carga peresoza (Refactory)
                 var query = await (from A in _context.Company
                                    where A.i_IsDeleted == YesNo.No && A.v_IdentificationNumber == ruc
                                    select new Company
                                    {
                                        i_CompanyId = A.i_CompanyId,
+                                       i_ResponsibleSystemUserId = A.i_ResponsibleSystemUserId,
                                        v_Name = A.v_Name,
                                        v_IdentificationNumber = A.v_IdentificationNumber,
                                        v_Address = A.v_Address,
@@ -258,6 +260,7 @@ namespace SL.Sigesoft.Data.Repositories
                                                              .ToList()
                                    }
                               ).FirstOrDefaultAsync();
+
                 return query;
             }
             catch (Exception ex)
@@ -267,7 +270,7 @@ namespace SL.Sigesoft.Data.Repositories
             }
             
         }
-
+        
         public async Task<List<Company>> AutocompleteByName(string value)
         {
             return await _dbSet.Where(c => c.i_IsDeleted == YesNo.No && c.v_Name.Contains(value)).ToListAsync();
@@ -287,6 +290,31 @@ namespace SL.Sigesoft.Data.Repositories
                 return true;
 
             return false;
+        }
+
+        public async Task<bool> ValidateCompanyIsMine(int responsibleSystemUserId, string ruc)
+        {
+            try
+            {
+                var query = await _dbSet.Where(p => p.v_IdentificationNumber == ruc && p.i_IsDeleted == YesNo.No).FirstOrDefaultAsync();
+                if (query != null)
+                {
+
+                    if (query.i_ResponsibleSystemUserId != responsibleSystemUserId)
+                    {
+                        return false;
+                    }
+                    return true;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
         }
     }
 }

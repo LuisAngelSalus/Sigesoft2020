@@ -16,12 +16,14 @@ namespace SL.Sigesoft.Data.Repositories
         private SigesoftCoreContext _context;
         private IPersonsRepository _personsRepository;
         private readonly ILogger<WorkerRepository> _logger;
+        private DbSet<Worker> _dbSet;
 
         public WorkerRepository(SigesoftCoreContext context, ILogger<WorkerRepository> logger, IPersonsRepository personsRepository)
         {
             _context = context;
             _personsRepository = personsRepository;
             this._logger = logger;
+            this._dbSet = _context.Set<Worker>();
         }
 
         public async Task<Worker> AddAsync(Worker entity)
@@ -192,5 +194,39 @@ namespace SL.Sigesoft.Data.Repositories
           
         }
 
+        //public async Task<Worker> DoWorker(Worker worker)
+        //{
+        //    try
+        //    {
+        //        //foreach (var item in listWorkers)
+        //        //{
+        //            _dbSet.Add(worker);
+        //        //}
+        //         await _context.SaveChangesAsync() ;
+
+        //        return worker;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Error en {nameof(DoWorker)}: " + ex.Message);
+        //        return null;
+        //    }
+            
+        //}
+
+        public async Task<Worker> GetAsyncByDoc(string document)
+        {
+            try
+            {
+                var worker = await _context.Worker.Where(p => p.v_NroDocument == document).FirstOrDefaultAsync();
+                return worker;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            
+        }
     }
 }

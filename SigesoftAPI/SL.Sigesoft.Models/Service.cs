@@ -15,8 +15,6 @@ namespace SL.Sigesoft.Models
         public int i_ServiceId { get; set; }
         public int i_ProtocolId { get; set; }
         public int i_WorkerId { get; set; }
-        public int i_ServiceTypeId { get; set; }
-        public int i_ServiceModeId { get; set; }
         public int i_ServiceStatusId { get; set; }
         public DateTime d_ServiceDate { get; set; }
         public YesNo i_IsDeleted { get; set; }
