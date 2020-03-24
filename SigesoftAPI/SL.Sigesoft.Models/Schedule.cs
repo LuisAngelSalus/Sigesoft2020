@@ -7,7 +7,6 @@ namespace SL.Sigesoft.Models
 {
    public class Schedule
     {
-
         public int i_ScheduleId { get; set; }
         public int i_ServiceId { get; set; }
         public DateTime d_DateTimeCalendar { get; set; }

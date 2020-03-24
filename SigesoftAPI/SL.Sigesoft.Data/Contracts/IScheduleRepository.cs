@@ -9,5 +9,6 @@ namespace SL.Sigesoft.Data.Contracts
     public interface IScheduleRepository
     {
         Task<bool> DoSchedule(List<Schedule> schedules);
+        Task<List<ScheduleListModel>> Search(ParamsSearch paramsSearch);
     }
 }

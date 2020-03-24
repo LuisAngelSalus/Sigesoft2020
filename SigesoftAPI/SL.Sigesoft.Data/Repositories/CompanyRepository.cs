@@ -297,9 +297,11 @@ namespace SL.Sigesoft.Data.Repositories
             try
             {
                 var query = await _dbSet.Where(p => p.v_IdentificationNumber == ruc && p.i_IsDeleted == YesNo.No).FirstOrDefaultAsync();
+                
                 if (query != null)
                 {
-
+                    if (query.i_ResponsibleSystemUserId == null) return true;
+                    
                     if (query.i_ResponsibleSystemUserId != responsibleSystemUserId)
                     {
                         return false;
