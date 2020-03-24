@@ -449,6 +449,7 @@ namespace SL.Sigesoft.WebApi.Profiles
             .ForMember(u => u.StatusQuotationName, p => p.MapFrom(m => m.StatusQuotationName))
             .ForMember(u => u.StatusQuotationId, p => p.MapFrom(m => m.StatusQuotationId))
             .ForMember(u => u.Indicator, p => p.MapFrom(m => m.Indicator))
+            .ForMember(u => u.Email, p => p.MapFrom(m => m.Email))
             .ReverseMap();
 
             this.CreateMap<QuoteTrackingFilterModel, QuoteTrackingFilterDto>()

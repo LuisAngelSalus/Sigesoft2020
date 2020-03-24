@@ -25,6 +25,7 @@ namespace SL.Sigesoft.Models
         public int StatusQuotationId { get; set; }
         public DateTime? InsertDate { get; set; }
         public string Indicator { get; set; }
+        public string Email { get; set; }
         public List<QuoteTrackingFilterModel> QuoteTracking { get; set; }
     }
 

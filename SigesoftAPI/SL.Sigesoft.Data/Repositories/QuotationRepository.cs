@@ -435,6 +435,7 @@ namespace SL.Sigesoft.Data.Repositories
                                   AcceptanceDate = A.d_AcceptanceDate,
                                   CompanyName = B.v_Name,
                                   Total = A.r_TotalQuotation,
+                                  Email =  A.v_Email,
                                   Indicator = GetIndicator((from A2 in _context.QuoteTracking
                                                             where A2.i_QuotationId == A.i_QuotationId && A2.i_IsDeleted == YesNo.No
                                                             orderby A2.d_Date descending
