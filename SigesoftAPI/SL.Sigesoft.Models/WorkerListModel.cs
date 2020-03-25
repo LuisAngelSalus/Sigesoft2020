@@ -10,6 +10,8 @@ namespace SL.Sigesoft.Models
         public string CompanyName { get; set; }
         public string WorkerEmail { get; set; }
         public string WorkerCell { get; set; }
+        public string ProtocolName { get; set; }
+        public string CurrentOccupation { get; set; }
     }
 
     public class ParamsSearch

@@ -13,7 +13,7 @@ namespace SL.Sigesoft.Dtos
         public string ContactName { get; set; }
         public string Mail { get; set; }
         public string District { get; set; }
-        public string PhoneCompany { get; set; }
+        public string PhoneCompany { get; set; }        
         public int ResponsibleSystemUserId { get; set; }
         public int InsertUserId { get; set; }
 

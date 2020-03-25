@@ -57,22 +57,39 @@ namespace SL.Sigesoft.Data.Repositories
                                      join E in _context.Protocol on B.i_ProtocolId equals E.i_ProtocolId
                                      join F in _context.Company on E.i_CompanyId equals F.i_CompanyId                                     
                                      where A.i_IsDeleted == YesNo.No
-                                        && (!validfi || A.d_InsertDate >= fi)
-                                        && (!validff || A.d_InsertDate <= ff)
+                                        && (!validfi || A.d_DateTimeCalendar >= fi)
+                                        && (!validff || A.d_DateTimeCalendar <= ff)
                                      select new  { 
                                         CompanyName = F.v_Name,
                                         CurrentOccupation = C.v_CurrentPosition,
                                         Email = C.v_Email,
                                         Cell = C.v_MobileNumber,
                                         FullName = D.v_FirstName + " " + D.v_FirstLastName + " " + D.v_SecondLastName, 
-                                        ProtocolName = E.v_ProtocolName,
-                                        
+                                        ProtocolName = E.v_ProtocolName                                        
                                      }).ToListAsync();
 
+            var filterName = queryWorker.Where(x => x.FullName.ToLower().Contains(paramsSearch.Value.ToLower())).ToList();
+            var filterCompany = queryWorker.Where(x => x.CompanyName.ToLower().Contains(paramsSearch.Value.ToLower())).ToList();
+            var filterCurrentOccupation = queryWorker.Where(x => x.CurrentOccupation.ToLower().Contains(paramsSearch.Value.ToLower())).ToList();            
+            var filterProtocol = queryWorker.Where(x => x.ProtocolName.ToLower().Contains(paramsSearch.Value.ToLower())).ToList();                       
 
+            var combinedList = filterName.Concat(filterCompany).Concat(filterCurrentOccupation).Concat(filterProtocol);
 
+            var result = new List<ScheduleListModel>();
+            foreach (var item in combinedList)
+            {
+                var oScheduleListModel = new ScheduleListModel();
+                oScheduleListModel.FullName = item.FullName;
+                oScheduleListModel.CompanyName = item.CompanyName;
+                oScheduleListModel.WorkerEmail = item.Email;
+                oScheduleListModel.WorkerCell = item.Cell;
+                oScheduleListModel.ProtocolName = item.ProtocolName;
+                oScheduleListModel.CurrentOccupation = item.CurrentOccupation;
 
-            return null;
+                result.Add(oScheduleListModel);
+            }
+
+            return result;
         }
     }
 }

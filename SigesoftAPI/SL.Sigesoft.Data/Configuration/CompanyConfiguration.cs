@@ -73,7 +73,7 @@ namespace SL.Sigesoft.Data.Configuration
                 .HasMaxLength(100)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.SystemUser)
+        entity.HasOne(d => d.SystemUser)
                 .WithMany(p => p.Company)
                 .HasForeignKey(d => d.i_ResponsibleSystemUserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)

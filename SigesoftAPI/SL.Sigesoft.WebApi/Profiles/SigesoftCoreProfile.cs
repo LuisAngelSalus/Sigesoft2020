@@ -95,7 +95,7 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.Mail, p => p.MapFrom(m => m.v_Mail))
                 .ForMember(u => u.District, p => p.MapFrom(m => m.v_District))
                 .ForMember(u => u.PhoneCompany, p => p.MapFrom(m => m.v_PhoneCompany))
-                .ForMember(u => u.ResponsibleSystemUserId, p => p.MapFrom(m => m.i_ResponsibleSystemUserId))
+                .ForMember(u => u.ResponsibleSystemUserId, p => p.MapFrom(m => m.i_ResponsibleSystemUserId))                
                 .ForMember(u => u.InsertUserId, p => p.MapFrom(m => m.i_InsertUserId))
                 .ReverseMap();                
 
