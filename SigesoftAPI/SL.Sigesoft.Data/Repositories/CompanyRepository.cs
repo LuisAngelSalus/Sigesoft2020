@@ -123,6 +123,7 @@ namespace SL.Sigesoft.Data.Repositories
             entityDb.v_Address = entity.v_Address;
             entityDb.v_PhoneNumber = entity.v_PhoneNumber;
             entityDb.v_ContactName = entity.v_ContactName;
+            entityDb.v_PathLogo = entity.v_PathLogo;
             entityDb.v_Mail = entity.v_Mail;
             entityDb.v_District = entity.v_District;
             entityDb.v_PhoneCompany = entity.v_PhoneCompany;
@@ -278,9 +279,18 @@ namespace SL.Sigesoft.Data.Repositories
 
         public async Task<IEnumerable<Company>> GetAllFilterAsync(ParamsCompanyFilterModel paramsCompany)
         {
-            return await _dbSet.Include(su => su.CompanyHeadquarter)
+            try
+            {
+                return await _dbSet.Include(su => su.CompanyHeadquarter)
                       .Where(u => u.i_IsDeleted == YesNo.No && u.i_ResponsibleSystemUserId == paramsCompany.ResponsibleSystemUserId)
                       .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            
         }
 
         private bool CompanyExistsBD(string ruc)
