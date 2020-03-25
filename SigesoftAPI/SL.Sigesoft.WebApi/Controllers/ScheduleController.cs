@@ -52,36 +52,5 @@ namespace SL.Sigesoft.WebApi.Controllers
             
         }
 
-        [HttpPost]
-        [Route("Buscar")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Response<List<ScheduleListModel>>>>Search(ParamsSearch paramsSearch)
-        {
-            var response = new Response<List<ScheduleListModel>>();
-            try
-            {
-                var workers = await _scheduleRepository.Search(paramsSearch);
-                if (workers == null)
-                {
-                    response.Data = null;
-                    response.IsSuccess = true;
-                    response.Message = "No se encontró registro";
-                    return NotFound(response);
-                }
-                response.Data = _mapper.Map<List<ScheduleListModel>>(workers);
-                if (response.Data != null)
-                {
-                    response.IsSuccess = true;
-                    response.Message = "Consulta Exitosa";
-                }
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-            return response;
-
-        }
     }
 }
