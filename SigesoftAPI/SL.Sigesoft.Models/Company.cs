@@ -17,7 +17,6 @@ namespace SL.Sigesoft.Models
         public int i_CompanyId { get; set; }
         public int? i_ResponsibleSystemUserId { get; set; }
         public string v_Name { get; set; }
-        public string v_PathLogo { get; set; }
         public string v_IdentificationNumber { get; set; }
         public string v_Address { get; set; }
         public string v_PhoneNumber { get; set; }

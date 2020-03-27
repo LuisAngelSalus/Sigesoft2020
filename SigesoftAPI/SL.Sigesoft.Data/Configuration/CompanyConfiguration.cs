@@ -52,11 +52,6 @@ namespace SL.Sigesoft.Data.Configuration
                 .HasMaxLength(20)
                 .IsUnicode(false);
 
-            entity.Property(e => e.v_PathLogo)
-                .HasColumnName("v_PathLogo")
-                .HasMaxLength(100)
-                .IsUnicode(false);
-
             entity.Property(e => e.v_Mail)
                 .HasColumnName("v_Mail")
                 .HasMaxLength(150)

@@ -60,32 +60,36 @@ namespace SL.Sigesoft.Data.Repositories
                                         && (!validfi || A.d_DateTimeCalendar >= fi)
                                         && (!validff || A.d_DateTimeCalendar <= ff)
                                      select new  { 
+                                        ScheduleId = A.i_ScheduleId,
                                         CompanyName = F.v_Name,
                                         CurrentOccupation = C.v_CurrentPosition,
                                         Email = C.v_Email,
                                         Cell = C.v_MobileNumber,
                                         FullName = D.v_FirstName + " " + D.v_FirstLastName + " " + D.v_SecondLastName, 
-                                        ProtocolName = E.v_ProtocolName                                        
+                                        ProtocolName = E.v_ProtocolName,
+                                        NroDocument = C.v_NroDocument
                                      }).ToListAsync();
 
             var filterName = queryWorker.Where(x => x.FullName.ToLower().Contains(paramsSearch.Value.ToLower())).ToList();
             var filterCompany = queryWorker.Where(x => x.CompanyName.ToLower().Contains(paramsSearch.Value.ToLower())).ToList();
             var filterCurrentOccupation = queryWorker.Where(x => x.CurrentOccupation.ToLower().Contains(paramsSearch.Value.ToLower())).ToList();            
-            var filterProtocol = queryWorker.Where(x => x.ProtocolName.ToLower().Contains(paramsSearch.Value.ToLower())).ToList();                       
+            var filterProtocol = queryWorker.Where(x => x.ProtocolName.ToLower().Contains(paramsSearch.Value.ToLower())).ToList();
+            var filterNroDocument = queryWorker.Where(x => x.NroDocument.ToLower().Contains(paramsSearch.Value.ToLower())).ToList();
 
-            var combinedList = filterName.Concat(filterCompany).Concat(filterCurrentOccupation).Concat(filterProtocol);
-
+            var combinedList = filterName.Concat(filterCompany).Concat(filterCurrentOccupation).Concat(filterProtocol).Concat(filterNroDocument).ToList();
+            combinedList = combinedList.GroupBy(p => p.ScheduleId).Select(s => s.First()).ToList();
             var result = new List<ScheduleListModel>();
             foreach (var item in combinedList)
             {
                 var oScheduleListModel = new ScheduleListModel();
+                oScheduleListModel.ScheduleId = item.ScheduleId;
                 oScheduleListModel.FullName = item.FullName;
                 oScheduleListModel.CompanyName = item.CompanyName;
                 oScheduleListModel.WorkerEmail = item.Email;
                 oScheduleListModel.WorkerCell = item.Cell;
                 oScheduleListModel.ProtocolName = item.ProtocolName;
                 oScheduleListModel.CurrentOccupation = item.CurrentOccupation;
-
+                oScheduleListModel.NroDocument = item.NroDocument;
                 result.Add(oScheduleListModel);
             }
 
