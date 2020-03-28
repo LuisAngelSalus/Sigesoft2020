@@ -123,7 +123,6 @@ namespace SL.Sigesoft.Data.Repositories
             entityDb.v_Address = entity.v_Address;
             entityDb.v_PhoneNumber = entity.v_PhoneNumber;
             entityDb.v_ContactName = entity.v_ContactName;
-            entityDb.v_PathLogo = entity.v_PathLogo;
             entityDb.v_Mail = entity.v_Mail;
             entityDb.v_District = entity.v_District;
             entityDb.v_PhoneCompany = entity.v_PhoneCompany;

@@ -30,7 +30,7 @@ namespace SL.Sigesoft.Data.Configuration
             entity.Property(e => e.v_Name)
                 .IsRequired()
                 .HasColumnName("v_Name")
-                .HasMaxLength(50)
+                .HasMaxLength(250)
                 .IsUnicode(false);
 
             entity.HasQueryFilter(x => x.i_IsDeleted == Models.Enum.YesNo.No);
