@@ -258,5 +258,32 @@ namespace SL.Sigesoft.WebApi.Controllers
                 return BadRequest();
             }
         }
+
+
+        [HttpGet]
+        [Route("ListaUsuarios")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Response<IEnumerable<SystemUserModel>>>> GetAllFilter()
+        {
+            var response = new Response<IEnumerable<SystemUserModel>>();
+            try
+            {
+                var systemUsers = await _systemUserRepository.GetAllFilter();
+                response.Data = systemUsers;
+
+                if (response.Data != null)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Consulta Exitosa";
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
     }
 }

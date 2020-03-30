@@ -76,11 +76,24 @@ namespace SL.Sigesoft.Data.Repositories
             return false;
         }
 
+        //public async Task<IEnumerable<SystemUser>> GetAllAsync()
+        //{
+        //    return await _dbSet.Include(su => su.Permission)
+        //                       .Include(su => su.Company)
+        //                       .Include(su => su.Notification)
+        //                       .Include(su => su.Person)
+        //                       .Include(su => su.Quotation)
+        //                       .Include(su => su.Secuential)
+        //                       .Include(su => su.Suscription)
+        //                       .Where(u => u.i_IsDeleted == YesNo.No)
+        //                       .ToListAsync();
+        //}
+
         public async Task<IEnumerable<SystemUser>> GetAllAsync()
         {
             return await _dbSet.Include(su => su.Permission)
                                .Include(su => su.Company)
-                               .Include(su => su.Notification)                               
+                               .Include(su => su.Notification)
                                .Include(su => su.Person)
                                .Include(su => su.Quotation)
                                .Include(su => su.Secuential)
@@ -413,6 +426,44 @@ namespace SL.Sigesoft.Data.Repositories
             _dbSetAccess.Add(access);
 
             _context.SaveChanges();
+        }
+
+        public async Task<List<SystemUserModel>> GetAllFilter()
+        {
+            var query = await (from A in _context.SystemUser 
+                               join B in _context.Person on A.i_PersonId equals B.i_PersonId
+                               join C in _context.Permission on A.i_SystemUserId equals C.i_SystemUserId
+                               join D in _context.Role on C.i_RoleId equals D.i_RoleId
+                               join E in _context.Company on A.i_CustomerCompanyId equals E.i_CompanyId into E_join
+                               from E in E_join.DefaultIfEmpty()
+                               select new 
+                               {
+                                   FullName =  B.v_FirstName + " " + B.v_FirstLastName + " " + B.v_SecondLastName,
+                                   CompanyName = E.v_Name,
+                                   UserName = A.v_UserName,
+                                   Email = A.v_Email,
+                                   SystemUserId = A.i_SystemUserId,
+                                   Rol = D.v_Description,
+                               }).ToListAsync();
+
+            var ListResult = new List<SystemUserModel>();
+            foreach (var item in query)
+            {
+                var oSystemUserModel = new SystemUserModel();
+                oSystemUserModel.FullName = item.FullName;
+                oSystemUserModel.CompanyName = item.CompanyName;
+                oSystemUserModel.UserName= item.UserName;
+                oSystemUserModel.Email = item.Email;
+                oSystemUserModel.SystemUserId = item.SystemUserId;
+                var listRole = query.FindAll(p => p.SystemUserId == item.SystemUserId).ToList();
+                oSystemUserModel.Roles = string.Join(", ", listRole.Select(p => p.Rol));
+
+                ListResult.Add(oSystemUserModel);
+            }
+
+            ListResult = ListResult.GroupBy(g => g.SystemUserId).Select(s => s.First()).ToList();
+
+            return ListResult;
         }
     }
 }
