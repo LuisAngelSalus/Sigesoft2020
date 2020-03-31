@@ -198,7 +198,7 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ReverseMap();
 
 
-            this.CreateMap<Component, ListComponentDto>()
+            this.CreateMap<SL.Sigesoft.Models.Win.Component, ListComponentDto>()
                 .ForMember(u => u.ComponentId, p => p.MapFrom(m => m.v_ComponentId))
                 .ForMember(u => u.Name, p => p.MapFrom(m => m.v_Name))
                 .ForMember(u => u.CategoryName, p => p.MapFrom(m => m.v_CategoryName))
@@ -772,7 +772,7 @@ namespace SL.Sigesoft.WebApi.Profiles
             .ForMember(u => u.i_IsVipId, p => p.MapFrom(m => m.IsVipId))
             .ForMember(u => u.i_moodId, p => p.MapFrom(m => m.MoodId))
             .ReverseMap();
-
+            
             this.CreateMap<ServiceRegisterDto, Service>()
             .ForMember(u => u.i_ProtocolId, p => p.MapFrom(m => m.ProtocolId))
             .ForMember(u => u.i_WorkerId, p => p.MapFrom(m => m.WorkerId))
