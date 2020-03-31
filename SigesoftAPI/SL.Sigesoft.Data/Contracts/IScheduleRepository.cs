@@ -10,5 +10,6 @@ namespace SL.Sigesoft.Data.Contracts
     {
         Task<bool> DoSchedule(List<Schedule> schedules);
         Task<List<ScheduleListModel>> Search(ParamsSearch paramsSearch);
+        Task<ScheduleDataModel> GetDataSchedule(int scheduleId);
     }
 }

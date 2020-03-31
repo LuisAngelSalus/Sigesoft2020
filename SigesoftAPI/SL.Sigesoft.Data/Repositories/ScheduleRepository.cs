@@ -58,7 +58,7 @@ namespace SL.Sigesoft.Data.Repositories
                                      join F in _context.Company on E.i_CompanyId equals F.i_CompanyId                                     
                                      where A.i_IsDeleted == YesNo.No
                                         && (!validfi || A.d_DateTimeCalendar >= fi)
-                                        && (!validff || A.d_DateTimeCalendar <= ff)
+                                        && (!validff || A.d_DateTimeCalendar <= ff.AddDays(1))
                                      select new  { 
                                         ScheduleId = A.i_ScheduleId,
                                         CompanyName = F.v_Name,
@@ -94,6 +94,48 @@ namespace SL.Sigesoft.Data.Repositories
             }
 
             return result;
+        }
+
+        public async Task<ScheduleDataModel> GetDataSchedule(int scheduleId)
+        {
+            var schedule = await (from A in _context.Schedule
+                                     join B in _context.Service on A.i_ServiceId equals B.i_ServiceId
+                                     join C in _context.Worker on B.i_WorkerId equals C.i_WorkerId
+                                     join D in _context.Person on C.i_PersonId equals D.i_PersonId
+                                     join E in _context.ServiceComponent on B.i_ServiceId equals E.i_ServiceId
+                                     join F in _context.Protocol on B.i_ProtocolId equals F.i_ProtocolId
+                                     join G in _context.Company on F.i_CompanyId equals G.i_CompanyId
+                                    where A.i_ScheduleId == scheduleId && A.i_IsDeleted == YesNo.No
+                                     select new ScheduleDataModel {
+                                        FirstName = D.v_FirstName,                                         
+                                        FirstLastName = D.v_FirstLastName,
+                                        SecondLastName = D.v_SecondLastName,
+                                        DateBirth = C.d_DateOfBirth,
+                                        DocType = C.i_TypeDocumentId,
+                                        NroDocument = C.v_NroDocument,
+                                        GenderId = C.i_GenderId,
+                                        Phone = C.v_MobileNumber,
+                                        Email = C.v_Email,
+                                        ProtocolName = F.v_ProtocolName,
+                                        CompanyName = G.v_Name,
+                                        ServiceDate = B.d_ServiceDate,
+                                         ScheduleComponents = (from A1 in _context.ServiceComponent 
+                                                               join B1 in _context.Component on A1.v_ComponentId equals B1.v_ComponentId
+                                                               join C1 in _context.SystemParameter on new { a = B1.i_CategoryId, b = 116 }
+                                                                                equals new { a = C1.i_ParameterId, b = C1.i_GroupId } into C1_join
+                                                               from C1 in C1_join.DefaultIfEmpty()
+                                                               where A1.i_ServiceId == B.i_ServiceId
+                                                                select new ScheduleComponent
+                                                                {
+                                                                    CategoryId = B1.i_CategoryId,
+                                                                    CategoryName = C1.v_Value1,
+                                                                    ComponentId = A1.v_ComponentId,
+                                                                    ComponentName = B1.v_Name   
+                                                                }).ToList()
+                                     }).FirstOrDefaultAsync();
+
+            
+            return schedule;
         }
     }
 }

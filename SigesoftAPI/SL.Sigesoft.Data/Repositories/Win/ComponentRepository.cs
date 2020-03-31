@@ -20,14 +20,14 @@ namespace SL.Sigesoft.Data.Repositories.Win
         private readonly SigesoftCoreContext _contextWeb;
         private readonly ICompanyRepository _companyRepository;
         private readonly ILogger<ComponentRepository> _logger;
-        private DbSet<Component> _dbSet;
+        private DbSet<SL.Sigesoft.Models.Win.Component> _dbSet;
 
         public ComponentRepository(SigesoftWinContext context,
            ILogger<ComponentRepository> logger, SigesoftCoreContext contextWeb, ICompanyRepository companyRepository)
         {
             this._context = context;
             this._logger = logger;
-            this._dbSet = _context.Set<Component>();
+            this._dbSet = _context.Set<SL.Sigesoft.Models.Win.Component>();
             this._contextWeb = contextWeb;
             this._companyRepository = companyRepository;            
         }
@@ -37,14 +37,14 @@ namespace SL.Sigesoft.Data.Repositories.Win
             throw new NotImplementedException();
         }
 
-        public async Task<List<Component>> GetAllAsync()
+        public async Task<List<SL.Sigesoft.Models.Win.Component>> GetAllAsync()
         {
             var query = await (from A in _context.Component
                                join B in _context.SystemParameter on new { a = A.i_CategoryId.Value, b = 116 }
                                             equals new { a = B.i_ParameterId, b = B.i_GroupId } into B_join
                                from B in B_join.DefaultIfEmpty()
                                where A.i_IsDeleted == YesNo.No
-                               select new Component
+                               select new SL.Sigesoft.Models.Win.Component
                                {
                                    v_ComponentId = A.v_ComponentId,
                                    v_Name = A.v_Name,
@@ -59,14 +59,14 @@ namespace SL.Sigesoft.Data.Repositories.Win
             
         }
 
-        public async Task<List<Component>> GetByNameAsync(string value)
+        public async Task<List<SL.Sigesoft.Models.Win.Component>> GetByNameAsync(string value)
         {
             var query = await (from A in _context.Component
                                join B in _context.SystemParameter on new { a = A.i_CategoryId.Value, b = 116 }
                                             equals new { a = B.i_ParameterId, b = B.i_GroupId } into B_join
                                from B in B_join.DefaultIfEmpty()
                                where A.i_IsDeleted == YesNo.No && A.v_Name.Contains(value)
-                               select new Component
+                               select new SL.Sigesoft.Models.Win.Component
                                {
                                    v_ComponentId = A.v_ComponentId,
                                    v_Name = A.v_Name,

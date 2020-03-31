@@ -85,5 +85,31 @@ namespace SL.Sigesoft.WebApi.Controllers
 
         }
 
+        [HttpGet]
+        [Route("DataCita/{idSchedule}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Response<ScheduleDataModel>>> GetDataSchedule(int idSchedule)
+        {
+            var response = new Response<ScheduleDataModel>();
+            try
+            {
+                var schedule = await _scheduleRepository.GetDataSchedule(idSchedule);                
+                response.Data = schedule;
+
+                if (response.Data != null)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Consulta Exitosa";
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+            return response;
+
+        }
+
     }
 }
