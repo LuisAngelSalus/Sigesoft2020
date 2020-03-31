@@ -76,16 +76,35 @@ namespace SL.Sigesoft.Data.Repositories
             return false;
         }
 
+        //public async Task<IEnumerable<SystemUser>> GetAllAsync()
+        //{
+        //    return await _dbSet.Include(su => su.Permission)
+        //                       .Include(su => su.Company)
+        //                       .Include(su => su.Notification)
+        //                       .Include(su => su.Person)
+        //                       .Include(su => su.Quotation)
+        //                       .Include(su => su.Secuential)
+        //                       .Include(su => su.Suscription)
+        //                       .Where(u => u.i_IsDeleted == YesNo.No)
+        //                       .ToListAsync();
+        //}
+
         public async Task<IEnumerable<SystemUser>> GetAllAsync()
         {
             return await _dbSet.Include(su => su.Permission)
+                               .Include(su => su.Company)
+                               .Include(su => su.Notification)
+                               .Include(su => su.Person)
+                               .Include(su => su.Quotation)
+                               .Include(su => su.Secuential)
+                               .Include(su => su.Suscription)
                                .Where(u => u.i_IsDeleted == YesNo.No)
                                .ToListAsync();
         }
 
         public async Task<SystemUser> GetAsync(int id)
         {
-            return await _dbSet.Include(per => per.Person)                               
+            return await _dbSet.Include(per => per.Person)
                                 .SingleOrDefaultAsync(c => c.i_SystemUserId == id && c.i_IsDeleted == YesNo.No);
         }
 
@@ -146,7 +165,7 @@ namespace SL.Sigesoft.Data.Repositories
         public Task<bool> ChangeProfile(SystemUser systemUser)
         {
             throw new NotImplementedException();
-        }        
+        }
 
         public Task<bool> ValidatePassword(SystemUser systemUser)
         {
@@ -224,7 +243,7 @@ namespace SL.Sigesoft.Data.Repositories
                                           select new
                                           {
                                               SystemUserId = A.i_InsertUserId,
-                                              UserName =A.v_UserName,
+                                              UserName = A.v_UserName,
                                               FullName = H.v_FirstName + " " + H.v_FirstLastName + " " + H.v_SecondLastName
                                           }).ToListAsync();
 
@@ -291,7 +310,7 @@ namespace SL.Sigesoft.Data.Repositories
 
                 throw;
             }
-            
+
         }
 
         public async Task<(bool result, SystemUserLoginModel systemUser)> ValidateLogin(SystemUser systemUser)
@@ -299,38 +318,39 @@ namespace SL.Sigesoft.Data.Repositories
             try
             {
                 var systemUserDb = await _dbSet.Include(u => u.Permission).FirstOrDefaultAsync(u => u.v_UserName == systemUser.v_UserName);
-            
-            
-            if (systemUserDb != null)
-            {
-                try
+
+
+                if (systemUserDb != null)
                 {
-                    var resultado = _passwordHasher.VerifyHashedPassword(systemUserDb, systemUserDb.v_Password, systemUser.v_Password);
+                    try
+                    {
+                        var resultado = _passwordHasher.VerifyHashedPassword(systemUserDb, systemUserDb.v_Password, systemUser.v_Password);
 
-                    var systemUserModel = await (from A in _context.SystemUser  
-                                                 where A.v_UserName == systemUser.v_UserName && A.i_IsDeleted == YesNo.No
-                                              select new SystemUserLoginModel
-                                              {
-                                                  UserName = A.v_UserName,
-                                                  SystemUserId = A.i_SystemUserId,
-                                                  Roles =  (from A1 in _context.Permission 
-                                                            join B1  in _context.Role on A1.i_RoleId equals B1.i_RoleId
-                                                            where A1.i_IsDeleted == YesNo.No && A1.i_SystemUserId == A.i_SystemUserId
-                                                            group B1.v_Description by B1.v_Description into g
-                                                            select new RoleModel { 
-                                                                RolName =g.Key
-                                                            }).ToList()
-                                              }).FirstOrDefaultAsync();
+                        var systemUserModel = await (from A in _context.SystemUser
+                                                     where A.v_UserName == systemUser.v_UserName && A.i_IsDeleted == YesNo.No
+                                                     select new SystemUserLoginModel
+                                                     {
+                                                         UserName = A.v_UserName,
+                                                         SystemUserId = A.i_SystemUserId,
+                                                         Roles = (from A1 in _context.Permission
+                                                                  join B1 in _context.Role on A1.i_RoleId equals B1.i_RoleId
+                                                                  where A1.i_IsDeleted == YesNo.No && A1.i_SystemUserId == A.i_SystemUserId
+                                                                  group B1.v_Description by B1.v_Description into g
+                                                                  select new RoleModel
+                                                                  {
+                                                                      RolName = g.Key
+                                                                  }).ToList()
+                                                     }).FirstOrDefaultAsync();
 
-                    return (resultado == PasswordVerificationResult.Success ? true : false, systemUserModel);
+                        return (resultado == PasswordVerificationResult.Success ? true : false, systemUserModel);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"Error en {nameof(ValidateLogin)}: " + ex.Message);
+                    }
+
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error en {nameof(ValidateLogin)}: " + ex.Message);
-                }
-
-            }
-            return (false, null);
+                return (false, null);
             }
             catch (Exception ex)
             {
@@ -359,7 +379,7 @@ namespace SL.Sigesoft.Data.Repositories
                         acceDB.i_IsDeleted = YesNo.Yes;
                     }
                 }
-               await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 //AGREGAR NUEVOS PERMISOS
                 foreach (var permi in updateAccessDto)
                 {
@@ -373,7 +393,7 @@ namespace SL.Sigesoft.Data.Repositories
                         newPerm.i_UpdateUserId = permi.UpdateUserId;
                         newPerm.d_UpdateDate = DateTime.Now;
 
-                       _dbSetPermission.Add(newPerm);
+                        _dbSetPermission.Add(newPerm);
 
                         await _context.SaveChangesAsync();
                         InsertAccess(newPerm.i_PermissionId, permi);
@@ -386,10 +406,10 @@ namespace SL.Sigesoft.Data.Repositories
             {
                 return false;
             }
-           
+
         }
 
-        private  void InsertAccess(int permissionId, UpdateAccessModel permi)
+        private void InsertAccess(int permissionId, UpdateAccessModel permi)
         {
             var access = new Access();
             access.i_PermissionId = permissionId;
@@ -406,6 +426,44 @@ namespace SL.Sigesoft.Data.Repositories
             _dbSetAccess.Add(access);
 
             _context.SaveChanges();
+        }
+
+        public async Task<List<SystemUserModel>> GetAllFilter()
+        {
+            var query = await (from A in _context.SystemUser
+                               join B in _context.Person on A.i_PersonId equals B.i_PersonId
+                               join C in _context.Permission on A.i_SystemUserId equals C.i_SystemUserId
+                               join D in _context.Role on C.i_RoleId equals D.i_RoleId
+                               join E in _context.Company on A.i_CustomerCompanyId equals E.i_CompanyId into E_join
+                               from E in E_join.DefaultIfEmpty()
+                               select new
+                               {
+                                   FullName = B.v_FirstName + " " + B.v_FirstLastName + " " + B.v_SecondLastName,
+                                   CompanyName = string.IsNullOrEmpty(E.v_Name) ? "" : E.v_Name,
+                                   UserName = A.v_UserName,
+                                   Email = A.v_Email,
+                                   SystemUserId = A.i_SystemUserId,
+                                   Rol = D.v_Description,
+                               }).ToListAsync();
+
+            var ListResult = new List<SystemUserModel>();
+            foreach (var item in query)
+            {
+                var oSystemUserModel = new SystemUserModel();
+                oSystemUserModel.FullName = item.FullName;
+                oSystemUserModel.CompanyName = item.CompanyName;
+                oSystemUserModel.UserName = item.UserName;
+                oSystemUserModel.Email = item.Email;
+                oSystemUserModel.SystemUserId = item.SystemUserId;
+                var listRole = query.FindAll(p => p.SystemUserId == item.SystemUserId).ToList();
+                oSystemUserModel.Roles = string.Join(", ", listRole.Select(p => p.Rol));
+
+                ListResult.Add(oSystemUserModel);
+            }
+
+            ListResult = ListResult.GroupBy(g => g.SystemUserId).Select(s => s.First()).ToList();
+
+            return ListResult;
         }
     }
 }

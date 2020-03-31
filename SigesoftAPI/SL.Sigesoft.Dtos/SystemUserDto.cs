@@ -9,5 +9,7 @@ namespace SL.Sigesoft.Dtos
         public int SystemUserId { get; set; }
         public int? PersonId { get; set; }
         public string UserName { get; set; }
+        public string FullName { get; set; }
+        public string Email { get; set; }
     }
 }

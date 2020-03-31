@@ -14,5 +14,7 @@ namespace SL.Sigesoft.Data.Contracts
         Task<(bool result, SystemUserLoginModel systemUser)> ValidateLogin(SystemUser systemUser);
         Task<AccessSysteUserModelDto> GetAccess(int id);
         Task<bool> UpdateAccess(List<UpdateAccessModel> updateAccessDto);
+        Task<List<SystemUserModel>> GetAllFilter();
+        
     }
 }

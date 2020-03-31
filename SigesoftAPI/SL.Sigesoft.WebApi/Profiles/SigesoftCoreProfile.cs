@@ -58,6 +58,7 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.UserName, p => p.MapFrom(m => m.v_UserName))
                 .ForMember(u => u.Email, p => p.MapFrom(m => m.v_Email))
                 .ForMember(u => u.Phone, p => p.MapFrom(m => m.v_Phone))
+                .ForMember(u => u.Password, p => p.MapFrom(m => m.v_Password))
                 .ReverseMap();
 
             this.CreateMap<SystemUser, SystemUserRegisterDto>()
@@ -95,7 +96,7 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.Mail, p => p.MapFrom(m => m.v_Mail))
                 .ForMember(u => u.District, p => p.MapFrom(m => m.v_District))
                 .ForMember(u => u.PhoneCompany, p => p.MapFrom(m => m.v_PhoneCompany))
-                .ForMember(u => u.ResponsibleSystemUserId, p => p.MapFrom(m => m.i_ResponsibleSystemUserId))                
+                .ForMember(u => u.ResponsibleSystemUserId, p => p.MapFrom(m => m.i_ResponsibleSystemUserId))
                 .ForMember(u => u.InsertUserId, p => p.MapFrom(m => m.i_InsertUserId))
                 .ReverseMap();
 
@@ -140,7 +141,7 @@ namespace SL.Sigesoft.WebApi.Profiles
             this.CreateMap<Company, CompanyDto>()
                 .ForMember(u => u.CompanyId, p => p.MapFrom(m => m.i_CompanyId))
                 .ForMember(u => u.Name, p => p.MapFrom(m => m.v_Name))
-                .ForMember(u => u.IdentificationNumber, p => p.MapFrom(m => m.v_IdentificationNumber))                
+                .ForMember(u => u.IdentificationNumber, p => p.MapFrom(m => m.v_IdentificationNumber))
                 .ForMember(u => u.Address, p => p.MapFrom(m => m.v_Address))
                 .ForMember(u => u.PhoneNumber, p => p.MapFrom(m => m.v_PhoneNumber))
                 .ForMember(u => u.ContactName, p => p.MapFrom(m => m.v_ContactName))
@@ -564,6 +565,9 @@ namespace SL.Sigesoft.WebApi.Profiles
                 .ForMember(u => u.SystemUserId, p => p.MapFrom(m => m.i_SystemUserId))
                 .ForMember(u => u.PersonId, p => p.MapFrom(m => m.i_PersonId))
                 .ForMember(u => u.UserName, p => p.MapFrom(m => m.v_UserName))
+                .ForMember(u => u.Email, p => p.MapFrom(m => m.v_Email))
+                .ForMember(u => u.FullName, p => p.MapFrom(m => string.Format("{0} {1} {2}", m.Person.v_FirstName, m.Person.v_FirstLastName, m.Person.v_SecondLastName)))
+
                 .ReverseMap();
 
             this.CreateMap<Role, ListRoleDto>()
