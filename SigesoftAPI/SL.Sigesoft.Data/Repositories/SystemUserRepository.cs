@@ -239,12 +239,16 @@ namespace SL.Sigesoft.Data.Repositories
                 {
                     var queryOpt = await (from A in _context.SystemUser
                                           join H in _context.Person on A.i_PersonId equals H.i_PersonId
+                                          join C in _context.Permission on A.i_SystemUserId equals C.i_SystemUserId
+                                          join D in _context.Role on C.i_RoleId equals D.i_RoleId into D_join
+                                          from D in D_join.DefaultIfEmpty()
                                           where A.i_SystemUserId == id
                                           select new
                                           {
                                               SystemUserId = A.i_InsertUserId,
                                               UserName = A.v_UserName,
-                                              FullName = H.v_FirstName + " " + H.v_FirstLastName + " " + H.v_SecondLastName
+                                              FullName = H.v_FirstName + " " + H.v_FirstLastName + " " + H.v_SecondLastName,
+                                              RoleName = D.v_Description,
                                           }).ToListAsync();
 
                     var oAccessSysteUserModelDtoOpt = new AccessSysteUserModelDto();
@@ -252,6 +256,8 @@ namespace SL.Sigesoft.Data.Repositories
                     oAccessSysteUserModelDtoOpt.SystemUserId = id;
                     oAccessSysteUserModelDtoOpt.UserName = queryOpt[0].UserName;
                     oAccessSysteUserModelDtoOpt.FullName = queryOpt[0].FullName;
+                    oAccessSysteUserModelDtoOpt.Role = queryOpt[0].RoleName;
+
 
                     return oAccessSysteUserModelDtoOpt;
 
@@ -263,6 +269,7 @@ namespace SL.Sigesoft.Data.Repositories
                 oAccessSysteUserModelDto.UserName = query[0].UserName;
                 oAccessSysteUserModelDto.FullName = query[0].FullName;
                 oAccessSysteUserModelDto.CustomerCompanyId = query[0].CustomerCompanyId;
+                oAccessSysteUserModelDto.Role = query[0].RolName;
 
                 var companiesDb = query.GroupBy(g => g.CompanyId).Select(s => s.First()).ToList();
                 var companies = new List<Companies>();
