@@ -23,6 +23,8 @@ namespace SL.Sigesoft.Data.Configuration
 
             entity.Property(e => e.i_ServiceStatusId).HasColumnName("i_ServiceStatusId");
 
+            entity.Property(e => e.i_AptitudeStatusId).HasColumnName("i_AptitudeStatusId");
+
             entity.Property(e => e.d_ServiceDate).HasColumnName("d_ServiceDate");
 
             entity.Property(e => e.i_IsDeleted).HasColumnName("i_IsDeleted");

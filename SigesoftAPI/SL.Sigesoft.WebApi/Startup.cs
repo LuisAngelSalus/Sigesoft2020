@@ -30,7 +30,7 @@ namespace SL.Sigesoft.WebApi
     {
         public Startup(IConfiguration configuration)
         {
-            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();    
+            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
             _configuration = configuration;
         }
         public IConfiguration _configuration;
@@ -61,6 +61,7 @@ namespace SL.Sigesoft.WebApi
             services.AddScoped<ISubscriptionRepository, SuscriptionRespository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<IAccountSettingRepository, AccountSettingRepository>();
+            services.AddScoped<IResultRepository, ResultRepository>();
             services.AddScoped<IWorkerRepository, WorkerRepository>();
             services.AddScoped<IClientUserRepository, ClientUserRepository>();
             services.AddScoped<IScheduleRepository, ScheduleRepository>();
@@ -130,7 +131,7 @@ namespace SL.Sigesoft.WebApi
             app.UseCors("CorsPolicy");
 
             app.UseHttpsRedirection();
-            app.UseMvc();    
-       }
+            app.UseMvc();
+        }
     }
 }
