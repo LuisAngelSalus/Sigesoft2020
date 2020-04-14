@@ -53,6 +53,8 @@ namespace SL.Sigesoft.Data
         public virtual DbSet<ServiceComponent> ServiceComponent { get; set; }
         public virtual DbSet<Component> Component { get; set; }
 
+        public virtual DbSet<Warehouse> Warehouse { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.0-servicing-10079");
@@ -92,6 +94,7 @@ namespace SL.Sigesoft.Data
             modelBuilder.ApplyConfiguration(new ServiceConfiguration());
             modelBuilder.ApplyConfiguration(new ServiceComponentConfiguration());
             modelBuilder.ApplyConfiguration(new ComponentConfiguration());
+            modelBuilder.ApplyConfiguration(new WarehouseConfiguration());
         }
     }
 }

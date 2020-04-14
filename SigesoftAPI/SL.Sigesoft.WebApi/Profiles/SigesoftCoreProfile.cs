@@ -776,7 +776,7 @@ namespace SL.Sigesoft.WebApi.Profiles
             .ForMember(u => u.i_IsVipId, p => p.MapFrom(m => m.IsVipId))
             .ForMember(u => u.i_moodId, p => p.MapFrom(m => m.MoodId))
             .ReverseMap();
-            
+
             this.CreateMap<ServiceRegisterDto, Service>()
             .ForMember(u => u.i_ProtocolId, p => p.MapFrom(m => m.ProtocolId))
             .ForMember(u => u.i_WorkerId, p => p.MapFrom(m => m.WorkerId))
@@ -798,6 +798,50 @@ namespace SL.Sigesoft.WebApi.Profiles
             .ForMember(u => u.i_TypeDocumentId, p => p.MapFrom(m => m.TypeDocumentId))
             .ForMember(u => u.v_NroDocument, p => p.MapFrom(m => m.NroDocument))
             .ReverseMap();
+
+            this.CreateMap<Warehouse, WarehouseInsertDto>()
+              .ForMember(u => u.Description, p => p.MapFrom(m => m.v_Description))
+              .ForMember(u => u.CompanyId , p => p.MapFrom(m => m.i_CompanyId))
+              .ForMember(u => u.CompanyHeadquarterId, p => p.MapFrom(m => m.i_CompanyHeadquarterId))
+              .ForMember(u => u.IsPrincipal, p => p.MapFrom(m => m.i_IsPrincipal))
+              .ForMember(u => u.InsertUserId, p => p.MapFrom(m => m.i_InsertUserId))
+              .ReverseMap();
+
+            this.CreateMap<WarehouseInsertDto, Warehouse>()
+             .ForMember(u => u.v_Description, p => p.MapFrom(m => m.Description))
+             .ForMember(u => u.i_CompanyId, p => p.MapFrom(m => m.CompanyId))
+             .ForMember(u => u.i_CompanyHeadquarterId, p => p.MapFrom(m => m.CompanyHeadquarterId))
+             .ForMember(u => u.i_IsPrincipal, p => p.MapFrom(m => m.IsPrincipal))
+             .ForMember(u => u.i_InsertUserId, p => p.MapFrom(m => m.InsertUserId))
+             .ReverseMap();
+
+            this.CreateMap<WarehouseDto, Warehouse>()
+                .ForMember(u => u.i_WarehouseId, p => p.MapFrom(m => m.WarehouseId))
+         .ForMember(u => u.v_Description, p => p.MapFrom(m => m.Description))
+         .ForMember(u => u.i_CompanyId, p => p.MapFrom(m => m.CompanyId))
+         .ForMember(u => u.i_CompanyHeadquarterId, p => p.MapFrom(m => m.CompanyHeadquarterId))
+         .ForMember(u => u.i_IsPrincipal, p => p.MapFrom(m => m.IsPrincipal))
+         .ForMember(u => u.i_InsertUserId, p => p.MapFrom(m => m.InsertUserId))
+         .ReverseMap();
+
+            this.CreateMap<Warehouse, WarehouseUpdateDataDto>()
+          .ForMember(u => u.CompanyId, p => p.MapFrom(m => m.i_CompanyId))
+          .ForMember(u => u.CompanyHeadquarterId, p => p.MapFrom(m => m.i_CompanyHeadquarterId))
+          .ForMember(u => u.Description, p => p.MapFrom(m => m.v_Description))
+          .ForMember(u => u.WarehouseId, p => p.MapFrom(m => m.i_WarehouseId))        
+          .ForMember(u => u.UpdateUserId, p => p.MapFrom(m => m.i_UpdateUserId))
+          .ReverseMap();
+
+            this.CreateMap<WarehouseUpdateDataDto, Warehouse>()
+                .ForMember(u => u.i_WarehouseId, p => p.MapFrom(m => m.WarehouseId))
+         .ForMember(u => u.v_Description, p => p.MapFrom(m => m.Description))
+         .ForMember(u => u.i_CompanyId, p => p.MapFrom(m => m.CompanyId))
+         .ForMember(u => u.i_CompanyHeadquarterId, p => p.MapFrom(m => m.CompanyHeadquarterId))
+        
+         .ForMember(u => u.i_UpdateUserId, p => p.MapFrom(m => m.UpdateUserId))
+         .ReverseMap();
+
+      
 
         }
     }

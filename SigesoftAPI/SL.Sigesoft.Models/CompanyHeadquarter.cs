@@ -10,6 +10,7 @@ namespace SL.Sigesoft.Models
         public CompanyHeadquarter()
         {
             Quotation = new HashSet<Quotation>();
+            Warehouse = new HashSet<Warehouse>();
         }
 
         public int i_CompanyHeadquarterId { get; set; }
@@ -29,5 +30,6 @@ namespace SL.Sigesoft.Models
 
         public virtual Company Company { get; set; }
         public virtual ICollection<Quotation> Quotation { get; set; }
+        public virtual ICollection<Warehouse> Warehouse { get; set; }
     }
 }

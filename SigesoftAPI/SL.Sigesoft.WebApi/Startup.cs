@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -23,6 +25,7 @@ using SL.Sigesoft.Data.Repositories;
 using SL.Sigesoft.Data.Repositories.Win;
 using SL.Sigesoft.Models;
 using SL.Sigesoft.WebApi.Services;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace SL.Sigesoft.WebApi
 {
@@ -39,6 +42,31 @@ namespace SL.Sigesoft.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
+
+            services.AddSwaggerGen(cfg =>
+            {
+                cfg.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
+                {
+                    Title = "Sigesift API",
+                    Version = "v1.1",
+                    Description = "Simple RESTful API built with ASP.NET Core 2.2 to show how to create RESTful services using a decoupled, maintainable architecture.",
+                    Contact = new Contact
+                    {
+                        Name = "Luis",
+                        Url = "https://github.com/LuisAngelSalus/",
+                    },
+                    License = new License
+                    {
+                        Name = "MIT",
+                    },
+                });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                cfg.IncludeXmlComments(xmlPath);
+            });
+
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDbContext<SigesoftCoreContext>(options => options.UseSqlServer(_configuration.GetConnectionString("SigesoftCoreDB")));
             services.AddDbContext<SigesoftWinContext>(options => options.UseSqlServer(_configuration.GetConnectionString("SigesoftWinDB")));
@@ -67,6 +95,7 @@ namespace SL.Sigesoft.WebApi
             services.AddScoped<IScheduleRepository, ScheduleRepository>();
             services.AddScoped<IPasswordHasher<SystemUser>, PasswordHasher<SystemUser>>();
             services.AddScoped<IPasswordHasher<ClientUser>, PasswordHasher<ClientUser>>();
+            services.AddScoped<IWarehouseRepository, WarehouseRepository>();
             services.AddSingleton<TokenService>();
 
             //Accedemos a la sección JwtSettings del archivo appsettings.json
@@ -131,6 +160,14 @@ namespace SL.Sigesoft.WebApi
             app.UseCors("CorsPolicy");
 
             app.UseHttpsRedirection();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sigesoft API");
+            });
+
             app.UseMvc();
         }
     }

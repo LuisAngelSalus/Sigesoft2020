@@ -12,6 +12,7 @@ namespace SL.Sigesoft.Models
             PriceList = new HashSet<PriceList>();
             Protocol = new HashSet<Protocol>();
             Quotation = new HashSet<Quotation>();
+            Warehouse = new HashSet<Warehouse>();
         }
 
         public int i_CompanyId { get; set; }
@@ -34,6 +35,7 @@ namespace SL.Sigesoft.Models
         public virtual ICollection<PriceList> PriceList { get; set; }
         public virtual ICollection<Protocol> Protocol { get; set; }
         public virtual ICollection<Quotation> Quotation { get; set; }
+        public virtual ICollection<Warehouse> Warehouse { get; set; }
         public virtual SystemUser SystemUser { get; set; }
     }
 }
