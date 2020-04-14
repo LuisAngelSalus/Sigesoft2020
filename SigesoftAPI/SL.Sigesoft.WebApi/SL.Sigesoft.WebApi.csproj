@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>E:\Proyecto SIGESOFT\BackEnd\Sigesoft2020\SigesoftAPI\SL.Sigesoft.WebApi\SL.Sigesoft.WebApi.xml</DocumentationFile>
+    <DocumentationFile>..\SL.Sigesoft.WebApi\SL.Sigesoft.WebApi.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
