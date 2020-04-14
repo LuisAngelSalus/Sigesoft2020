@@ -47,7 +47,7 @@ namespace SL.Sigesoft.WebApi
             {
                 cfg.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
                 {
-                    Title = "Sigesift API",
+                    Title = "Sigesoft API",
                     Version = "v1.1",
                     Description = "Simple RESTful API built with ASP.NET Core 2.2 to show how to create RESTful services using a decoupled, maintainable architecture.",
                     Contact = new Contact
