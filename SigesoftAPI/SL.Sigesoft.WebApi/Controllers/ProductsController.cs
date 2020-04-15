@@ -58,5 +58,48 @@ namespace SL.Sigesoft.WebApi.Controllers
             return Ok(productResource);
         }
 
+        /// <summary>
+        /// Updates an existing product according to an identifier.
+        /// </summary>
+        /// <param name="id">Produc identifier.</param>
+        /// <param name="resource">Update product data.</param>
+        /// <returns>Response for the request.</returns>
+        [HttpPut("{id}")]
+        [ProducesResponseType(typeof(ProductResource), 200)]
+        [ProducesResponseType(typeof(ErrorResource), 400)]
+        public async Task<IActionResult> PutAsync(int id, [FromBody] SaveProductResource resource)
+        {
+            var product = _mapper.Map<SaveProductResource, Product>(resource);
+            var result = await _productService.UpdateAsync(id, product);
+
+            if (!result.Success)
+            {
+                return BadRequest(new ErrorResource(result.Message));
+            }
+
+            var productResource = _mapper.Map<Product, SaveProductResource>(result.Resource);
+            return Ok(productResource);
+        }
+
+        /// <summary>
+        /// Deletes a given product according to a identifier.
+        /// </summary>
+        /// <param name="id">Product identifier.</param>
+        /// <returns>Response for the request.</returns>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(ProductResource), 200)]
+        [ProducesResponseType(typeof(ErrorResource), 400)]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            var result = await _productService.DeleteAsync(id);
+
+            if (!result.Success)
+            {
+                return BadRequest(new ErrorResource(result.Message));
+            }
+
+            var productResource = _mapper.Map<Product, ProductResource>(result.Resource);
+            return Ok(productResource);
+        }
     }
 }
