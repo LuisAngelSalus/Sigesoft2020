@@ -4,5 +4,18 @@
         <name>SL.Sigesoft.WebApi</name>
     </assembly>
     <members>
+        <member name="M:SL.Sigesoft.WebApi.Controllers.ProductsController.ListAsync">
+            <summary>
+            List all products.
+            </summary>
+            <returns>List all products.</returns>
+        </member>
+        <member name="M:SL.Sigesoft.WebApi.Controllers.ProductsController.PostAsync(SL.Sigesoft.WebApi.Resources.SaveProductResource)">
+            <summary>
+            Save as new product.
+            </summary>
+            <param name="resource">Product data.</param>
+            <returns>Response for the request.</returns>
+        </member>
     </members>
 </doc>
